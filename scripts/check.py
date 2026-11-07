@@ -21,6 +21,9 @@ for file in public.rglob('*.html'):
     assert 'Alan O Cinneide' in text and 'Software BV' in text
     assert text.count('class="spectrum"')==2
     assert cv['linkedin'] in text
+    assert text.count('class="theme-toggle"') == 1
+    assert 'aria-pressed="false" hidden>Dark mode</button>' in text
+    assert text.index('theme.js') < text.index('design/tokens.css')
     for private in ['Laan van','2593','11 44 8026','11448026']:assert private not in text
 reader=PdfReader(public/'assets/AlanOCinneide_CV.pdf')
 assert len(reader.pages)==2

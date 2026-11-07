@@ -24,6 +24,10 @@ CV wording derives from the owner-supplied CV. Director and Zoundio date ranges 
 
 Tokens, spectrum, flowing bands, favicon and Space Grotesk font copied from the sibling `aoc-design-system` repository on 7 November 2026. Source: https://github.com/kenneide/aoc-design-system. Company identity is recorded in `design/company.json`. The source design-system repository is unchanged.
 
+For future design updates, first read [`../aoc-design-system/AGENTS.md`](../aoc-design-system/AGENTS.md), `design/README.md`, `design/PROVENANCE.md` and `design/tokens.json` there. The upstream [theme implementation](https://github.com/kenneide/aoc-design-system/blob/main/theme.js) is copied here as `theme.js` (7 November 2026). Keep it aligned with upstream when updating theme behavior. The local `design/tokens.css` already contains the shared light/dark roles and 700 ms motion token; update generated tokens in the design repo and copy its output here rather than hand-editing them.
+
+The theme follows system preference until a visitor chooses light or dark, stores that choice locally, and applies it before styles load. Changes blend semantic colors over 700 ms; reduced motion settles immediately. Spectrum ribbons and artwork keep their original colors. With JavaScript disabled, system theming still works and the toggle stays hidden. Header markup is generated in `scripts/build.py`; edit that source rather than the generated HTML. Run `npm run build` and inspect both pages at phone and desktop widths before publishing.
+
 Brand artwork remains the property of its rights holders. Space Grotesk is distributed under the SIL Open Font License in `assets/fonts/OFL.txt`. The LinkedIn icon identifies a link to the owner's supplied profile; LinkedIn is a trademark of its respective owner.
 
-The site has no runtime dependencies, JavaScript, analytics, forms or external font requests. PDF creation uses ReportLab and verification uses pypdf. Only the explicit website allowlist is copied into `dist/`.
+The site has no runtime dependencies, analytics, forms or external font requests. Its standalone `theme.js` provides the accessible dark-mode toggle on both pages. PDF creation uses ReportLab and verification uses pypdf. Only the explicit website allowlist is copied into `dist/`.

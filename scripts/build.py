@@ -16,8 +16,8 @@ linkedin='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 2H3.55C2.6
 def social(): return f'<a class="social" aria-label="LinkedIn" href="{cv["linkedin"]}">{linkedin}<span>LinkedIn</span></a>'
 def shell(title,desc,body,prefix='',is_cv=False):
     return f'''<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta name="theme-color" content="#f6f5ef"><link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml"><link rel="preload" href="{prefix}assets/fonts/SpaceGrotesk.ttf" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="{prefix}design/tokens.css"><link rel="stylesheet" href="{prefix}styles.css"></head>
-<body><a class="skip" href="#main">Skip to content</a><header><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap header-row"><a class="brand" href="{prefix or './'}">Alan O Cinneide<span>Software BV</span></a><nav aria-label="Main navigation"><a href="{ './' if is_cv else 'cv/'}" {'aria-current="page"' if is_cv else ''}>CV</a>{social()}</nav></div></header>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta name="theme-color" content="#f6f5ef"><script src="{prefix}theme.js"></script><link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml"><link rel="preload" href="{prefix}assets/fonts/SpaceGrotesk.ttf" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="{prefix}design/tokens.css"><link rel="stylesheet" href="{prefix}styles.css"></head>
+<body><a class="skip" href="#main">Skip to content</a><header><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap header-row"><a class="brand" href="{prefix or './'}">Alan O Cinneide<span>Software BV</span></a><nav aria-label="Main navigation"><a href="{ './' if is_cv else 'cv/'}" {'aria-current="page"' if is_cv else ''}>CV</a>{social()}<button class="theme-toggle" type="button" aria-pressed="false" hidden>Dark mode</button></nav></div></header>
 {body}
 <footer><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap footer-row"><strong>{e(company['name'])}</strong><div class="footer-links"><a href="mailto:{cv['email']}">{cv['email']}</a><a href="{e(company['kvk']['url'])}">KVK {company['kvk']['number']} ↗</a></div></div></footer></body></html>'''
 home='''<main id="main" class="wrap"><section class="hero" aria-labelledby="headline"><div><p class="eyebrow">Independent thinking. Thoughtful software.</p><h1 id="headline">Good ideas.<br>Built to work.</h1><p class="intro">Software development and technical leadership, with a focus on digital audio.</p><a class="button" href="mailto:alan.ocinneide@gmail.com">Get in touch <span aria-hidden="true">↗</span></a></div><div><div class="hero-art"><img src="assets/bands.svg" width="1280" height="640" alt=""></div><div class="art-caption" aria-hidden="true"><span>Clear thinking.</span><span>Colourful possibilities.</span></div></div></section><div class="hero-meta"><span>The Hague, Netherlands</span><a href="cv/">Explore my experience <span aria-hidden="true">↗</span></a></div></main>'''
@@ -79,7 +79,7 @@ if y<58:raise ValueError('Second PDF page overflow')
 c.save()
 # Publish allowlist; never copy source CV, content files or working documents.
 dist=ROOT/'dist';shutil.rmtree(dist,ignore_errors=True);dist.mkdir()
-for name in ['index.html','styles.css','assets','design','cv']:
+for name in ['index.html','styles.css','theme.js','assets','design','cv']:
     source=ROOT/name; dest=dist/name
     if source.is_dir():shutil.copytree(source,dest)
     else:shutil.copy2(source,dest)
