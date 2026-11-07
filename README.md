@@ -1,6 +1,6 @@
 # Alan O Cinneide Software BV
 
-Company homepage and public CV. Published at https://kenneide.github.io/aoc-home/.
+Company homepage and public CV. Custom domain: https://alanocinneide.com/. GitHub Pages hosts the site; Cloudflare manages DNS.
 
 ## Build and preview
 
@@ -31,3 +31,9 @@ The theme follows system preference until a visitor chooses light or dark, store
 Brand artwork remains the property of its rights holders. Space Grotesk is distributed under the SIL Open Font License in `assets/fonts/OFL.txt`. The LinkedIn icon identifies a link to the owner's supplied profile; LinkedIn is a trademark of its respective owner.
 
 The site has no runtime dependencies, analytics, forms or external font requests. Its standalone `theme.js` provides the accessible dark-mode toggle on both pages. PDF creation uses ReportLab and verification uses pypdf. Only the explicit website allowlist is copied into `dist/`.
+
+## Custom domains
+
+GitHub Pages settings map `alanocinneide.com` to this repository. The existing Actions workflow remains the publisher; a `CNAME` file is not needed for workflow-based Pages sites. Cloudflare uses DNS-only apex A records for `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`. `www` is a DNS-only CNAME to `kenneide.github.io`; GitHub redirects it to the apex. Enable Enforce HTTPS once the certificate is issued. Preserve the iCloud MX and email TXT records, and the GitHub domain-verification TXT record.
+
+The homepage Projects section links to `https://gym.alanocinneide.com/` and `https://design.alanocinneide.com/`, each independently published from its own repository. All contact links remain `hello@alanocinneide.com`.

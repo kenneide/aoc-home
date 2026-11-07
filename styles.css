@@ -10,3 +10,7 @@
 .theme-toggle:focus-visible{outline:3px solid var(--focus);outline-offset:6px}
 @media(max-width:520px){.header-row{flex-wrap:wrap}nav{gap:16px;flex-wrap:wrap} .theme-toggle{padding-inline:10px}}
 @media print{:root{--background:#fff!important;--text:#20231d!important;--secondary-text:#5d6257!important;--border:#d8d9ce!important;color-scheme:light}.theme-toggle{display:none}}
+
+/* Project links use the shared semantic roles and a simple ruled layout. */
+.projects{padding-block:64px 32px}.projects h2{font-size:clamp(36px,4vw,56px);font-weight:500;letter-spacing:-.04em;line-height:1.1;margin:0 0 40px}.project-list{display:grid;grid-template-columns:1fr 1fr;gap:48px}.project-list article{border-top:1px solid var(--border);padding-top:24px}.project-list h3{font-size:25px;font-weight:500;letter-spacing:-.035em;line-height:1.25;margin:0 0 16px}.project-list h3 a{display:flex;justify-content:space-between;gap:20px;text-decoration:none}.project-list h3 a:hover{text-decoration:underline}.project-list p{max-width:480px;color:var(--secondary-text);margin:0}
+@media(max-width:650px){.projects{padding-block:48px 24px}.project-list{grid-template-columns:1fr;gap:32px}.projects h2{margin-bottom:32px}}
