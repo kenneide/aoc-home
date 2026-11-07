@@ -1,0 +1,80 @@
+/* Generated from design/tokens.json. Run npm run generate. */
+:root {
+  --colour-blue: #038bcd;
+  --colour-green: #009037;
+  --colour-lime: #b2c906;
+  --colour-gold: #96845c;
+  --colour-white: #ffffff;
+  --colour-orange: #f7a800;
+  --colour-yellow: #ffee16;
+  --colour-red: #e5312c;
+  --colour-ink: #20231d;
+  --colour-paper: #f6f5ef;
+  --colour-muted: #5d6257;
+  --colour-line: #d8d9ce;
+  --colour-night: #151813;
+  --colour-charcoal: #252a22;
+  --colour-mist: #bfc5b6;
+  --colour-dark-line: #4a5144;
+  --font-family: Space Grotesk;
+  --font-fallback: Arial, sans-serif;
+  --font-body: 1rem;
+  --font-small: 0.8125rem;
+  --font-heading: clamp(2rem, 5vw, 4.5rem);
+  --font-display: clamp(3.5rem, 8.6vw, 8.5rem);
+  --font-line-height: 1.6;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --layout-max: 1440px;
+  --layout-gutter: clamp(20px, 4vw, 64px);
+  --layout-radius: 2px;
+  --motion-quick: 180ms;
+  --motion-settle: 400ms;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-band-duration: 1800ms;
+  --motion-theme: 700ms;
+  --motion-theme-ease: cubic-bezier(0.333333, 0, 0.666667, 1);
+  --background: var(--colour-paper);
+  --surface: var(--colour-white);
+  --text: var(--colour-ink);
+  --secondary-text: var(--colour-muted);
+  --action: var(--colour-ink);
+  --on-action: var(--colour-white);
+  --focus: var(--colour-ink);
+  --highlight: var(--colour-lime);
+  --border: var(--colour-line);
+  color-scheme: light;
+}
+:root[data-theme=dark] {
+  --background: var(--colour-night);
+  --surface: var(--colour-charcoal);
+  --text: var(--colour-paper);
+  --secondary-text: var(--colour-mist);
+  --action: var(--colour-lime);
+  --on-action: var(--colour-ink);
+  --focus: var(--colour-yellow);
+  --highlight: var(--colour-lime);
+  --border: var(--colour-dark-line);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme=light]) {
+  --background: var(--colour-night);
+  --surface: var(--colour-charcoal);
+  --text: var(--colour-paper);
+  --secondary-text: var(--colour-mist);
+  --action: var(--colour-lime);
+  --on-action: var(--colour-ink);
+  --focus: var(--colour-yellow);
+  --highlight: var(--colour-lime);
+  --border: var(--colour-dark-line);
+    color-scheme: dark;
+  }
+}

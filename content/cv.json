@@ -1,0 +1,68 @@
+{
+  "name": "Alan Ó Cinnéide",
+  "title": "Senior Technical Lead",
+  "qualification": "PhD · Digital Audio",
+  "location": "The Hague, Netherlands",
+  "email": "alan.ocinneide@gmail.com",
+  "linkedin": "https://www.linkedin.com/in/alanocinneide",
+  "profile": "Creative technical lead specializing in quality software solutions for digital audio problems. Passionate about communication, collaboration and learning.",
+  "experience": [
+    [
+      "Oct 2021 - Present",
+      "Director",
+      "Alan O Cinneide Software BV",
+      "The Hague, Netherlands",
+      "Providing software development services to clients."
+    ],
+    [
+      "Aug 2021 - Present",
+      "Technical Lead",
+      "Zoundio",
+      "Stockholm, Sweden",
+      "Contributing to Zoundio’s product portfolio, most notably the Gibson App on iOS and Android. Working remotely from The Hague."
+    ],
+    [
+      "Sep 2020 - Jul 2021",
+      "System Designer",
+      "Sonion",
+      "Hoofddorp, Netherlands",
+      "Contributed to the product development and technology team, particularly in Active Noise Cancellation and biometric sensing."
+    ],
+    [
+      "Sep 2019 - Aug 2020",
+      "Senior Audio DSP Software Engineer",
+      "Huawei",
+      "Munich, Germany",
+      "Developed audio signal processing solutions for spatial audio and speaker protection as part of Huawei’s audio research team."
+    ],
+    [
+      "Jun 2016 - May 2019",
+      "R&D Manager",
+      "Cirrus Logic",
+      "Stockholm, Sweden",
+      "Led a cross-functional research and development scrum team, delivering software for the amplifier business unit and contributing to several design-wins of Tier 1 and midrange vendors."
+    ],
+    [
+      "May 2014 - May 2016",
+      "Lecturer",
+      "MTC Oman",
+      "Muscat, Oman",
+      "Designed and delivered electrical engineering courses, including Engineering Mathematics, Analog and Digital Electronics, and Digital Signal Processing, as a member of the Systems Engineering department."
+    ],
+    [
+      "Apr 2012 - Apr 2014",
+      "Audio DSP Research Engineer",
+      "NXP Semiconductors",
+      "Leuven, Belgium",
+      "Developed audio signal processing solutions as part of NXP’s Audio Acoustic Laboratory, including Loudspeaker Protection for Mobile Audio and Error Concealment for Automotive Audio."
+    ]
+  ],
+  "education": [
+    "Sep 2007 - May 2012",
+    "PhD",
+    "Dublin Institute of Technology",
+    "Dublin, Ireland",
+    "Completed a doctoral degree as part of DIT’s Audio Research Group. Thesis: Phase-Distortion Robust Voice Source Analysis."
+  ],
+  "references": "Available upon request"
+}
