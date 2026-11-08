@@ -1,0 +1,60 @@
+{
+  "shared": {
+    "brandName": "Alan O Cinneide",
+    "brandSuffix": "Software BV",
+    "skipLink": "Skip to content",
+    "navigationLabel": "Main navigation",
+    "cvLink": "CV",
+    "linkedin": "LinkedIn",
+    "themeToggle": "Dark mode",
+    "registryLabel": "KVK"
+  },
+  "home": {
+    "description": "Creative problem solving through software. Alan O Cinneide brings technical experience and a candid, collaborative approach to building better products.",
+    "eyebrow": "Software development and technical leadership",
+    "headline": [
+      "Creative problem solving.",
+      "Through software."
+    ],
+    "intro": "I work with people to solve practical problems and build better products. I’m an assertive partner, bringing creative thinking, technical experience and a candid approach to working together.",
+    "contactLink": "Get in touch",
+    "artCaptions": [
+      "Clear thinking.",
+      "Colourful possibilities."
+    ],
+    "location": "The Hague, Netherlands",
+    "experienceLink": "Explore my experience",
+    "projectsEyebrow": "Selected work",
+    "projectsHeading": "Projects",
+    "projects": [
+      {
+        "title": "Gym Circuit Logger",
+        "url": "https://gym.alanocinneide.com/",
+        "description": "A phone-first workout logger, with a demo and gym setup tools."
+      },
+      {
+        "title": "Design system",
+        "url": "https://design.alanocinneide.com/",
+        "description": "Shared colours, typography and reusable presentation templates."
+      },
+      {
+        "title": "Maestro",
+        "url": "https://maestro.alanocinneide.com/",
+        "description": "A DJ-to-musician performance tool, built at the ADE Lab Hackathon."
+      }
+    ]
+  },
+  "cv": {
+    "pageTitle": "CV | Alan O Cinneide Software BV",
+    "eyebrow": "Experience / Curriculum vitae",
+    "downloadLink": "Download CV",
+    "downloadFormat": "PDF",
+    "profileHeading": "Profile",
+    "experienceHeading": "Experience",
+    "continuedHeading": "Experience / continued",
+    "educationHeading": "Education",
+    "referencesHeading": "References",
+    "pdfTitle": "Alan Ó Cinnéide | Curriculum vitae",
+    "pdfPageLabel": "CV"
+  }
+}

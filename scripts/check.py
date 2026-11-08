@@ -3,9 +3,11 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import json
+from html import escape
 from pypdf import PdfReader
 root=Path(__file__).resolve().parent.parent
 public=root/'dist';cv=json.loads((root/'content/cv.json').read_text())
+copy=json.loads((root/'content/site.json').read_text())
 class Links(HTMLParser):
     def handle_starttag(self,tag,attrs):
         attrs=dict(attrs)
@@ -22,7 +24,7 @@ for file in public.rglob('*.html'):
     assert text.count('class="spectrum"')==2
     assert cv['linkedin'] in text
     assert text.count('class="theme-toggle"') == 1
-    assert 'aria-pressed="false" hidden>Dark mode</button>' in text
+    assert f'aria-pressed="false" hidden>{escape(copy["shared"]["themeToggle"])}</button>' in text
     assert text.index('theme.js') < text.index('design/tokens.css')
     for private in ['Laan van','2593','11 44 8026','11448026']:assert private not in text
 reader=PdfReader(public/'assets/AlanOCinneide_CV.pdf')
@@ -32,7 +34,6 @@ web=(public/'cv/index.html').read_text()
 for item in cv['experience']+[cv['education']]:
     for field in item[:3]:
         assert field in pdf,field
-        from html import escape
         assert escape(field) in web,field
 for private in ['Laan van','2593','11 44 8026','11448026']:assert private not in pdf
 for page in reader.pages:assert page.get('/Annots')

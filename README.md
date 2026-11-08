@@ -16,7 +16,14 @@ Open http://localhost:4173. GitHub Actions builds and deploys `dist/` to Pages o
 
 ## Content
 
-`content/cv.json` is the factual source for both the HTML CV and PDF. Update that file, then rebuild. The build writes `index.html`, `cv/index.html`, `assets/AlanOCinneide_CV.pdf` and the ignored `dist/` and `output/pdf/` folders. The two-page PDF uses an explicit page break after Sonion; reassess pagination when adding roles. Overflow fails the build.
+Public copy is maintained in two files:
+
+- `content/site.json`: homepage wording and project links, page metadata, navigation, accessibility labels, and shared web/PDF section labels.
+- `content/cv.json`: personal details, profile, experience, education and references, shared by the HTML CV and PDF.
+
+Company identity and registration details remain in `design/company.json`, the existing design provenance record. Repository documentation, font licence text and build diagnostics are not website copy. Edit the content files rather than generated HTML or strings in `scripts/build.py`, then run `npm run build`. Text is escaped by the templates; headline lines are separate array entries to preserve the existing line break.
+
+The homepage introduction and CV profile describe creative problem solving through software and an assertive, candid approach to partnership. Audio remains an area of expertise rather than the scope of all services. For further voice edits, start with `home.eyebrow`, `home.headline`, `home.intro` and `home.artCaptions` in `content/site.json`, then `profile` and the role descriptions in `content/cv.json`. Keep factual dates, qualifications and experience claims grounded in the owner-supplied CV. The build writes `index.html`, `cv/index.html`, `assets/AlanOCinneide_CV.pdf` and the ignored `dist/` and `output/pdf/` folders. The two-page PDF uses an explicit page break after Sonion; reassess pagination when adding roles. Overflow fails the build.
 
 CV wording derives from the owner-supplied CV. Director and Zoundio date ranges confirmed current by the owner on 7 November 2026. No additional experience, skills or metrics are asserted. Street address and mobile are intentionally excluded from all public output. The original CV is not included.
 
