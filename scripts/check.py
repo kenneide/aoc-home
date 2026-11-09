@@ -14,7 +14,7 @@ class Links(HTMLParser):
         for key in ['href','src']:
             link=attrs.get(key,'');url=urlsplit(link)
             if url.scheme or not url.path:continue
-            target=(self.file.parent/unquote(url.path)).resolve()
+            target=((public/unquote(url.path).lstrip('/')) if url.path.startswith('/') else (self.file.parent/unquote(url.path))).resolve()
             assert target.is_relative_to(public.resolve()),link
             assert target.exists(),f'{self.file}: broken {link}'
 for file in public.rglob('*.html'):

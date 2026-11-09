@@ -90,4 +90,6 @@ for name in ['index.html','styles.css','theme.js','assets','design','cv']:
 shutil.copy2(out,dist/'assets/AlanOCinneide_CV.pdf')
 shutil.copy2(out,ROOT/'assets/AlanOCinneide_CV.pdf')
 (dist/'.nojekyll').touch()
+# Disable Cloudflare Pages' implicit SPA fallback for missing files.
+(dist/'404.html').write_text(shell('404 — '+company['name'], '404', '<main id="main" class="wrap"><h1>404</h1></main>', '/'))
 print('Built homepage, CV page and two-page PDF in dist/')
