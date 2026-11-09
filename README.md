@@ -1,6 +1,6 @@
 # Alan O Cinneide Software BV
 
-Company homepage and public CV. Custom domain: https://alanocinneide.com/. GitHub Pages hosts the site; Cloudflare manages DNS.
+Company homepage and public CV. Custom domain: https://alanocinneide.com/. Cloudflare Pages hosts production and manages DNS. GitHub Pages remains a fallback.
 
 ## Build and preview
 
@@ -12,7 +12,7 @@ python3 scripts/check.py
 python3 -m http.server 4173 --directory dist
 ```
 
-Open http://localhost:4173. GitHub Actions builds and deploys `dist/` to Pages on pushes to `main`; Pages must use GitHub Actions as its source.
+Open http://localhost:4173. Cloudflare builds and deploys `dist/` on pushes to `main`. The existing GitHub Actions workflow also maintains the GitHub Pages fallback.
 
 ## Content
 
@@ -41,7 +41,7 @@ The site has no runtime dependencies, analytics, forms or external font requests
 
 ## Custom domains
 
-GitHub Pages settings map `alanocinneide.com` to this repository. The existing Actions workflow remains the publisher; a `CNAME` file is not needed for workflow-based Pages sites. Cloudflare uses DNS-only apex A records for `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`. `www` is a DNS-only CNAME to `kenneide.github.io`; GitHub redirects it to the apex. Enable Enforce HTTPS once the certificate is issued. Preserve the iCloud MX and email TXT records, and the GitHub domain-verification TXT record.
+Production uses the GitHub-connected Cloudflare Pages project `aoc-home`. Preserve the existing website domain configuration, iCloud mail records and GitHub domain verification records. Verify HTTPS and the www redirect after hosting changes; GitHub Pages settings apply only to the fallback.
 
 The homepage Projects section links to `https://gym.alanocinneide.com/`, `https://design.alanocinneide.com/` and `https://maestro.alanocinneide.com/`, each independently published from its own repository. All contact links remain `hello@alanocinneide.com`.
 
@@ -49,3 +49,7 @@ The homepage Projects section links to `https://gym.alanocinneide.com/`, `https:
 ## Production hosting and updates
 
 The public website is https://alanocinneide.com/, hosted by the GitHub-connected Cloudflare Pages project `aoc-home`. Push to this repository’s `main` branch to trigger an automatic Cloudflare build and deployment; no dashboard upload is needed. The build command is `pip install -r requirements.txt && npm run build`, and only `dist` is published. Cloudflare manages custom-domain certificates and HTTP-to-HTTPS redirects. Check the Cloudflare status on the GitHub commit before treating an update as live. Existing GitHub Pages workflows remain as a fallback; production DNS points to Cloudflare. Do not change mail records when maintaining website DNS.
+
+## Website finishing assets
+
+The build generates `404.html`, `robots.txt`, `sitemap.xml` and Cloudflare `_headers` directly in `dist/`. Error copy and production metadata live in `content/site.json`. The 404 uses root-relative links for nested missing paths. Canonical URLs point to production; the error page is marked noindex. Sharing artwork and browser icons are committed under `assets/`, derived from the existing spectrum colours and local Space Grotesk font. No analytics, forms or additional external requests are introduced.

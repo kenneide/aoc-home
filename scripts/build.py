@@ -16,10 +16,15 @@ shared=copy['shared']; homepage=copy['home']; labels=copy['cv']
 company=json.loads((ROOT/'design/company.json').read_text())
 linkedin='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.45 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.3 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.3h.04c.4-.76 1.36-1.56 2.8-1.56 3 0 3.57 1.98 3.57 4.55v5.26Z"/></svg>'
 def social(): return f'<a class="social" aria-label="{e(shared['linkedin'])}" href="{cv["linkedin"]}">{linkedin}<span>{e(shared['linkedin'])}</span></a>'
-def shell(title,desc,body,prefix='',is_cv=False):
+def shell(title,desc,body,prefix='',is_cv=False,not_found=False):
+    origin=copy['site']['origin']
+    url=origin+('/cv/' if is_cv else '/')
+    metadata='<meta name="robots" content="noindex">' if not_found else f'<link rel="canonical" href="{url}"><meta property="og:url" content="{url}">'
+    metadata+=f'''<meta property="og:type" content="website"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:image" content="{origin}/assets/social-preview.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{e(copy['site']['imageAlt'])}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{origin}/assets/social-preview.png">'''
+
     return f'''<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta name="theme-color" content="#f6f5ef"><script src="{prefix}theme.js"></script><link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml"><link rel="preload" href="{prefix}assets/fonts/SpaceGrotesk.ttf" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="{prefix}design/tokens.css"><link rel="stylesheet" href="{prefix}styles.css"></head>
-<body><a class="skip" href="#main">{e(shared['skipLink'])}</a><header><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap header-row"><a class="brand" href="{prefix or './'}">{e(shared['brandName'])}<span>{e(shared['brandSuffix'])}</span></a><nav aria-label="{e(shared['navigationLabel'])}"><a href="{ './' if is_cv else 'cv/'}" {'aria-current="page"' if is_cv else ''}>{e(shared['cvLink'])}</a>{social()}<button class="theme-toggle" type="button" aria-pressed="false" hidden>{e(shared['themeToggle'])}</button></nav></div></header>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}">{metadata}<link rel="icon" href="{prefix}assets/favicon.ico" sizes="any"><link rel="icon" href="{prefix}assets/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="{prefix}assets/apple-touch-icon.png"><meta name="theme-color" content="#f6f5ef"><script src="{prefix}theme.js"></script><link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml"><link rel="preload" href="{prefix}assets/fonts/SpaceGrotesk.ttf" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="{prefix}design/tokens.css"><link rel="stylesheet" href="{prefix}styles.css"></head>
+<body><a class="skip" href="#main">{e(shared['skipLink'])}</a><header><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap header-row"><a class="brand" href="{prefix or './'}">{e(shared['brandName'])}<span>{e(shared['brandSuffix'])}</span></a><nav aria-label="{e(shared['navigationLabel'])}"><a href="{ './' if is_cv else prefix+'cv/'}" {'aria-current="page"' if is_cv else ''}>{e(shared['cvLink'])}</a>{social()}<button class="theme-toggle" type="button" aria-pressed="false" hidden>{e(shared['themeToggle'])}</button></nav></div></header>
 {body}
 <footer><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap footer-row"><strong>{e(company['name'])}</strong><div class="footer-links"><a href="mailto:{cv['email']}">{cv['email']}</a><a href="{e(company['kvk']['url'])}">{e(shared['registryLabel'])} {company['kvk']['number']} ↗</a></div></div></footer></body></html>'''
 def project(item):
@@ -91,5 +96,12 @@ shutil.copy2(out,dist/'assets/AlanOCinneide_CV.pdf')
 shutil.copy2(out,ROOT/'assets/AlanOCinneide_CV.pdf')
 (dist/'.nojekyll').touch()
 # Disable Cloudflare Pages' implicit SPA fallback for missing files.
-(dist/'404.html').write_text(shell('404 — '+company['name'], '404', '<main id="main" class="wrap"><h1>404</h1></main>', '/'))
+missing=copy['notFound']
+missing_body=f'''<main id="main" class="wrap error-page"><p class="eyebrow">404</p><h1>{e(missing['title'])}</h1><p class="intro">{e(missing['description'])}</p><div class="error-links"><a class="button" href="/">{e(missing['homeLink'])}</a><a href="/cv/">{e(missing['cvLink'])}</a><a href="mailto:{e(company['inquiriesEmail'])}">{e(missing['contactLink'])}</a></div></main>'''
+(dist/'404.html').write_text(shell(missing['title']+' — '+company['name'],missing['description'],missing_body,'/',not_found=True))
+origin=copy['site']['origin']
+(dist/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {origin}/sitemap.xml\n')
+(dist/'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>{origin}/</loc></url><url><loc>{origin}/cv/</loc></url></urlset>')
+(dist/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n')
+
 print('Built homepage, CV page and two-page PDF in dist/')

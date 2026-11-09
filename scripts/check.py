@@ -39,3 +39,22 @@ for private in ['Laan van','2593','11 44 8026','11448026']:assert private not in
 for page in reader.pages:assert page.get('/Annots')
 assert not list(public.rglob('*.json')) or {f.name for f in public.rglob('*.json')}=={'company.json'}
 print('Checks passed: local links, identity, spectrum frames, CV coverage, PDF links and public contact details')
+# Website metadata and recovery routes.
+import xml.etree.ElementTree as ET
+origin=copy['site']['origin']
+for path,route in [('index.html','/'),('cv/index.html','/cv/')]:
+    html=(public/path).read_text()
+    assert f'rel="canonical" href="{origin}{route}"' in html
+    for marker in ['og:title','og:description','og:image','twitter:card','apple-touch-icon']:
+        assert marker in html,marker
+missing=(public/'404.html').read_text()
+assert 'content="noindex"' in missing and 'rel="canonical"' not in missing
+assert 'href="/cv/"' in missing and 'src="/theme.js"' in missing
+assert copy['notFound']['title'] in missing
+urls=ET.parse(public/'sitemap.xml').findall('{*}url/{*}loc')
+assert {x.text for x in urls}=={origin+'/',origin+'/cv/'}
+assert f'Sitemap: {origin}/sitemap.xml' in (public/'robots.txt').read_text()
+for name in ['social-preview.png','favicon.ico','favicon-32.png','apple-touch-icon.png']:
+    assert (public/'assets'/name).stat().st_size>0
+assert 'X-Content-Type-Options: nosniff' in (public/'_headers').read_text()
+print('Checks passed: canonical metadata, sharing, icons, sitemap and 404 recovery')

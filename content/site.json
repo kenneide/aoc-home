@@ -56,5 +56,16 @@
     "referencesHeading": "References",
     "pdfTitle": "Alan Ó Cinnéide | Curriculum vitae",
     "pdfPageLabel": "CV"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you’re looking for may have moved, or the link may be incorrect.",
+    "homeLink": "Back to the homepage",
+    "cvLink": "View my CV",
+    "contactLink": "Get in touch"
+  },
+  "site": {
+    "origin": "https://alanocinneide.com",
+    "imageAlt": "Alan O Cinneide Software BV — Creative problem solving. Through software."
   }
 }
