@@ -139,3 +139,23 @@ main,.presenting main{display:block;position:static;padding:0}
 .presenting{overflow:visible}
 }
 
+/* Quiet choreography: fixed text, finite artwork reveals and diagram accents. */
+.slide{--detail-accent:var(--colour-lime)}
+.layout-opening,.layout-gym,.layout-question,.layout-review{--detail-accent:var(--colour-ink)}
+.presenting .slide-inner{animation:none}
+.chapter-map{display:none}
+.presenting .chapter-map{position:fixed;bottom:64px;left:0;right:0;z-index:4;display:flex;gap:2px;padding:0 20px;background:var(--surface)}
+.chapter-map button{flex:1;position:relative;isolation:isolate;border:0;border-top:2px solid var(--border);background:transparent;color:var(--secondary-text);font:inherit;font-size:10px;letter-spacing:.06em;text-align:left;padding:9px 0;cursor:pointer;min-height:36px}
+.chapter-map button::before{content:'';position:absolute;left:0;right:0;top:-2px;height:2px;background:var(--text);transform:scaleX(0);transform-origin:left;transition:transform var(--motion-settle) var(--motion-ease)}
+.chapter-map button::after{content:'';position:absolute;left:0;top:-2px;height:2px;width:var(--chapter-progress,0%);background:var(--text);transition:width var(--motion-settle) var(--motion-ease)}
+.chapter-map button:hover::before,.chapter-map button:focus-visible::before{transform:scaleX(1)}
+.chapter-map button[aria-current]{color:var(--text)}
+.presenting main{bottom:100px}
+.presenting .slide{width:min(100vw,calc((100dvh - 100px)*16/9))}
+.controls button{transition:background-color var(--theme-colour-response,var(--motion-quick)),color var(--theme-colour-response,var(--motion-quick)),border-color var(--theme-colour-response,var(--motion-quick))}
+.controls button:hover:not(:disabled){background:var(--action);color:var(--on-action)}
+.contact{text-decoration:none;align-self:flex-start;background:linear-gradient(currentColor,currentColor) left bottom / 0 1px no-repeat;padding-bottom:6px;transition:background-size var(--motion-settle) var(--motion-ease)}
+.contact:hover,.contact:focus-visible{background-size:100% 1px}
+@media(max-width:650px){.presenting .chapter-map{display:none}.presenting main{padding-bottom:160px}.presenting .slide{width:100%}.controls button,.controls a{min-height:36px}}
+@media(prefers-reduced-motion:reduce){.chapter-map button::before,.chapter-map button::after,.controls button,.contact{transition:none}}
+@media print{.chapter-map,.presenting .chapter-map{display:none}.presenting .slide{width:100%}}

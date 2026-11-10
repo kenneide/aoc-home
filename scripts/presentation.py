@@ -1,6 +1,6 @@
 """Build a private, loopback-only preview; never add project files to dist."""
 from pathlib import Path
-import json, shutil, subprocess, sys
+import json, shutil, subprocess, sys, hashlib
 from html import escape as e
 root=Path(__file__).resolve().parent.parent
 subprocess.run(['npm','run','build'],cwd=root,check=True)
@@ -58,7 +58,11 @@ for idx,s in enumerate(slides):
  notes.append('\n## '+s['id']+' — '+s['title']+'\n'+'\n'.join(f'\n**{k.title()}:** {v}' for k,v in n.items()))
 (target/'notes.txt').write_text('\n'.join(notes))
 (target/'index.html').write_text('''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>AI for Fun & Profit — local draft</title><script src="../../theme.js"></script><link rel="stylesheet" href="../../design/tokens.css"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="deck.css"><header><img class="spectrum" src="../../assets/spectrum.svg" alt=""><div class="wrap header-row"><a href="/">Alan O Cinneide Software BV</a><button class="theme-toggle" aria-pressed="false" hidden>Dark mode</button></div></header><nav class="controls"><a href="/#projects">Back to site</a><button id="prev">← Previous</button><output aria-live="polite"></output><button id="next">Next →</button><button id="present">Present</button><button id="full">Full screen</button><a href="notes.txt" target="_blank">Notes</a></nav><main>'''+''.join(sections)+'''</main><footer><img class="spectrum" src="../../assets/spectrum.svg" alt=""><p>Alan O Cinneide Software BV · Local presentation draft</p></footer><script src="deck.js"></script></html>''')
-for name in ['deck.js','deck.css']:shutil.copy2(project/name,target/name)
+for name in ['deck.js','deck.css']:
+ shutil.copy2(project/name,target/name)
+ version=hashlib.sha256((project/name).read_bytes()).hexdigest()[:12]
+ page=target/'index.html'
+ page.write_text(page.read_text().replace(f'"{name}"',f'"{name}?v={version}"'))
 print('Preview: http://127.0.0.1:4174/projects/ai-for-fun-and-profit/')
 if '--serve' in sys.argv:
  from preview_server import serve

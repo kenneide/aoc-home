@@ -19,3 +19,7 @@ Select **Presentation: local preview** in Run and Debug and press **F5**. This u
 The deck adapts the sibling design system’s title, section, comparison, roadmap, visual and closing compositions. Sixteen slides use individual layouts: spectrum opening, constraints, manifesto, case study, stepped workflow, import pipeline, comparison, phone stage, demonstration, business roles, creative gallery, review grid, iteration process, opportunities, audience question and closing. Lime, yellow, orange and ink specimen surfaces retain their artwork palettes; ordinary reading surfaces follow the shared semantic theme. Media slots remain explicit placeholders, never simulated product screenshots.
 
 Repeated launches reuse a server on port 4174 when it serves the matching presentation. Refresh the browser to see rebuilt content. If another application owns the port, the launcher reports the conflict without stopping that application.
+
+## Motion and small details
+
+Presentation mode draws the existing spectrum artwork into view once, then settles. Workflow and process nodes receive a short, sequential accent; media placeholders receive a quiet outline response. Text stays still, all content is always available, and nothing loops or auto-advances. A chapter rail shows actual talk progress and lets you jump between acts. “Replay details” repeats the current visual entrance for rehearsal. Reduced motion skips the choreography and rail transitions, including cancelling an entrance when the preference changes. No animation libraries or external assets are required.
