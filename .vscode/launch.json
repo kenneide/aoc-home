@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Presentation: local preview",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "PATH=\"${workspaceFolder}/.venv/bin:$PATH\" npm run presentation:dev",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "pattern": "Serving HTTP on 127\\.0\\.0\\.1 port 4174",
+        "uriFormat": "http://127.0.0.1:4174/projects/ai-for-fun-and-profit/",
+        "action": "openExternally"
+      }
+    }
+  ]
+}

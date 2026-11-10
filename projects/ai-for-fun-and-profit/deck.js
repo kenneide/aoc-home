@@ -1,0 +1,9 @@
+const slides=[...document.querySelectorAll('.slide')];let i=Math.max(0,slides.findIndex(s=>'#'+s.id===location.hash));
+const prev=document.querySelector('#prev'),next=document.querySelector('#next'),present=document.querySelector('#present');
+function update(){slides.forEach((s,j)=>{s.hidden=document.body.classList.contains('presenting')&&j!==i});prev.disabled=i===0;next.disabled=i===slides.length-1;document.querySelector('output').textContent=`${i+1} / ${slides.length}`;}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));history.replaceState(null,'','#'+slides[i].id);update();if(!document.body.classList.contains('presenting'))slides[i].scrollIntoView();}
+prev.onclick=()=>go(i-1);next.onclick=()=>go(i+1);
+present.onclick=()=>{document.body.classList.toggle('presenting');present.textContent=document.body.classList.contains('presenting')?'All slides':'Present';update();};
+document.querySelector('#full').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else{if(!document.body.classList.contains('presenting'))present.click();await document.documentElement.requestFullscreen();}}catch{document.querySelector('output').textContent='Use Present mode';}};
+addEventListener('hashchange',()=>{const n=slides.findIndex(s=>'#'+s.id===location.hash);if(n>=0){i=n;update();}});
+addEventListener('keydown',e=>{if(!document.body.classList.contains('presenting')||e.altKey||e.ctrlKey||e.metaKey||e.target.closest('input,textarea,select,button,a'))return;let n={ArrowRight:i+1,ArrowDown:i+1,PageDown:i+1,ArrowLeft:i-1,ArrowUp:i-1,PageUp:i-1,Home:0,End:slides.length-1,' ':i+(e.shiftKey?-1:1)}[e.key];if(e.key==='Escape'){present.click();present.focus();}if(n!==undefined){e.preventDefault();go(n);}});update();

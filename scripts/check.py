@@ -58,3 +58,7 @@ for name in ['social-preview.png','favicon.ico','favicon-32.png','apple-touch-ic
     assert (public/'assets'/name).stat().st_size>0
 assert 'X-Content-Type-Options: nosniff' in (public/'_headers').read_text()
 print('Checks passed: canonical metadata, sharing, icons, sitemap and 404 recovery')
+# Draft presentation must never enter production output.
+assert not (public/'projects/ai-for-fun-and-profit').exists()
+for file in public.rglob('*'):
+    assert file.name not in {'slides.json','deck.js','deck.css','notes.txt'}

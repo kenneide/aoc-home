@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "python3 scripts/build.py && python3 scripts/check.py",
-    "dev": "python3 -m http.server 4173 --directory dist"
+    "dev": "python3 -m http.server 4173 --directory dist",
+    "presentation:build": "python3 scripts/presentation.py",
+    "presentation:dev": "python3 scripts/presentation.py --serve"
   }
 }
