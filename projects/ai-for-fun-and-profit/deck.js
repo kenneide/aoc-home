@@ -49,10 +49,10 @@ function animateDetails(slide) {
   const nodes = [...slide.querySelectorAll('.columns > div, .pipeline > span, .process-loop li, .review-grid > div, .demo-steps > span, .opportunity-list > span')];
   nodes.forEach((node, position) => {
     const accent = getComputedStyle(slide).getPropertyValue('--detail-accent').trim();
-    play(node, [{boxShadow: `inset 0 3px ${accent}`}, {boxShadow: 'inset 0 0px transparent'}], position * 90, duration * 1.5);
+    play(node, [{boxShadow: `inset 0 3px ${accent}`, offset: 0}, {boxShadow: `inset 0 3px ${accent}`, offset: 0.35}, {boxShadow: 'inset 0 0px transparent', offset: 1}], position * 300, duration * 3);
   });
   slide.querySelectorAll('.phone, .media-slot').forEach((node, position) => {
-    play(node, [{outline: '1px solid currentColor', outlineOffset: '5px'}, {outline: '1px solid transparent', outlineOffset: '0px'}], position * 90);
+    play(node, [{outline: '1px solid currentColor', outlineOffset: '5px'}, {outline: '1px solid transparent', outlineOffset: '0px'}], position * 300, duration * 2);
   });
 }
 function update() {
