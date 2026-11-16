@@ -15,7 +15,7 @@ class Element {
 const artwork = new Element();
 let started=0,cancelled=0;
 artwork.animate=()=>{started++;return {cancel(){cancelled++;}};};
-const slides=Array.from({length:16},(_,i)=>Object.assign(new Element(),{id:`slide-${String(i+1).padStart(2,'0')}`}));
+const slides=Array.from({length:18},(_,i)=>Object.assign(new Element(),{dataset:{chapter: i===0?'The opportunity':''},id:`slide-${String(i+1).padStart(2,'0')}`}));
 slides[0].querySelector=()=>artwork;
 slides[1].querySelector=()=>artwork;
 const controls=new Element();
@@ -40,7 +40,7 @@ assert.equal(controls.children[0].hidden,true);
 elements['#next'].onclick();assert.equal(started,2);
 const key=key=>listeners.keydown({key,target:{closest:()=>null},preventDefault(){}});
 key('End');assert.equal(elements['#next'].disabled,true);
-key('ArrowRight');assert.equal(elements.output.textContent,'16 / 16');
+key('ArrowRight');assert.equal(elements.output.textContent,'18 / 18');
 key('Home');assert.equal(elements['#prev'].disabled,true);
 key('Escape');assert(slides.every(s=>!s.hidden));
 assert.equal(body.children[0].children.filter(b=>b.attrs['aria-current']).length,1);

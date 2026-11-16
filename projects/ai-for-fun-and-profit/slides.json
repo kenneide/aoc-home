@@ -1,94 +1,97 @@
 [
   {
-    "id": "slide-01",
-    "title": "What have you stopped asking for?",
-    "body": "Because software felt too expensive?",
+    "id": "human-computers",
+    "title": "This used to be a computer.",
+    "body": "",
+    "layout": "historical",
+    "source": "https://www.flickr.com/photos/nasacommons/7538108706",
+    "placeholder": null,
     "notes": {
-      "point": "What have you stopped asking for?",
-      "story": "Ask people to recall a problem they stopped trying to solve. Introduce Alan, then connect the question to changing development economics.",
-      "transition": "Next: What we could build",
-      "materials": "No additional material required",
-      "minutes": 1
+      "point": "This used to be a computer.",
+      "story": "Introduce the event: Drink & Discover, MyWorkLounge, Friday 20 November 2026. In 1949 NACA staff transcribed flight recordings and used slide rules and electric calculators to reduce data to engineering units. Calculation required skilled people, equipment and time. Electronic computers later automated much of this work.",
+      "transition": "Next: When calculation became cheap",
+      "materials": "https://www.flickr.com/photos/nasacommons/7538108706",
+      "minutes": 1.2
     },
-    "placeholder": null
+    "chapter": "The opportunity"
   },
   {
-    "id": "slide-02",
-    "title": "What we could build",
-    "body": "Expertise \u2192 Budget \u2192 Time",
+    "id": "cheap-calculation",
+    "title": "When calculation became cheap",
+    "body": "Human calculation → Electronic computers → Interactive spreadsheets",
+    "layout": "calculation",
+    "source": "https://www.bricklin.com/history/saiproduct1_m.htm",
+    "placeholder": null,
     "notes": {
-      "point": "What we could build",
-      "story": "Explain how familiar technologies and available skills shaped product choices. These were rational constraints, but not always the ideal starting point.",
-      "transition": "Next: What should we build?",
-      "materials": "No additional material required",
-      "minutes": 1.5
-    },
-    "placeholder": null
+      "point": "When calculation became cheap",
+      "story": "These were distinct developments: electronic computers automated calculation; VisiCalc, released for Apple II in 1979, brought interactive business modelling to ordinary business users. We did not just calculate the same things faster: scenarios, forecasts, budgets and sensitivity analysis became practical to explore. Cheaper technology can expand demand. Screenshot is a later capture, not a launch photograph.",
+      "transition": "Next: The world wants more software",
+      "materials": "https://www.bricklin.com/history/saiproduct1_m.htm",
+      "minutes": 1.2
+    }
   },
   {
-    "id": "slide-03",
-    "title": "What should we build?",
-    "body": "Think beyond your constraints.\nBuild with AI.\nDeliver with discipline.",
+    "id": "more-software",
+    "title": "The world wants more software",
+    "body": "“the world wants a gigantic amount more software, hundred times, maybe a thousand times more software.”",
+    "layout": "quote",
+    "source": "https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf",
+    "placeholder": null,
     "notes": {
-      "point": "What should we build?",
-      "story": "AI expands realistic options. Product and engineering judgment choose among them. AI can accelerate an ordinary application without being a feature of it.",
-      "transition": "Next: Zoundio: creating guitar lessons",
-      "materials": "No additional material required",
-      "minutes": 1.5
-    },
-    "placeholder": null
+      "point": "The world wants more software",
+      "story": "Sam Altman, Federal Reserve conference, July 22, 2025, transcript page 19. This is speculation, not a measured forecast. Why more software? Perhaps millions of small specialist workflows, personal applications, automations and niche business tools rather than only large consumer apps.",
+      "transition": "Next: App Store submissions reviewed: +49% since 2022",
+      "materials": "https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf",
+      "minutes": 1.2
+    }
   },
   {
-    "id": "slide-04",
-    "title": "Zoundio: creating guitar lessons",
-    "body": "The lesson author\u2019s experience matters",
+    "id": "submission-activity",
+    "title": "App Store submissions reviewed: +49% since 2022",
+    "body": "",
+    "layout": "chart",
+    "source": "https://www.apple.com/legal/app-store/transparency/",
+    "placeholder": null,
     "notes": {
-      "point": "Zoundio: creating guitar lessons",
-      "story": "Introduce music education and interactive guitar lessons. Explain cumbersome specialized authoring workflows without exposing internal implementation.",
-      "transition": "Next: Why awkward workflows survive",
-      "materials": "Screenshot of approved original Zoundio authoring workflow",
-      "minutes": 2
+      "point": "App Store submissions reviewed: +49% since 2022",
+      "story": "Exact counts: 2022: 6,101,913; 2023: 6,892,500; 2024: 7,771,599; 2025: 9,100,620. Growth is 49.1%. Includes updates and resubmissions, not distinct new apps. This shows increased submission activity, not that AI caused growth. Internal tools, scripts, web apps and personal automations may never appear in an app store.",
+      "transition": "Next: What becomes worth building?",
+      "materials": "https://www.apple.com/legal/app-store/transparency/",
+      "minutes": 1.2
     },
-    "placeholder": "Screenshot of approved original Zoundio authoring workflow"
+    "chart": [
+      [
+        2022,
+        6101913
+      ],
+      [
+        2023,
+        6892500
+      ],
+      [
+        2024,
+        7771599
+      ],
+      [
+        2025,
+        9100620
+      ]
+    ]
   },
   {
-    "id": "slide-05",
-    "title": "Why awkward workflows survive",
-    "body": "Historical constraints \u2192 Specialized tools \u2192 Lasting habits",
+    "id": "worth-building",
+    "title": "What becomes worth building?",
+    "body": "An idea that wasn’t worth three months of development might be worth three afternoons of experimentation.",
+    "layout": "experiment",
+    "source": "",
+    "placeholder": null,
     "notes": {
-      "point": "Why awkward workflows survive",
-      "story": "Explain why organizations preserve working processes even when they become awkward. This is a conceptual diagram, not an exact internal workflow.",
-      "transition": "Next: Use the tools musicians know",
-      "materials": "No additional material required",
-      "minutes": 2
-    },
-    "placeholder": null
-  },
-  {
-    "id": "slide-06",
-    "title": "Use the tools musicians know",
-    "body": "Familiar authoring \u2192 Import / conversion \u2192 Native lesson data",
-    "notes": {
-      "point": "Use the tools musicians know",
-      "story": "Describe the better authoring approach. AI-assisted development helped make new conversion and import capabilities practical. Do not name unconfirmed formats or claim measured savings.",
-      "transition": "Next: Build the right tool",
-      "materials": "Approved new Zoundio import workflow screenshot",
-      "minutes": 2
-    },
-    "placeholder": "Approved new Zoundio import workflow screenshot"
-  },
-  {
-    "id": "slide-07",
-    "title": "Build the right tool",
-    "body": "A better authoring workflow can improve everything downstream",
-    "notes": {
-      "point": "Build the right tool",
-      "story": "Compare specialized authoring with familiar tools plus import. Discuss potential organizational benefits without invented metrics. Sometimes recognizing the wrong tool is the valuable work.",
+      "point": "What becomes worth building?",
+      "story": "A rhetorical illustration, not a factual estimate. Consider gym logging, specialist guitar editing, kitchen inventory and meal planning, or automating repetitive business work. These examples illustrate possibilities, not claims that every project exists. AI lowers the cost of experimentation; good products still require judgment. Start with the working personal gym application.",
       "transition": "Next: Open it and log",
       "materials": "No additional material required",
-      "minutes": 1.5
-    },
-    "placeholder": null
+      "minutes": 1.2
+    }
   },
   {
     "id": "slide-08",
@@ -99,35 +102,96 @@
       "story": "Describe the personal gym problem and desired experience. Explain the mobile-friendly PWA and local anonymous device-specific data. AI accelerated implementation and iteration.",
       "transition": "Next: A workout, logged",
       "materials": "Real gym app screenshot",
-      "minutes": 2
+      "minutes": 1.79
     },
-    "placeholder": "Real gym app screenshot"
+    "placeholder": "Real gym app screenshot",
+    "layout": "gym",
+    "chapter": "The gym"
   },
   {
     "id": "slide-09",
     "title": "A workout, logged",
-    "body": "Open \u2192 Log an exercise \u2192 Inspect progress",
+    "body": "Open → Log an exercise → Inspect progress",
     "notes": {
       "point": "A workout, logged",
       "story": "Demonstrate the working product using prepared demo data. If unavailable, walk through approved screenshots. Avoid exposing personal workout data accidentally.",
       "transition": "Next: The gym does the setup",
       "materials": "Live gym app demonstration and fallback screenshots",
-      "minutes": 2.5
+      "minutes": 2.23
     },
-    "placeholder": "Live gym app demonstration and fallback screenshots"
+    "placeholder": "Live gym app demonstration and fallback screenshots",
+    "layout": "demo"
   },
   {
     "id": "slide-10",
     "title": "The gym does the setup",
-    "body": "Gym: equipment \u00b7 workouts \u00b7 branding\nMember: ready to use",
+    "body": "Gym: equipment · workouts · branding\nMember: ready to use",
     "notes": {
       "point": "The gym does the setup",
       "story": "Explain how reducing member setup led to a configurable white-label concept for machines or free weights. The gym is the potential customer. Working personal product; commercial opportunity under development.",
+      "transition": "Next: Zoundio: creating guitar lessons",
+      "materials": "No additional material required",
+      "minutes": 1.34
+    },
+    "placeholder": null,
+    "layout": "business"
+  },
+  {
+    "id": "slide-04",
+    "title": "Zoundio: creating guitar lessons",
+    "body": "The lesson author’s experience matters",
+    "notes": {
+      "point": "Zoundio: creating guitar lessons",
+      "story": "Introduce music education and interactive guitar lessons. Explain cumbersome specialized authoring workflows without exposing internal implementation.",
+      "transition": "Next: Why awkward workflows survive",
+      "materials": "Screenshot of approved original Zoundio authoring workflow",
+      "minutes": 1.79
+    },
+    "placeholder": "Screenshot of approved original Zoundio authoring workflow",
+    "layout": "case",
+    "chapter": "Zoundio"
+  },
+  {
+    "id": "slide-05",
+    "title": "Why awkward workflows survive",
+    "body": "Historical constraints → Specialized tools → Lasting habits",
+    "notes": {
+      "point": "Why awkward workflows survive",
+      "story": "Explain why organizations preserve working processes even when they become awkward. This is a conceptual diagram, not an exact internal workflow.",
+      "transition": "Next: Use the tools musicians know",
+      "materials": "No additional material required",
+      "minutes": 1.79
+    },
+    "placeholder": null,
+    "layout": "roadmap"
+  },
+  {
+    "id": "slide-06",
+    "title": "Use the tools musicians know",
+    "body": "Familiar authoring → Import / conversion → Native lesson data",
+    "notes": {
+      "point": "Use the tools musicians know",
+      "story": "Describe the better authoring approach. AI-assisted development helped make new conversion and import capabilities practical. Do not name unconfirmed formats or claim measured savings.",
+      "transition": "Next: Build the right tool",
+      "materials": "Approved new Zoundio import workflow screenshot",
+      "minutes": 1.79
+    },
+    "placeholder": "Approved new Zoundio import workflow screenshot",
+    "layout": "import"
+  },
+  {
+    "id": "slide-07",
+    "title": "Build the right tool",
+    "body": "A better authoring workflow can improve everything downstream",
+    "notes": {
+      "point": "Build the right tool",
+      "story": "Compare specialized authoring with familiar tools plus import. Discuss potential organizational benefits without invented metrics. Sometimes recognizing the wrong tool is the valuable work.",
       "transition": "Next: Room to play",
       "materials": "No additional material required",
-      "minutes": 1.5
+      "minutes": 1.34
     },
-    "placeholder": null
+    "placeholder": null,
+    "layout": "comparison"
   },
   {
     "id": "slide-11",
@@ -138,48 +202,55 @@
       "story": "Show one or two actual creative experiments once selected. Explain curiosity and what was learned; do not imply that placeholder projects exist.",
       "transition": "Next: An impressive result is a beginning",
       "materials": "One or two real AI-assisted creative experiments",
-      "minutes": 1.5
+      "minutes": 1.34
     },
-    "placeholder": "One or two real AI-assisted creative experiments"
+    "placeholder": "One or two real AI-assisted creative experiments",
+    "layout": "gallery",
+    "chapter": "Room to play"
   },
   {
     "id": "slide-12",
     "title": "An impressive result is a beginning",
-    "body": "Assumptions \u00b7 Bugs \u00b7 Abstractions \u00b7 System design",
+    "body": "Assumptions · Bugs · Abstractions · System design",
     "notes": {
       "point": "An impressive result is a beginning",
-      "story": "Explain why generating code is different from delivering software. Review and judgment catch incorrect assumptions, bugs and inappropriate abstractions.",
+      "story": "Explain why generating code is different from delivering software. Review and judgment catch incorrect assumptions, bugs and inappropriate abstractions. Good products still require problem definition, product judgment, design, architecture, integration, testing, security and ongoing maintenance.",
       "transition": "Next: How I build with AI",
       "materials": "No additional material required",
-      "minutes": 1.5
+      "minutes": 1.34
     },
-    "placeholder": null
+    "placeholder": null,
+    "layout": "review",
+    "chapter": "Engineering"
   },
   {
     "id": "slide-13",
     "title": "How I build with AI",
-    "body": "Problem \u2192 Experience \u2192 Requirements \u2192 Tasks\nAgents \u2192 Review / test / debug \u2192 Feedback \u21bb",
+    "body": "Problem → Experience → Requirements → Tasks\nAgents → Review / test / debug → Feedback ↻",
     "notes": {
       "point": "How I build with AI",
       "story": "Walk through the iterative process. Clear architecture, version control, automated tests and incremental changes make AI leverage dependable. Validate outcomes against real needs.",
       "transition": "Next: What would fit your work better?",
       "materials": "No additional material required",
-      "minutes": 2
+      "minutes": 1.79
     },
-    "placeholder": null
+    "placeholder": null,
+    "layout": "process"
   },
   {
     "id": "slide-14",
     "title": "What would fit your work better?",
-    "body": "Administration \u00b7 Spreadsheets \u00b7 Internal tools\nBusiness data \u00b7 Services \u00b7 Prototypes",
+    "body": "Administration · Spreadsheets · Internal tools\nBusiness data · Services · Prototypes",
     "notes": {
       "point": "What would fit your work better?",
       "story": "Invite recognition of repetitive work and poorly fitting tools. An existing product, simpler workflow or lightweight automation may be preferable to custom software.",
       "transition": "Next: What would the ideal solution look like?",
       "materials": "No additional material required",
-      "minutes": 1.5
+      "minutes": 1.34
     },
-    "placeholder": null
+    "placeholder": null,
+    "layout": "opportunities",
+    "chapter": "Your ideas"
   },
   {
     "id": "slide-15",
@@ -190,9 +261,10 @@
       "story": "Give the audience a moment to consider one problem. Investigate practicality after articulating the ideal outcome.",
       "transition": "Next: What would be worth building?",
       "materials": "No additional material required",
-      "minutes": 1
+      "minutes": 0.89
     },
-    "placeholder": null
+    "placeholder": null,
+    "layout": "question"
   },
   {
     "id": "slide-16",
@@ -200,11 +272,12 @@
     "body": "Think beyond your constraints.\nBuild with AI.\nDeliver with discipline.",
     "notes": {
       "point": "What would be worth building?",
-      "story": "Don\u2019t start by asking what you can build. Start by asking what would be worth building. I help people turn ideas and problems into working software, combining product thinking, engineering experience, and AI-assisted development to make the process faster, more accessible, and more reliable. Invite conversation afterward.",
-      "transition": "Open discussion and informal conversations.",
+      "story": "Don’t start by asking what you can build. Start by asking what would be worth building. I help people turn ideas and problems into working software, combining product thinking, engineering experience, and AI-assisted development to make the process faster, more accessible, and more reliable. Invite conversation afterward.",
+      "transition": "Discussion and informal conversations.",
       "materials": "No additional material required",
-      "minutes": 1.5
+      "minutes": 1.34
     },
-    "placeholder": null
+    "placeholder": null,
+    "layout": "closing"
   }
 ]

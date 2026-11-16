@@ -4,7 +4,7 @@ const next = document.querySelector('#next');
 const present = document.querySelector('#present');
 const status = document.querySelector('output');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
-const chapters = [[0, 'The opportunity'], [3, 'Zoundio'], [7, 'The gym'], [10, 'Room to play'], [11, 'Engineering'], [13, 'Your ideas']];
+const chapters = slides.flatMap((slide, i) => slide.dataset.chapter ? [[i, slide.dataset.chapter]] : []);
 let index = Math.max(0, slides.findIndex(slide => '#' + slide.id === location.hash));
 let animations = [];
 let animatedSlide = null;

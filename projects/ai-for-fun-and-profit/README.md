@@ -1,6 +1,6 @@
 # AI for Fun & Profit
 
-Local first draft: 16 slides, approximately 27 minutes plus discussion.
+Local first draft: 18 slides, approximately 27 minutes plus discussion.
 
 Install the site's requirements in a Python environment (`pip install -r requirements.txt`), then run `npm run presentation:dev`. Open http://127.0.0.1:4174/projects/ai-for-fun-and-profit/ . The server binds only to loopback. `npm run presentation:build` generates without serving.
 
@@ -23,3 +23,13 @@ Repeated launches reuse a server on port 4174 when it serves the matching presen
 ## Motion and small details
 
 Presentation mode draws the existing spectrum artwork into view once, then settles. Workflow and process nodes receive a short, sequential accent; media placeholders receive a quiet outline response. Text stays still, all content is always available, and nothing loops or auto-advances. A chapter rail shows actual talk progress and lets you jump between acts. “Replay details” repeats the current visual entrance for rehearsal. Reduced motion skips the choreography and rail transitions, including cancelling an entrance when the preference changes. No animation libraries or external assets are required.
+
+## Opening sources and assets
+
+- NASA E49-54, 1949 computer room: https://www.flickr.com/photos/nasacommons/7538108706 — NASA credit; no known copyright restrictions. Editorial historical use under https://www.nasa.gov/nasa-brand-center/images-and-media/ . Locally stored, no image alterations.
+- VisiCalc screenshot: https://commons.wikimedia.org/wiki/File:Visicalc.png — public-domain text screenshot, credited to Gortu / apple2history.org; later capture, not a launch photograph.
+- VisiCalc history: https://www.bricklin.com/history/saiproduct1_m.htm
+- Altman quotation: https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf — July 22, 2025, page 19; speculative.
+- Apple exact annual counts and report links: https://www.apple.com/legal/app-store/transparency/ . Updates and resubmissions included; no causal claim about AI.
+
+Opening replaces the old introduction; gym now precedes Zoundio. Existing demonstration media remain placeholders.
