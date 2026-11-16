@@ -1,3 +1,6 @@
+import { createShow } from './show.js';
+let show;
+let muted = false;
 const $ = selector => document.querySelector(selector);
 let recipient = null;
 const encoder = new TextEncoder();
@@ -45,23 +48,27 @@ $('form').onsubmit = async event => {
     $('#error').textContent = 'This code does not open a delivery in this draw. Check you have the current code and try again.';
   }
 };
-$('#unwrap').onclick = () => {
+function startShow() {
+  show?.stop();
   $('#gift').hidden = true;
   $('#reveal').hidden = false;
-  $('#name').textContent = recipient.name;
-  $('#replay').focus();
-  dance();
-};
-function dance() {
-  $('#elf').classList.remove('dancing');
-  void $('#elf').offsetWidth;
-  $('#elf').classList.add('dancing');
-}
-$('#replay').onclick = dance;
-$('#lock').onclick = () => {
-  recipient = null;
   $('#name').textContent = '';
+  $('#replay').hidden = true;
+  show = createShow($('#elf'), recipient, () => {
+    $('#name').textContent = 'YOUR KRIS KINDLE IS… ' + recipient.name + '!';
+    $('#replay').hidden = false;
+  }, { muted });
+  show.start();
+}
+$('#unwrap').textContent = 'Reveal My Kris Kindle!';
+$('#unwrap').onclick = startShow;
+$('#replay').onclick = startShow;
+const skip = document.createElement('button'); skip.textContent = 'Skip animation';
+skip.onclick = () => show?.skip(); $('#reveal').append(skip);
+const mute = document.createElement('button'); mute.textContent = 'Mute';
+mute.onclick = () => { muted = show ? show.mute() : !muted; mute.textContent = muted ? 'Unmute' : 'Mute'; mute.setAttribute('aria-pressed', String(muted)); }; $('#reveal').append(mute);
+$('#lock').onclick = () => {
+  show?.stop(); recipient = null; $('#name').textContent = '';
   for (const selector of ['#gift', '#reveal', '#lock']) $(selector).hidden = true;
-  $('#login').hidden = false;
-  $('#code').focus();
+  $('#login').hidden = false; $('#code').focus();
 };

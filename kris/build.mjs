@@ -5,6 +5,6 @@ try{await access('private/demo.json')}catch{const names=['Holly','Robin','Noel',
 const entries=JSON.parse(await readFile('private/demo.json','utf8'));
 await writeFile('dist/reveals.json',JSON.stringify(Object.fromEntries(entries.map(e=>[e.id,e.payload]))));
 await writeFile('private/demo-codes.txt',entries.map(e=>`${e.name}: ${e.code}`).join('\n'),{mode:0o600});
-for(const file of ['index.html','app.js','style.css'])await copyFile(file,'dist/'+file);
+for(const file of ['index.html','app.js','style.css','show.js','music.js','choreography.js'])await copyFile(file,'dist/'+file);
 await copyFile('../design/tokens.css','dist/tokens.css');await copyFile('../theme.js','dist/theme.js');
 console.log('Built demo. Codes: private/demo-codes.txt. No family draw generated.');

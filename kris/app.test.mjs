@@ -8,13 +8,13 @@ const demos = JSON.parse(await readFile(new URL('./private/demo.json', import.me
 const published = JSON.parse(await readFile(new URL('./dist/reveals.json', import.meta.url),'utf8'));
 function setup({protocol='http:', crypto=webcrypto, fetch: fetcher=async()=>({ok:true,json:async()=>published})}={}) {
  const elements = new Map();
- const document={querySelector(s){if(!elements.has(s))elements.set(s,{value:'',hidden:true,textContent:'',focus(){},classList:{add(){},remove(){}}});return elements.get(s)}};
- runInNewContext(source,{document,crypto,location:{protocol},fetch:fetcher,TextEncoder,TextDecoder,Uint8Array,atob});
+ const document={createElement(){return {setAttribute(){}}},querySelector(s){if(!elements.has(s))elements.set(s,{value:'',hidden:true,textContent:'',focus(){},append(){},classList:{add(){},remove(){}}});return elements.get(s)}};
+ runInNewContext(source.replace(/^import .*;\n/, ''),{createShow:(_host, _recipient, finish)=>({start:finish,stop(){},skip:finish,mute(){return true}}),document,crypto,location:{protocol},fetch:fetcher,TextEncoder,TextDecoder,Uint8Array,atob});
  const el=s=>document.querySelector(s);
  return {el,async submit(code){el('#code').value=code;await el('form').onsubmit({preventDefault(){}})}};
 }
 test('all six published demo codes unlock and reveal; lock clears recipient',async()=>{
- for(const entry of demos){const ui=setup();await ui.submit(entry.code);assert.equal(ui.el('#error').textContent,'');assert.equal(ui.el('#gift').hidden,false);ui.el('#unwrap').onclick();assert.ok(demos.some(e=>e.name===ui.el('#name').textContent));assert.notEqual(ui.el('#name').textContent,entry.name);ui.el('#lock').onclick();assert.equal(ui.el('#name').textContent,'');assert.equal(ui.el('#login').hidden,false)}
+ for(const entry of demos){const ui=setup();await ui.submit(entry.code);assert.equal(ui.el('#error').textContent,'');assert.equal(ui.el('#gift').hidden,false);ui.el('#unwrap').onclick();assert.ok(demos.some(e=>ui.el('#name').textContent === 'YOUR KRIS KINDLE IS… ' + e.name + '!'));assert.notEqual(ui.el('#name').textContent,'YOUR KRIS KINDLE IS… ' + entry.name + '!');ui.el('#lock').onclick();assert.equal(ui.el('#name').textContent,'');assert.equal(ui.el('#login').hidden,false)}
 });
 test('whole labelled lines, uppercase and spaced codes work',async()=>{const ui=setup();await ui.submit(`${demos[0].name}: ${demos[0].code.toUpperCase().match(/.{4}/g).join('-')}`);assert.equal(ui.el('#gift').hidden,false)});
 test('invalid code, file URL, insecure context and fetch failure give useful errors',async()=>{
