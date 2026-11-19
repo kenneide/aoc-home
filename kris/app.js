@@ -3,6 +3,8 @@ let show;
 let muted = false;
 const $ = selector => document.querySelector(selector);
 let recipient = null;
+let photos = [];
+let names = [];
 const encoder = new TextEncoder();
 const hex = buffer => Array.from(new Uint8Array(buffer), x => x.toString(16).padStart(2, '0')).join('');
 const hash = text => crypto.subtle.digest('SHA-256', encoder.encode(text));
@@ -39,6 +41,9 @@ $('form').onsubmit = async event => {
     if (!record) throw new Error('Unknown code');
     const key = await crypto.subtle.importKey('raw', await hash('kris-key:' + code), 'AES-GCM', false, ['decrypt']);
     recipient = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes(record.iv) }, key, bytes(record.data))));
+    const cast = record.cast ? JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes(record.cast.iv)},key,bytes(record.cast.data)))) : {};
+    photos = cast.photos ?? []; names = cast.names ?? [];
+    if(names.length!==6 || names.filter(n=>n===recipient.name).length!==1) throw Error('Invalid cast');
     $('#code').value = '';
     $('#login').hidden = true;
     $('#gift').hidden = false;
@@ -57,7 +62,7 @@ function startShow() {
   show = createShow($('#elf'), recipient, () => {
     $('#name').textContent = 'YOUR KRIS KINDLE IS… ' + recipient.name + '!';
     $('#replay').hidden = false;
-  }, { muted });
+  }, { muted, photos, names });
   show.start();
 }
 $('#unwrap').textContent = 'Reveal My Kris Kindle!';
@@ -68,7 +73,7 @@ skip.onclick = () => show?.skip(); $('#reveal').append(skip);
 const mute = document.createElement('button'); mute.textContent = 'Mute';
 mute.onclick = () => { muted = show ? show.mute() : !muted; mute.textContent = muted ? 'Unmute' : 'Mute'; mute.setAttribute('aria-pressed', String(muted)); }; $('#reveal').append(mute);
 $('#lock').onclick = () => {
-  show?.stop(); recipient = null; $('#name').textContent = '';
+  show?.stop(); recipient = null; photos = []; names = []; $('#name').textContent = '';
   for (const selector of ['#gift', '#reveal', '#lock']) $(selector).hidden = true;
   $('#login').hidden = false; $('#code').focus();
 };

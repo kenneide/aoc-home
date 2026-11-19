@@ -1,1 +1,11 @@
-{"private":true,"type":"module","scripts":{"build":"node build.mjs","test":"node --test","dev":"python3 -m http.server 4174 --directory dist"}}
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test",
+    "dev": "python3 -m http.server 4174 --directory dist",
+    "build:family": "node build.mjs --family",
+    "build:demo": "node build.mjs --demo"
+  }
+}
