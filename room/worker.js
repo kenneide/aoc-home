@@ -1,9 +1,8 @@
 import { DurableObject } from 'cloudflare:workers';
-import { overlaps, slots } from '../meet/calendar.js';
-import { roomCalendar } from './calendar.js';
+import { overlaps } from '../meet/calendar.js';
+import { availabilityCalendar, roomCalendar } from './calendar.js';
 
-const minute = 60_000;
-const day = 1440 * minute;
+import { bookingWindow, minute, validBooking } from './hours.js';
 const json = (body, status = 200) => Response.json(body, {
   status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' },
 });
@@ -39,7 +38,8 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
-    if (!path.startsWith('/api/')) {
+    const feed = path === '/availability.ics';
+    if (!feed && !path.startsWith('/api/')) {
       return env.ASSETS.fetch(path === '/' ? new Request(new URL('/index.html', url), request) : request);
     }
     const open = env.BOOKING_OPEN === 'true';
@@ -49,6 +49,22 @@ export default {
       const ip = request.headers.get('CF-Connecting-IP') || 'local';
       if (!(await env.PUBLIC_LIMIT.limit({ key: ip })).success) return failure('Too many requests. Try again shortly.', 429);
       const service = env.BOOKINGS.getByName('room');
+      if (feed && ['GET', 'HEAD'].includes(request.method)) {
+        const now = Date.now();
+        const range = bookingWindow(now);
+        const calendar = availabilityCalendar(await service.busy(range), range);
+        return new Response(request.method === 'HEAD' ? null : calendar, { headers: {
+          'Content-Type': 'text/calendar; charset=utf-8',
+          'Cache-Control': 'public, max-age=60',
+          'X-Content-Type-Options': 'nosniff',
+        } });
+      }
+      if (path === '/api/availability' && request.method === 'GET') {
+        const range = bookingWindow(Date.now());
+        const busy = (await service.busy(range)).filter(interval => overlaps(interval, range))
+          .map(({ start, end }) => ({ start: Math.max(start, range.start), end: Math.min(end, range.end) }));
+        return json({ ...range, busy });
+      }
       if (path === '/api/slots' && request.method === 'GET') {
         const duration = Number(url.searchParams.get('duration'));
         if (![30, 60].includes(duration)) return failure('Choose 30 or 60 minutes.', 400);
@@ -63,7 +79,7 @@ export default {
           data.email ??= '';
           data.phone ??= '';
         }
-        if (!data || !Number.isSafeInteger(data.start) || ![30, 60].includes(data.duration) ||
+        if (!data || !Number.isSafeInteger(data.start) || !Number.isSafeInteger(data.duration) || data.duration < 1 || data.duration > 600 ||
             !validText(data.name, 100) || !data.name.trim() || !validText(data.email, 254) ||
             (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) ||
             !validText(data.phone, 50) || !validText(data.token, 2048) ||
@@ -89,7 +105,7 @@ export default {
       const message = error?.message ?? '';
       const reason = /^(?:Calendar setup required|Invalid calendar collection|Calendar provider is not configured|(?:Free\/busy|Calendar query) unavailable: HTTP \d{3}|Calendar data missing|Invalid calendar response|Unexpected calendar response|Calendar did not expand recurrence|Calendar redirect (?:rejected|limit reached))$/.test(message)
         ? message : 'Unexpected upstream error';
-      console.warn('Room booking request failed:', path === '/api/slots' ? 'availability' : 'booking', reason);
+      console.warn('Room booking request failed:', (feed || path === '/api/availability' || path === '/api/slots') ? 'availability' : 'booking', reason);
       return unavailable();
     }
   },
@@ -112,9 +128,24 @@ export class Bookings extends DurableObject {
   }
 
   async available(duration) {
-    const now = Date.now();
-    const busy = await roomCalendar(this.env).busy({ start: now, end: now + 30 * day });
-    return slots(now, duration, busy.concat(this.records().filter(record => record.name)));
+    const range = bookingWindow(Date.now());
+    const busy = await this.busy(range);
+    const step = 30 * minute;
+    const length = duration * minute;
+    const starts = [];
+    for (let start = Math.ceil(range.start / step) * step; start + length <= range.end; start += step) {
+      const end = start + length;
+      if (validBooking(start, end, range.start) && !busy.some(block => overlaps(block, { start, end }))) {
+        starts.push(start);
+      }
+    }
+    return starts;
+  }
+
+  async busy(range) {
+    const busy = await roomCalendar(this.env).busy(range);
+    const pending = this.records().filter(record => record.name && overlaps(record, range));
+    return busy.concat(pending.map(({ start, end }) => ({ start, end })));
   }
 
   async submit(data) {
@@ -125,7 +156,7 @@ export class Bookings extends DurableObject {
       return existing.name ? this.finish(existing) : {};
     }
     const now = Date.now();
-    if (!slots(now, data.duration, []).includes(data.start)) return conflict();
+    if (!validBooking(data.start, end, now)) return conflict();
     if (this.records().some(record => record.name && overlaps(record, { start: data.start, end }))) return conflict();
 
     const booking = { id: data.id, start: data.start, end, name: data.name, email: data.email,
@@ -147,7 +178,7 @@ export class Bookings extends DurableObject {
     const calendar = roomCalendar(this.env);
     if (!await calendar.exists(booking)) {
       const busy = await calendar.busy(booking);
-      if (booking.start <= Date.now() || busy.some(interval => overlaps(interval, booking))) {
+      if (!validBooking(booking.start, booking.end, Date.now()) || busy.some(interval => overlaps(interval, booking))) {
         this.sql.exec('DELETE FROM bookings WHERE id = ?', booking.id);
         return conflict();
       }

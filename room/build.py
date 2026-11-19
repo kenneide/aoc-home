@@ -19,11 +19,13 @@ for asset in ('theme.js', 'styles.css', 'design/tokens.css', 'assets/spectrum.sv
     target.parent.mkdir(exist_ok=True, parents=True)
     shutil.copyfile(root / asset, target)
 shutil.copytree(meet / 'public', out, dirs_exist_ok=True)
+shutil.copyfile(meet / 'hours.js', out / 'hours.js')
 
 ribbon = '<img class="spectrum" src="/assets/spectrum.svg" alt="" width="1280" height="48">'
 for path, title, script, content in (
     ('index.html', 'Book the room', 'booking.js', '''
-<p>Times are shown in Amsterdam time. Select a start time or drag across two half-hour slots.</p>
+<p>Book Monday through Friday, 08:00–18:00 The Hague time. Tap or drag on the calendar, then adjust the start and end times if needed.</p>
+<p><a href="webcal://room.alanocinneide.com/availability.ics">Subscribe to room availability</a></p>
 <p id="status" role="status">Loading availability…</p>
 <noscript>Enable JavaScript to check availability and book the room.</noscript>
 <section id="schedule" aria-label="Room availability" hidden>
@@ -32,12 +34,15 @@ for path, title, script, content in (
 <h2 id="week-label" aria-live="polite"></h2>
 <button type="button" id="next">Next week</button>
 </div>
-<p id="legend">Open cells are available. Shaded cells are unavailable.</p>
+<p id="legend">Shading shows booked or unavailable time.</p>
 <div id="week" class="week" aria-describedby="legend"></div>
 </section>
 <form id="booking" hidden>
 <p id="selection" role="status">Select a time in the calendar.</p>
-<label>Duration<select id="duration" disabled><option value="30">30 minutes</option><option value="60">60 minutes</option></select></label>
+<div class="options">
+<label>Start time<input id="start-time" type="time" min="08:00" max="17:59" required disabled></label>
+<label>End time<input id="end-time" type="time" min="08:01" max="18:00" required disabled></label>
+</div>
 <div class="options">
 <label>Name<input name="name" autocomplete="name" required maxlength="100"></label>
 <label>Email (optional)<input name="email" type="email" autocomplete="email" maxlength="254"></label>
@@ -46,7 +51,11 @@ for path, title, script, content in (
 <p>Only the calendar owner can see your booking details.</p>
 <div id="challenge"></div>
 <button class="button" id="submit" disabled>Book room</button>
-</form>'''),
+</form>
+<section id="confirmation" class="booking-confirmation" aria-labelledby="confirmation-title" hidden>
+<h2 id="confirmation-title" tabindex="-1">Room booked</h2>
+<p id="confirmation-time"></p>
+</section>'''),
 ):
     target = out / path
     target.write_text(f"""<!doctype html>

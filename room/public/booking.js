@@ -1,3 +1,5 @@
+import { day, minute, roomDay, validBooking, zone } from './hours.js';
+
 const form = document.querySelector('#booking');
 const status = document.querySelector('#status');
 const schedule = document.querySelector('#schedule');
@@ -5,27 +7,30 @@ const week = document.querySelector('#week');
 const weekLabel = document.querySelector('#week-label');
 const previous = document.querySelector('#previous');
 const next = document.querySelector('#next');
-const duration = document.querySelector('#duration');
+const startTime = document.querySelector('#start-time');
+const endTime = document.querySelector('#end-time');
 const selection = document.querySelector('#selection');
 const submit = document.querySelector('#submit');
+const confirmation = document.querySelector('#confirmation');
+const confirmationTitle = document.querySelector('#confirmation-title');
+const confirmationTime = document.querySelector('#confirmation-time');
 
-const zone = 'Europe/Amsterdam';
-const halfHour = 30 * 60_000;
-const day = 48 * halfHour;
-const amsterdamDate = new Intl.DateTimeFormat('sv-SE', { timeZone: zone, dateStyle: 'short' });
-const amsterdamTime = new Intl.DateTimeFormat('en-GB', {
+const halfHour = 30 * minute;
+const localDate = new Intl.DateTimeFormat('sv-SE', { timeZone: zone, dateStyle: 'short' });
+const localTime = new Intl.DateTimeFormat('en-GB', {
   timeZone: zone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
 });
 const heading = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric' });
 const range = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' });
 const chosenDay = new Intl.DateTimeFormat('en-GB', { timeZone: zone, weekday: 'long', day: 'numeric', month: 'long' });
-const today = Date.parse(amsterdamDate.format(Date.now()));
-const firstWeek = today - ((new Date(today).getUTCDay() + 6) % 7) * day;
-const lastWeek = firstWeek + Math.floor(((today - firstWeek) / day + 30) / 7) * 7 * day;
-let monday = firstWeek;
-let starts = new Map();
-let hourStarts = new Set();
+const key = date => new Date(date).toISOString().slice(0, 10);
+const weekOf = date => date - ((new Date(date).getUTCDay() + 6) % 7) * day;
+let firstWeek;
+let lastWeek;
+let monday;
+let availability;
 let selected;
+let selectedDate;
 let confirmed;
 let gesture;
 let token;
@@ -35,12 +40,31 @@ let submitting = false;
 let id = crypto.randomUUID();
 
 function describe({ start, length }) {
-  return `${chosenDay.format(start)}, ${amsterdamTime.format(start)}–${amsterdamTime.format(start + length * 60_000)} Amsterdam time`;
+  return `${chosenDay.format(start)}, ${localTime.format(start)}–${localTime.format(start + length * minute)} The Hague time`;
+}
+
+const intersects = (start, end, block) => start < block.end && block.start < end;
+
+function free(start, end) {
+  return validBooking(start, end, Math.max(Date.now(), availability.start)) && end <= availability.end &&
+    !availability.busy.some(block => intersects(start, end, block));
+}
+
+function openPart(start, end) {
+  let next = Math.max(start, (Math.floor(Math.max(Date.now(), availability.start) / minute) + 1) * minute);
+  const limit = Math.min(end, Math.floor(availability.end / minute) * minute);
+  for (const block of availability.busy) {
+    if (block.end <= next) continue;
+    if (block.start >= limit) break;
+    const until = Math.floor(block.start / minute) * minute;
+    if (until > next) return { start: next, end: until };
+    next = Math.ceil(block.end / minute) * minute;
+  }
+  return next < limit ? { start: next, end: limit } : undefined;
 }
 
 function updateControls() {
-  duration.disabled = loading || submitting || !selected;
-  duration.options[1].disabled = !selected || !hourStarts.has(selected.start);
+  startTime.disabled = endTime.disabled = loading || submitting || !selectedDate;
   submit.disabled = loading || submitting || !token || !selected;
   previous.disabled = submitting || monday === firstWeek;
   next.disabled = submitting || monday === lastWeek;
@@ -51,15 +75,17 @@ function markSelection() {
   const current = gesture?.preview ?? selected;
   for (const button of week.querySelectorAll('[data-start]')) {
     const start = Number(button.dataset.start);
-    const pressed = Boolean(current && start >= current.start && start < current.start + current.length * 60_000);
+    const pressed = Boolean(current && intersects(start, start + halfHour, current));
     if (button.getAttribute('aria-pressed') !== String(pressed)) button.setAttribute('aria-pressed', String(pressed));
   }
 }
 
-function choose(start, length) {
-  if (selected?.start !== start || selected.length !== length) id = crypto.randomUUID();
-  selected = { start, length };
-  duration.value = String(length);
+function choose(start, end) {
+  if (selected?.start !== start || selected.end !== end) id = crypto.randomUUID();
+  selectedDate = localDate.format(start);
+  selected = { start, end, length: (end - start) / minute };
+  startTime.value = localTime.format(start);
+  endTime.value = localTime.format(end);
   selection.textContent = describe(selected);
   markSelection();
   updateControls();
@@ -78,47 +104,82 @@ function render() {
   week.replaceChildren();
   cell('span', 'week-heading');
   const dates = Array.from({ length: 5 }, (_, index) => monday + index * day);
-  for (const date of dates) cell('span', 'week-heading', heading.format(date));
-  for (let row = 0; row < 16; row++) {
-    const clock = String(9 + Math.floor(row / 2)).padStart(2, '0') + (row % 2 ? ':30' : ':00');
-    cell('span', 'week-time', clock);
-    for (const date of dates) {
-      const key = new Date(date).toISOString().slice(0, 10) + 'T' + clock;
-      const start = starts.get(key);
-      if (confirmed?.cells.includes(key)) {
-        cell('span', 'week-slot week-confirmed', 'Booked').setAttribute('aria-label', heading.format(date) + ' ' + clock + ' booked');
-      } else if (start !== undefined) {
-        const button = cell('button', 'week-slot week-open', clock);
+  for (const date of dates) {
+    const label = cell('span', 'week-heading');
+    const parts = heading.formatToParts(date);
+    for (const type of ['weekday', 'day']) {
+      const line = document.createElement('span');
+      line.textContent = parts.find(part => part.type === type).value;
+      label.append(line);
+    }
+  }
+  const days = dates.map(date => roomDay(key(date)));
+  for (let row = 0; row < 20; row++) {
+    cell('span', 'week-time', row % 2 ? '' : String(8 + row / 2).padStart(2, '0') + ':00');
+    for (const [index, hours] of days.entries()) {
+      const start = hours.start + row * halfHour;
+      const end = start + halfHour;
+      const label = heading.format(dates[index]) + ' ' + localTime.format(start);
+      const part = openPart(start, end);
+      if (confirmed && intersects(start, end, confirmed)) {
+        cell('span', 'week-slot week-confirmed').setAttribute('aria-label', label + ' booked');
+      } else if (part) {
+        const partial = part.start > start || part.end < end;
+        const button = cell('button', 'week-slot week-open' + (partial ? ' week-partial' : ''));
         button.type = 'button';
-        button.dataset.start = start;
-        button.setAttribute('aria-label', heading.format(date) + ' at ' + clock);
+        Object.assign(button.dataset, { start, from: part.start, to: part.end });
+        button.setAttribute('aria-label', label + (partial ? ', partially available' : ''));
       } else {
-        cell('span', 'week-slot week-unavailable').setAttribute('aria-label', heading.format(date) + ' ' + clock + ' unavailable');
+        cell('span', 'week-slot week-unavailable').setAttribute('aria-label', label + ' unavailable');
       }
     }
   }
+  cell('span', 'week-time', '18:00');
   markSelection();
   updateControls();
 }
 
 previous.addEventListener('click', () => { monday -= 7 * day; render(); });
 next.addEventListener('click', () => { monday += 7 * day; render(); });
-duration.addEventListener('change', () => choose(selected.start, Number(duration.value)));
+
+function editTimes() {
+  const midnight = roomDay(selectedDate).start - 8 * 60 * minute;
+  const instant = value => {
+    const [hours, minutes] = value.split(':').map(Number);
+    return midnight + (hours * 60 + minutes) * minute;
+  };
+  const start = instant(startTime.value);
+  const end = instant(endTime.value);
+  if (free(start, end)) {
+    choose(start, end);
+  } else {
+    selected = undefined;
+    selection.textContent = 'Choose an available future time between 08:00 and 18:00 on ' +
+      chosenDay.format(roomDay(selectedDate).start) + '.';
+    markSelection();
+    updateControls();
+  }
+}
+for (const input of [startTime, endTime]) input.addEventListener('input', editTimes);
 form.addEventListener('input', event => {
-  if (event.target.matches('input')) id = crypto.randomUUID();
+  if (event.target.matches('input[name]')) id = crypto.randomUUID();
 });
+
+const partOf = button => ({ start: Number(button.dataset.from), end: Number(button.dataset.to) });
 
 week.addEventListener('click', event => {
   const button = event.target.closest('[data-start]');
-  // Pointer selections are committed on pointerup. Keyboard and assistive clicks use detail zero.
-  if (button && event.detail === 0) choose(Number(button.dataset.start), 30);
+  if (button && event.detail === 0) {
+    const { start, end } = partOf(button);
+    choose(start, end);
+  }
 });
 
 week.addEventListener('pointerdown', event => {
   const button = event.target.closest('[data-start]');
   if (gesture || !button || event.button !== 0 || !event.isPrimary) return;
-  const start = Number(button.dataset.start);
-  gesture = { pointer: event.pointerId, anchor: start, preview: { start, length: 30 } };
+  const anchor = partOf(button);
+  gesture = { pointer: event.pointerId, anchor, preview: anchor };
   button.setPointerCapture(event.pointerId);
   markSelection();
 });
@@ -126,58 +187,58 @@ week.addEventListener('pointerdown', event => {
 week.addEventListener('pointermove', event => {
   if (gesture?.pointer !== event.pointerId) return;
   const button = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-start]');
-  const target = Number(button?.dataset.start);
-  const start = Math.min(gesture.anchor, target);
-  gesture.preview = Math.abs(target - gesture.anchor) === halfHour && hourStarts.has(start)
-    ? { start, length: 60 } : { start: gesture.anchor, length: 30 };
+  if (button) {
+    const target = partOf(button);
+    const start = Math.min(gesture.anchor.start, target.start);
+    const end = Math.max(gesture.anchor.end, target.end);
+    if (free(start, end)) gesture.preview = { start, end };
+  }
   markSelection();
 });
 
 week.addEventListener('pointerup', event => {
   if (gesture?.pointer !== event.pointerId) return;
-  const { start, length } = gesture.preview;
+  const { start, end } = gesture.preview;
   gesture = undefined;
-  choose(start, length);
+  choose(start, end);
 });
 
-week.addEventListener('pointercancel', event => {
+function cancelGesture(event) {
   if (gesture?.pointer !== event.pointerId) return;
   gesture = undefined;
   markSelection();
-});
-
-async function fetchStarts(length) {
-  const response = await fetch('/api/slots?duration=' + length);
-  const data = await response.json();
-  if (!response.ok) throw Error(data.error);
-  return data.starts;
 }
-
-function keyFor(start) {
-  return amsterdamDate.format(start) + 'T' + amsterdamTime.format(start);
-}
+week.addEventListener('pointercancel', cancelGesture);
+week.addEventListener('lostpointercapture', cancelGesture);
 
 async function load() {
   loading = true;
   updateControls();
   try {
-    const [half, full] = await Promise.all([fetchStarts(30), fetchStarts(60)]);
-    starts = new Map(half.map(start => [keyFor(start), start]));
-    hourStarts = new Set(full);
-    status.textContent = starts.size ? '' : 'No times are available in the booking window.';
-    if (selected && (!starts.has(keyFor(selected.start)) || (selected.length === 60 && !hourStarts.has(selected.start)))) {
+    const response = await fetch('/api/availability');
+    const data = await response.json();
+    if (!response.ok) throw Error(data.error);
+    data.busy.sort((a, b) => a.start - b.start);
+    availability = data;
+    const today = Date.parse(localDate.format(data.start));
+    const weekday = new Date(today).getUTCDay();
+    firstWeek = weekOf(today) + (weekday === 0 || weekday === 6 ? 7 * day : 0);
+    lastWeek = weekOf(Date.parse(localDate.format(data.end)));
+    monday = Math.min(lastWeek, Math.max(firstWeek, monday ?? firstWeek));
+    if (selected && !free(selected.start, selected.end)) {
       selected = undefined;
-      selection.textContent = 'Select a time in the calendar.';
+      selection.textContent = 'Choose a different time.';
     }
+    status.textContent = '';
     schedule.hidden = false;
+    render();
   } catch (error) {
     selected = undefined;
-    selection.textContent = 'Select a time in the calendar.';
     schedule.hidden = true;
     status.textContent = error.message || 'Availability could not be loaded.';
   } finally {
     loading = false;
-    render();
+    updateControls();
   }
 }
 
@@ -203,13 +264,17 @@ form.addEventListener('submit', async event => {
       if (response.status === 409) await load();
       throw Error(result.error);
     }
-    confirmed = { cells: length === 60 ? [keyFor(start), keyFor(start + halfHour)] : [keyFor(start)] };
+    confirmed = { start, end: start + length * minute };
+    monday = weekOf(Date.parse(localDate.format(start)));
     selected = undefined;
     form.hidden = true;
+    status.textContent = '';
+    confirmationTime.textContent = describe({ start, length });
+    confirmationTitle.setAttribute('aria-describedby', confirmationTime.id);
+    confirmation.hidden = false;
     render();
-    status.textContent = 'Room booked for ' + describe({ start, length }) + '.';
-    status.tabIndex = -1;
-    status.focus();
+    confirmationTitle.focus({ preventScroll: true });
+    confirmation.scrollIntoView({ block: 'nearest', behavior: 'instant' });
   } catch (error) {
     status.textContent = error.message || 'Your booking could not be confirmed. Retry to check the same booking.';
   } finally {

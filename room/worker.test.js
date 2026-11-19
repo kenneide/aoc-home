@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { registerHooks } from 'node:module';
 import { DatabaseSync } from 'node:sqlite';
+import { validBooking } from './hours.js';
 import { slots } from '../meet/calendar.js';
 
 const hook = registerHooks({
@@ -85,4 +86,49 @@ test('recovers a lost write response by looking up the stable event ID', async t
   assert.match(event, /visitor@example.com/);
   assert.match(event, /\+31 1234/);
   assert.ok(!JSON.stringify(bookings.records()).includes('visitor@example.com'));
+});
+
+test('calendar subscription emits only busy blocks and no private event details', async () => {
+  const start = Math.floor(Date.now() / 1000) * 1000 + 3600_000;
+  const privateEvent = { start, end: start + 1800_000, id: 'internal-id', name: 'Private guest',
+    email: 'private@example.com', phone: '123456789', location: 'Private location' };
+  const env = {
+    BOOKING_OPEN: 'true',
+    PUBLIC_LIMIT: { limit: async () => ({ success: true }) },
+    BOOKINGS: { getByName: () => ({ busy: async () => [privateEvent, privateEvent] }) },
+  };
+  const response = await worker.fetch(new Request('https://room.alanocinneide.com/availability.ics'), env);
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get('Content-Type'), /^text\/calendar/);
+  const feed = await response.text();
+  assert.equal(feed.match(/BEGIN:VEVENT/g).length, 1);
+  assert.match(feed, /SUMMARY:Busy\r\n/);
+  assert.match(feed, /DTSTART:\d{8}T\d{6}Z/);
+  assert.match(feed, /DTEND:\d{8}T\d{6}Z/);
+  assert.doesNotMatch(feed, /Private|example\.com|internal-id|123456789|DESCRIPTION|ATTENDEE|LOCATION/);
+});
+
+
+test('booking hours allow same-day and non-grid bookings on weekdays across daylight saving changes', () => {
+  const utc = value => Date.parse(value);
+  const now = utc('2026-03-30T06:01Z');
+  assert.ok(validBooking(utc('2026-03-30T06:02Z'), utc('2026-03-30T13:57Z'), now));
+  assert.ok(validBooking(utc('2026-03-30T15:59Z'), utc('2026-03-30T16:00Z'), now));
+  assert.ok(!validBooking(now, now + 60_000, now));
+  assert.ok(!validBooking(utc('2026-03-30T05:59Z'), utc('2026-03-30T06:01Z'), now - 3600_000));
+  assert.ok(!validBooking(utc('2026-03-30T15:59Z'), utc('2026-03-30T16:01Z'), now));
+  assert.ok(!validBooking(utc('2026-05-01T08:00Z'), utc('2026-05-01T08:30Z'), now));
+  assert.ok(validBooking(utc('2026-10-26T07:00Z'), utc('2026-10-26T17:00Z'), utc('2026-10-26T06:59Z')));
+});
+
+test('submission rejects Saturday and Sunday before contacting the calendar', async t => {
+  const { bookings } = database(t);
+  const now = Date.parse('2026-03-27T08:00Z');
+  t.mock.method(Date, 'now', () => now);
+  const saturday = Date.parse('2026-03-28T09:00Z');
+  const sunday = Date.parse('2026-03-29T09:00Z');
+  for (const start of [saturday, sunday]) {
+    assert.equal((await bookings.submit(booking('weekend', start))).code, 409);
+  }
+  assert.deepEqual(bookings.records(), []);
 });

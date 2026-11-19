@@ -40,3 +40,17 @@
   .week-navigation h2 { grid-row: 1; grid-column: 1 / -1; }
   .week .week-slot { min-height: 2.75rem; }
 }
+.week-heading span { display: block; }
+.week-time { min-width: 3rem; padding-inline-end: .35rem; }
+.week-partial { background: linear-gradient(135deg, var(--surface) 50%, var(--border) 50%); }
+
+.booking-confirmation {
+  max-width: 44rem;
+  margin-block: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-inline-start: .3rem solid var(--action);
+  background: var(--surface);
+}
+.booking-confirmation h2 { margin: 0; }
+.booking-confirmation p { margin: .5rem 0 0; }
