@@ -1,0 +1,17 @@
+.meeting { padding-block: var(--space-12, 48px); }
+.meeting h1 { font-size: var(--font-heading, clamp(2rem, 5vw, 4.5rem)); }
+.meeting > p, .meeting form, .request { max-width: 44rem; }
+.meeting form:not([hidden]) { display: grid; gap: 1rem; margin-block: 1.5rem; }
+.meeting label { display: grid; gap: .3rem; min-width: 0; }
+.meeting :is(input, select, textarea) {
+  width: 100%; padding: .65rem; font: inherit; color: inherit;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; }
+.meeting button { justify-self: start; cursor: pointer; }
+.meeting button:disabled { opacity: .65; cursor: default; }
+.request { padding-block: 1rem; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
+.request p { white-space: pre-wrap; }
+
+.meeting :is(input, select, textarea, button):focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.meeting button { font: inherit; border: 0; }
