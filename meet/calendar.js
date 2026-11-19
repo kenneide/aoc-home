@@ -82,7 +82,7 @@ export function meetingFile(booking) {
   return calendar.toString() + '\r\n';
 }
 
-export function calendarProvider(env) {
+export function calendarProvider(env, { eventDomain = 'meet.alanocinneide.com', serialize = meetingFile } = {}) {
   if (env.CALENDAR_PROVIDER !== 'caldav' || !env.CALENDAR_USER || !env.CALENDAR_PASSWORD) throw Error('Calendar setup required');
   function collection(value) {
     const url = new URL(value);
@@ -96,10 +96,28 @@ export function calendarProvider(env) {
   const calendars = [...new Set([...JSON.parse(env.BUSY_CALENDARS).map(collection), target])];
   const auth = 'Basic ' + btoa(String.fromCharCode(...new TextEncoder().encode(env.CALENDAR_USER + ':' + env.CALENDAR_PASSWORD)));
   async function request(url, method, headers, body) {
-    return fetch(url, {
-      method, headers: { Authorization: auth, ...headers }, body,
-      redirect: 'error', signal: AbortSignal.timeout(8000),
-    });
+    let endpoint = new URL(url);
+    const signal = AbortSignal.timeout(8000);
+    const appleCalendarHost = /^(?:p[0-9]+-)?caldav\.icloud\.com$/;
+    for (let redirects = 0; redirects <= 3; redirects++) {
+      const response = await fetch(endpoint.href, {
+        method, headers: { Authorization: auth, ...headers }, body,
+        redirect: 'manual', signal,
+      });
+      if (![301, 302, 307, 308].includes(response.status)) return response;
+      const location = response.headers.get('Location');
+      await response.body?.cancel();
+      if (!location) throw Error('Calendar redirect rejected');
+      const next = new URL(location, endpoint);
+      // iCloud may move the same calendar resource to another Apple shard.
+      if (!appleCalendarHost.test(endpoint.hostname) || !appleCalendarHost.test(next.hostname) ||
+          next.protocol !== 'https:' || next.port || next.username || next.password ||
+          next.search || next.hash || next.pathname.replace(/\/$/, '') !== endpoint.pathname.replace(/\/$/, '')) {
+        throw Error('Calendar redirect rejected');
+      }
+      endpoint = next;
+    }
+    throw Error('Calendar redirect limit reached');
   }
   async function busyAt(url, { start, end }) {
     const range = `start="${timestamp(start)}" end="${timestamp(end)}"`;
@@ -109,13 +127,13 @@ export function calendarProvider(env) {
       const body = await free.text();
       if (body.includes('BEGIN:VFREEBUSY')) return readBusy(body);
     } else if (![400, 403, 405, 501].includes(free.status)) {
-      throw Error('Free/busy unavailable');
+      throw Error('Free/busy unavailable: HTTP ' + free.status);
     }
     const response = await report(`<c:calendar-query xmlns:c="urn:ietf:params:xml:ns:caldav" xmlns:d="DAV:">
       <d:prop><c:calendar-data><c:expand ${range}/></c:calendar-data></d:prop>
       <c:filter><c:comp-filter name="VCALENDAR"><c:comp-filter name="VEVENT"><c:time-range ${range}/></c:comp-filter></c:comp-filter></c:filter>
       </c:calendar-query>`);
-    if (response.status !== 207) throw Error('Calendar query unavailable');
+    if (response.status !== 207) throw Error('Calendar query unavailable: HTTP ' + response.status);
     const parser = new XMLParser({
       removeNSPrefix: true, parseTagValue: false, trimValues: false,
       isArray: name => ['response', 'propstat'].includes(name),
@@ -141,13 +159,13 @@ export function calendarProvider(env) {
       if (result.status === 404) return false;
       if (!result.ok) throw Error('Calendar event lookup unavailable');
       const event = new ICAL.Component(ICAL.parse(await result.text())).getFirstSubcomponent('vevent');
-      if (event?.getFirstPropertyValue('uid') !== booking.id + '@meet.alanocinneide.com') throw Error('Unexpected calendar event');
+      if (event?.getFirstPropertyValue('uid') !== booking.id + '@' + eventDomain) throw Error('Unexpected calendar event');
       return true;
     },
     async create(booking) {
       const result = await request(eventUrl(booking), 'PUT', {
         'If-None-Match': '*', 'Content-Type': 'text/calendar; charset=utf-8',
-      }, meetingFile(booking));
+      }, serialize(booking));
       if (!result.ok && !(result.status === 412 && await this.exists(booking))) throw Error('Calendar write unavailable');
     },
   };

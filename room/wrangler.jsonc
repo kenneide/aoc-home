@@ -1,0 +1,21 @@
+{
+  "name": "aoc-room",
+  "main": "worker.js",
+  "compatibility_date": "2026-04-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{"pattern": "room.alanocinneide.com", "custom_domain": true}],
+  "assets": {"directory": "./dist", "binding": "ASSETS", "run_worker_first": true, "html_handling": "none"},
+  "durable_objects": {"bindings": [{"name": "BOOKINGS", "class_name": "Bookings"}]},
+  "migrations": [{"tag": "v1", "new_sqlite_classes": ["Bookings"]}],
+  "ratelimits": [{"name": "PUBLIC_LIMIT", "namespace_id": "1001", "simple": {"limit": 30, "period": 60}}],
+  "vars": {
+    "PUBLIC_ORIGIN": "https://room.alanocinneide.com",
+    "CALENDAR_PROVIDER": "caldav",
+    "BUSY_CALENDARS": "[]",
+    "CALENDAR_HOSTS": "[\"p131-caldav.icloud.com\"]",
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAGI7hplMEYBHfNH_",
+    "BOOKING_OPEN": "true"
+  },
+  "keep_vars": true
+}

@@ -63,3 +63,27 @@ END:VCALENDAR
   assert.deepEqual(await provider.busy({ start: utc('2026-03-30'), end: utc('2026-03-31') }),
     [{ start: utc('2026-03-30T10:00Z'), end: utc('2026-03-30T11:00Z') }]);
 });
+
+test('CalDAV preserves REPORT across Apple shard redirects and rejects untrusted destinations', async t => {
+  const path = '/account/calendars/room/';
+  const source = 'https://p131-caldav.icloud.com' + path;
+  const destination = 'https://p30-caldav.icloud.com' + path;
+  let redirect = destination;
+  const calls = [];
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    calls.push({ url, method: options.method });
+    if (url === source) return new Response(null, { status: 302, headers: { Location: redirect } });
+    assert.equal(url, destination);
+    return new Response('BEGIN:VCALENDAR\r\nBEGIN:VFREEBUSY\r\nEND:VFREEBUSY\r\nEND:VCALENDAR');
+  });
+  const provider = calendarProvider({
+    CALENDAR_PROVIDER: 'caldav', CALENDAR_USER: 'test', CALENDAR_PASSWORD: 'test',
+    WRITE_CALENDAR: source, BUSY_CALENDARS: '[]', CALENDAR_HOSTS: '["p131-caldav.icloud.com"]',
+  });
+  const range = { start: Date.now(), end: Date.now() + 60_000 };
+  assert.deepEqual(await provider.busy(range), []);
+  assert.deepEqual(calls, [{ url: source, method: 'REPORT' }, { url: destination, method: 'REPORT' }]);
+  redirect = 'https://example.com' + path;
+  await assert.rejects(provider.busy(range), /Calendar redirect rejected/);
+  assert.equal(calls.length, 3);
+});
