@@ -1,4 +1,4 @@
-import { day, minute, roomDay, validBooking, zone } from './hours.js';
+import { closesAt, day, minute, opensAt, roomDay, validBooking, zone } from './hours.js';
 
 const form = document.querySelector('#booking');
 const status = document.querySelector('#status');
@@ -73,10 +73,18 @@ function updateControls() {
 
 function markSelection() {
   const current = gesture?.preview ?? selected;
+  week.querySelector('.week-draft-label')?.remove();
+  let firstSelected;
   for (const button of week.querySelectorAll('[data-start]')) {
     const start = Number(button.dataset.start);
     const pressed = Boolean(current && intersects(start, start + halfHour, current));
+    if (pressed) firstSelected ??= button;
     if (button.getAttribute('aria-pressed') !== String(pressed)) button.setAttribute('aria-pressed', String(pressed));
+  }
+  if (firstSelected) {
+    const label = blockLabel('Book', current);
+    label.classList.add('week-draft-label');
+    firstSelected.append(label);
   }
 }
 
@@ -99,6 +107,37 @@ function cell(tag, className, value = '') {
   return element;
 }
 
+function occupiedStretches() {
+  const blocks = confirmed ? [...availability.busy, confirmed] : availability.busy;
+  const stretches = [];
+  for (const block of [...blocks].sort((a, b) => a.start - b.start)) {
+    const previous = stretches.at(-1);
+    if (previous && block.start < previous.end) previous.end = Math.max(previous.end, block.end);
+    else stretches.push({ ...block });
+  }
+  return stretches;
+}
+
+function blockLabel(heading, { start, end }) {
+  const label = document.createElement('span');
+  label.className = 'week-block-label';
+  const title = document.createElement('strong');
+  title.textContent = heading;
+  const time = document.createElement('span');
+  time.textContent = localTime.format(start) + '–' + localTime.format(end);
+  label.append(title, time);
+  return label;
+}
+
+function labelBusySlot(slot, blocks, start, dayStart) {
+  if (!blocks.length) return;
+  slot.classList.add('week-occupied');
+  for (const block of blocks) {
+    if (Math.max(block.start, dayStart) < start) continue;
+    slot.append(blockLabel('Busy', block));
+  }
+}
+
 function render() {
   weekLabel.textContent = range.formatRange(monday, monday + 4 * day);
   week.replaceChildren();
@@ -114,27 +153,37 @@ function render() {
     }
   }
   const days = dates.map(date => roomDay(key(date)));
-  for (let row = 0; row < 20; row++) {
-    cell('span', 'week-time', row % 2 ? '' : String(8 + row / 2).padStart(2, '0') + ':00');
+  const stretches = occupiedStretches();
+  const periods = { [opensAt]: 'Morning', 12: 'Afternoon', 18: 'Evening' };
+  for (let row = 0; row < (closesAt - opensAt) * 2; row++) {
+    const hour = opensAt + row / 2;
+    if (periods[hour]) cell('span', 'week-period', periods[hour]);
+    cell('span', 'week-time', row % 2 ? '' : String(hour).padStart(2, '0') + ':00');
+    const slotClass = row % 2 ? 'week-slot ' : 'week-slot week-hour ';
     for (const [index, hours] of days.entries()) {
       const start = hours.start + row * halfHour;
       const end = start + halfHour;
       const label = heading.format(dates[index]) + ' ' + localTime.format(start);
       const part = openPart(start, end);
+      const occupied = stretches.filter(block => intersects(start, end, block));
+      let slot;
       if (confirmed && intersects(start, end, confirmed)) {
-        cell('span', 'week-slot week-confirmed').setAttribute('aria-label', label + ' booked');
+        slot = cell('span', slotClass + 'week-confirmed');
+        slot.setAttribute('aria-label', label + ' booked');
       } else if (part) {
         const partial = part.start > start || part.end < end;
-        const button = cell('button', 'week-slot week-open' + (partial ? ' week-partial' : ''));
-        button.type = 'button';
-        Object.assign(button.dataset, { start, from: part.start, to: part.end });
-        button.setAttribute('aria-label', label + (partial ? ', partially available' : ''));
+        slot = cell('button', slotClass + 'week-open' + (partial ? ' week-partial' : ''));
+        slot.type = 'button';
+        Object.assign(slot.dataset, { start, from: part.start, to: part.end });
+        slot.setAttribute('aria-label', label + (partial ? ', partially available' : ''));
       } else {
-        cell('span', 'week-slot week-unavailable').setAttribute('aria-label', label + ' unavailable');
+        slot = cell('span', slotClass + (occupied.length ? 'week-busy' : 'week-unavailable'));
+        slot.setAttribute('aria-label', label + (occupied.length ? ' occupied' : ' unavailable'));
       }
+      labelBusySlot(slot, occupied, start, hours.start);
     }
   }
-  cell('span', 'week-time', '18:00');
+  cell('span', 'week-time', closesAt + ':00');
   markSelection();
   updateControls();
 }
@@ -143,7 +192,7 @@ previous.addEventListener('click', () => { monday -= 7 * day; render(); });
 next.addEventListener('click', () => { monday += 7 * day; render(); });
 
 function editTimes() {
-  const midnight = roomDay(selectedDate).start - 8 * 60 * minute;
+  const midnight = roomDay(selectedDate).start - opensAt * 60 * minute;
   const instant = value => {
     const [hours, minutes] = value.split(':').map(Number);
     return midnight + (hours * 60 + minutes) * minute;
@@ -154,7 +203,7 @@ function editTimes() {
     choose(start, end);
   } else {
     selected = undefined;
-    selection.textContent = 'Choose an available future time between 08:00 and 18:00 on ' +
+    selection.textContent = 'Choose an available future time between 08:00 and 23:00 on ' +
       chosenDay.format(roomDay(selectedDate).start) + '.';
     markSelection();
     updateControls();

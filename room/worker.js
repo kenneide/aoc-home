@@ -2,7 +2,7 @@ import { DurableObject } from 'cloudflare:workers';
 import { overlaps } from '../meet/calendar.js';
 import { availabilityCalendar, roomCalendar } from './calendar.js';
 
-import { bookingWindow, minute, validBooking } from './hours.js';
+import { bookingWindow, closesAt, minute, opensAt, validBooking } from './hours.js';
 const json = (body, status = 200) => Response.json(body, {
   status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' },
 });
@@ -79,7 +79,7 @@ export default {
           data.email ??= '';
           data.phone ??= '';
         }
-        if (!data || !Number.isSafeInteger(data.start) || !Number.isSafeInteger(data.duration) || data.duration < 1 || data.duration > 600 ||
+        if (!data || !Number.isSafeInteger(data.start) || !Number.isSafeInteger(data.duration) || data.duration < 1 || data.duration > (closesAt - opensAt) * 60 ||
             !validText(data.name, 100) || !data.name.trim() || !validText(data.email, 254) ||
             (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) ||
             !validText(data.phone, 50) || !validText(data.token, 2048) ||

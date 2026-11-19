@@ -1,5 +1,7 @@
 export const minute = 60_000;
 export const day = 1440 * minute;
+export const opensAt = 8;
+export const closesAt = 23;
 // The Hague uses the Netherlands' IANA time zone.
 export const zone = 'Europe/Amsterdam';
 const date = new Intl.DateTimeFormat('sv-SE', { timeZone: zone, dateStyle: 'short' });
@@ -11,7 +13,7 @@ export function roomDay(key) {
   const part = offset.formatToParts(noon).find(item => item.type === 'timeZoneName').value;
   const [, sign, hours, minutes] = /^GMT([+-])(\d\d):(\d\d)$/.exec(part);
   const shift = (Number(hours) * 60 + Number(minutes)) * minute * (sign === '-' ? -1 : 1);
-  return { start: midnight + 8 * 60 * minute - shift, end: midnight + 18 * 60 * minute - shift };
+  return { start: midnight + opensAt * 60 * minute - shift, end: midnight + closesAt * 60 * minute - shift };
 }
 
 export function bookingWindow(now) {

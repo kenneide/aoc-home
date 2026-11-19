@@ -23,8 +23,8 @@ shutil.copyfile(meet / 'hours.js', out / 'hours.js')
 
 ribbon = '<img class="spectrum" src="/assets/spectrum.svg" alt="" width="1280" height="48">'
 for path, title, script, content in (
-    ('index.html', 'Book the room', 'booking.js', '''
-<p>Book Monday through Friday, 08:00–18:00 The Hague time. Tap or drag on the calendar, then adjust the start and end times if needed.</p>
+    ('index.html', 'Meeting Room Booking Form', 'booking.js', '''
+<p>Book Monday through Friday, 08:00–23:00 The Hague time. Tap or drag on the calendar, then adjust the start and end times if needed.</p>
 <p><a href="webcal://room.alanocinneide.com/availability.ics">Subscribe to room availability</a></p>
 <p id="status" role="status">Loading availability…</p>
 <noscript>Enable JavaScript to check availability and book the room.</noscript>
@@ -34,14 +34,18 @@ for path, title, script, content in (
 <h2 id="week-label" aria-live="polite"></h2>
 <button type="button" id="next">Next week</button>
 </div>
-<p id="legend">Shading shows booked or unavailable time.</p>
+<ul class="week-legend" id="legend" aria-label="Calendar key">
+<li><span class="week-key week-open" aria-hidden="true"></span>Available</li>
+<li><span class="week-key week-busy" aria-hidden="true"></span>Occupied</li>
+<li><span class="week-key week-unavailable" aria-hidden="true"></span>Outside booking window</li>
+</ul>
 <div id="week" class="week" aria-describedby="legend"></div>
 </section>
 <form id="booking" hidden>
 <p id="selection" role="status">Select a time in the calendar.</p>
 <div class="options">
-<label>Start time<input id="start-time" type="time" min="08:00" max="17:59" required disabled></label>
-<label>End time<input id="end-time" type="time" min="08:01" max="18:00" required disabled></label>
+<label>Start time<input id="start-time" type="time" min="08:00" max="22:59" required disabled></label>
+<label>End time<input id="end-time" type="time" min="08:01" max="23:00" required disabled></label>
 </div>
 <div class="options">
 <label>Name<input name="name" autocomplete="name" required maxlength="100"></label>

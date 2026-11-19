@@ -113,12 +113,12 @@ test('booking hours allow same-day and non-grid bookings on weekdays across dayl
   const utc = value => Date.parse(value);
   const now = utc('2026-03-30T06:01Z');
   assert.ok(validBooking(utc('2026-03-30T06:02Z'), utc('2026-03-30T13:57Z'), now));
-  assert.ok(validBooking(utc('2026-03-30T15:59Z'), utc('2026-03-30T16:00Z'), now));
+  assert.ok(validBooking(utc('2026-03-30T20:59Z'), utc('2026-03-30T21:00Z'), now));
   assert.ok(!validBooking(now, now + 60_000, now));
   assert.ok(!validBooking(utc('2026-03-30T05:59Z'), utc('2026-03-30T06:01Z'), now - 3600_000));
-  assert.ok(!validBooking(utc('2026-03-30T15:59Z'), utc('2026-03-30T16:01Z'), now));
+  assert.ok(!validBooking(utc('2026-03-30T20:59Z'), utc('2026-03-30T21:01Z'), now));
   assert.ok(!validBooking(utc('2026-05-01T08:00Z'), utc('2026-05-01T08:30Z'), now));
-  assert.ok(validBooking(utc('2026-10-26T07:00Z'), utc('2026-10-26T17:00Z'), utc('2026-10-26T06:59Z')));
+  assert.ok(validBooking(utc('2026-10-26T07:00Z'), utc('2026-10-26T22:00Z'), utc('2026-10-26T06:59Z')));
 });
 
 test('submission rejects Saturday and Sunday before contacting the calendar', async t => {
