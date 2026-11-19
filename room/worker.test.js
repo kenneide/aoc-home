@@ -132,3 +132,14 @@ test('submission rejects Saturday and Sunday before contacting the calendar', as
   }
   assert.deepEqual(bookings.records(), []);
 });
+
+test('availability offers quarter-hour starts including the final slot before closing', async t => {
+  const { bookings } = database(t);
+  t.mock.method(Date, 'now', () => Date.parse('2026-11-19T07:01Z'));
+  t.mock.method(globalThis, 'fetch', async () => free());
+  const starts = await bookings.available(15);
+  assert.equal(starts[0], Date.parse('2026-11-19T07:15Z'));
+  assert.equal(starts[1] - starts[0], 15 * 60_000);
+  assert.ok(starts.includes(Date.parse('2026-11-19T21:45Z')));
+  assert.ok(!starts.includes(Date.parse('2026-11-19T22:00Z')));
+});

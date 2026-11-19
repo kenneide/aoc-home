@@ -2,7 +2,7 @@ import { DurableObject } from 'cloudflare:workers';
 import { overlaps } from '../meet/calendar.js';
 import { availabilityCalendar, roomCalendar } from './calendar.js';
 
-import { bookingWindow, closesAt, minute, opensAt, validBooking } from './hours.js';
+import { bookingWindow, closesAt, minute, opensAt, slotMinutes, validBooking } from './hours.js';
 const json = (body, status = 200) => Response.json(body, {
   status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' },
 });
@@ -67,7 +67,7 @@ export default {
       }
       if (path === '/api/slots' && request.method === 'GET') {
         const duration = Number(url.searchParams.get('duration'));
-        if (![30, 60].includes(duration)) return failure('Choose 30 or 60 minutes.', 400);
+        if (![slotMinutes, 30, 60].includes(duration)) return failure('Choose 15, 30 or 60 minutes.', 400);
         return json({ starts: await service.available(duration) });
       }
       if (path === '/api/bookings' && request.method === 'POST') {
@@ -130,7 +130,7 @@ export class Bookings extends DurableObject {
   async available(duration) {
     const range = bookingWindow(Date.now());
     const busy = await this.busy(range);
-    const step = 30 * minute;
+    const step = slotMinutes * minute;
     const length = duration * minute;
     const starts = [];
     for (let start = Math.ceil(range.start / step) * step; start + length <= range.end; start += step) {

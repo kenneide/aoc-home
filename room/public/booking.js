@@ -1,4 +1,4 @@
-import { closesAt, day, minute, opensAt, roomDay, validBooking, zone } from './hours.js';
+import { closesAt, day, minute, opensAt, roomDay, slotMinutes, validBooking, zone } from './hours.js';
 
 const form = document.querySelector('#booking');
 const status = document.querySelector('#status');
@@ -15,7 +15,8 @@ const confirmation = document.querySelector('#confirmation');
 const confirmationTitle = document.querySelector('#confirmation-title');
 const confirmationTime = document.querySelector('#confirmation-time');
 
-const halfHour = 30 * minute;
+const slotLength = slotMinutes * minute;
+const slotsPerHour = 60 / slotMinutes;
 const localDate = new Intl.DateTimeFormat('sv-SE', { timeZone: zone, dateStyle: 'short' });
 const localTime = new Intl.DateTimeFormat('en-GB', {
   timeZone: zone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
@@ -77,7 +78,7 @@ function markSelection() {
   let firstSelected;
   for (const button of week.querySelectorAll('[data-start]')) {
     const start = Number(button.dataset.start);
-    const pressed = Boolean(current && intersects(start, start + halfHour, current));
+    const pressed = Boolean(current && intersects(start, start + slotLength, current));
     if (pressed) firstSelected ??= button;
     if (button.getAttribute('aria-pressed') !== String(pressed)) button.setAttribute('aria-pressed', String(pressed));
   }
@@ -155,14 +156,15 @@ function render() {
   const days = dates.map(date => roomDay(key(date)));
   const stretches = occupiedStretches();
   const periods = { [opensAt]: 'Morning', 12: 'Afternoon', 18: 'Evening' };
-  for (let row = 0; row < (closesAt - opensAt) * 2; row++) {
-    const hour = opensAt + row / 2;
+  for (let row = 0; row < (closesAt - opensAt) * slotsPerHour; row++) {
+    const hour = opensAt + row / slotsPerHour;
+    const startsHour = row % slotsPerHour === 0;
     if (periods[hour]) cell('span', 'week-period', periods[hour]);
-    cell('span', 'week-time', row % 2 ? '' : String(hour).padStart(2, '0') + ':00');
-    const slotClass = row % 2 ? 'week-slot ' : 'week-slot week-hour ';
+    cell('span', 'week-time', startsHour ? String(hour).padStart(2, '0') + ':00' : '');
+    const slotClass = startsHour ? 'week-slot week-hour ' : 'week-slot ';
     for (const [index, hours] of days.entries()) {
-      const start = hours.start + row * halfHour;
-      const end = start + halfHour;
+      const start = hours.start + row * slotLength;
+      const end = start + slotLength;
       const label = heading.format(dates[index]) + ' ' + localTime.format(start);
       const part = openPart(start, end);
       const occupied = stretches.filter(block => intersects(start, end, block));

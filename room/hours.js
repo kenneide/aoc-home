@@ -1,4 +1,5 @@
 export const minute = 60_000;
+export const slotMinutes = 15;
 export const day = 1440 * minute;
 export const opensAt = 8;
 export const closesAt = 23;

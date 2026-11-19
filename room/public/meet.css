@@ -48,7 +48,7 @@
 }
 .week-period::after { content: ""; flex: 1; border-top: 1px solid var(--border); }
 .week .week-slot {
-  justify-self: stretch; min-height: 1.85rem; padding: 0;
+  justify-self: stretch; min-height: 1.65rem; padding: 0;
   border: 0; border-inline-start: 1px solid var(--border); user-select: none;
 }
 .week .week-hour { border-block-start: 1px solid var(--border);
@@ -68,7 +68,6 @@
   .week-navigation { grid-template-columns: 1fr 1fr; }
   .week-navigation h2 { grid-row: 1; grid-column: 1 / -1; }
   .week { padding: .4rem; }
-  .week .week-slot { min-height: 2.75rem; }
 }
 
 .booking-confirmation {
@@ -90,7 +89,7 @@
 .week-block-label {
   display: grid;
   gap: .1rem;
-  padding: .15rem .35rem;
+  padding: .08rem .3rem;
   text-align: start;
   color: var(--text);
   font-size: .75rem;
