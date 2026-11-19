@@ -1,24 +1,29 @@
+import config from './settings.js';
+
 export const minute = 60_000;
-export const slotMinutes = 15;
 export const day = 1440 * minute;
-export const opensAt = 8;
-export const closesAt = 23;
-// The Hague uses the Netherlands' IANA time zone.
-export const zone = 'Europe/Amsterdam';
+export const { zone, timeLabel, slotMinutes, opensAt, closesAt, days, windowDays } = config.schedule;
+export const clock = hour => String(Math.floor(hour)).padStart(2, '0') + ':' +
+  String(Math.round((hour % 1) * 60)).padStart(2, '0');
 const date = new Intl.DateTimeFormat('sv-SE', { timeZone: zone, dateStyle: 'short' });
 const offset = new Intl.DateTimeFormat('en-GB', { timeZone: zone, timeZoneName: 'longOffset' });
 
 export function roomDay(key) {
   const midnight = Date.parse(key + 'T00:00:00Z');
-  const noon = midnight + 12 * 60 * minute;
-  const part = offset.formatToParts(noon).find(item => item.type === 'timeZoneName').value;
-  const [, sign, hours, minutes] = /^GMT([+-])(\d\d):(\d\d)$/.exec(part);
-  const shift = (Number(hours) * 60 + Number(minutes)) * minute * (sign === '-' ? -1 : 1);
-  return { start: midnight + opensAt * 60 * minute - shift, end: midnight + closesAt * 60 * minute - shift };
+  function instant(hour) {
+    const wall = midnight + Math.round(hour * 60) * minute;
+    const shift = value => {
+      const part = offset.formatToParts(value).find(item => item.type === 'timeZoneName').value;
+      const [, sign, hours, minutes] = /^GMT([+-])(\d\d):(\d\d)$/.exec(part) ?? [];
+      return hours ? (Number(hours) * 60 + Number(minutes)) * minute * (sign === '-' ? -1 : 1) : 0;
+    };
+    return wall - shift(wall - shift(wall));
+  }
+  return { start: instant(opensAt), end: instant(closesAt), instant };
 }
 
 export function bookingWindow(now) {
-  return { start: now, end: now + 30 * day };
+  return { start: now, end: now + windowDays * day };
 }
 
 export function validBooking(start, end, now) {
@@ -26,7 +31,7 @@ export function validBooking(start, end, now) {
       start <= now || end <= start || end > bookingWindow(now).end) return false;
   const key = date.format(start);
   const weekday = new Date(key + 'T00:00:00Z').getUTCDay();
-  if (weekday === 0 || weekday === 6) return false;
+  if (!days.includes(weekday)) return false;
   const hours = roomDay(key);
   return start >= hours.start && end <= hours.end;
 }

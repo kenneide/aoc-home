@@ -1,4 +1,4 @@
-import { closesAt, day, minute, opensAt, roomDay, slotMinutes, validBooking, zone } from './hours.js';
+import { clock, closesAt, day, days, minute, opensAt, roomDay, slotMinutes, timeLabel, validBooking, zone } from './hours.js';
 
 const form = document.querySelector('#booking');
 const status = document.querySelector('#status');
@@ -15,7 +15,6 @@ const confirmation = document.querySelector('#confirmation');
 const confirmationTitle = document.querySelector('#confirmation-title');
 const confirmationTime = document.querySelector('#confirmation-time');
 
-const slotLength = slotMinutes * minute;
 const slotsPerHour = 60 / slotMinutes;
 const localDate = new Intl.DateTimeFormat('sv-SE', { timeZone: zone, dateStyle: 'short' });
 const localTime = new Intl.DateTimeFormat('en-GB', {
@@ -24,8 +23,11 @@ const localTime = new Intl.DateTimeFormat('en-GB', {
 const heading = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric' });
 const range = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' });
 const chosenDay = new Intl.DateTimeFormat('en-GB', { timeZone: zone, weekday: 'long', day: 'numeric', month: 'long' });
+const weekDays = [...days].sort((a, b) => (a + 6) % 7 - (b + 6) % 7);
 const key = date => new Date(date).toISOString().slice(0, 10);
-const weekOf = date => date - ((new Date(date).getUTCDay() + 6) % 7) * day;
+const weekday = date => new Date(date).getUTCDay();
+const weekOf = date => date - ((weekday(date) + 6) % 7) * day;
+let draftLabel;
 let firstWeek;
 let lastWeek;
 let monday;
@@ -41,7 +43,7 @@ let submitting = false;
 let id = crypto.randomUUID();
 
 function describe({ start, length }) {
-  return `${chosenDay.format(start)}, ${localTime.format(start)}–${localTime.format(start + length * minute)} The Hague time`;
+  return `${chosenDay.format(start)}, ${localTime.format(start)}–${localTime.format(start + length * minute)} ${timeLabel}`;
 }
 
 const intersects = (start, end, block) => start < block.end && block.start < end;
@@ -74,18 +76,19 @@ function updateControls() {
 
 function markSelection() {
   const current = gesture?.preview ?? selected;
-  week.querySelector('.week-draft-label')?.remove();
+  draftLabel?.remove();
+  draftLabel = undefined;
   let firstSelected;
   for (const button of week.querySelectorAll('[data-start]')) {
     const start = Number(button.dataset.start);
-    const pressed = Boolean(current && intersects(start, start + slotLength, current));
+    const pressed = Boolean(current && intersects(start, Number(button.dataset.end), current));
     if (pressed) firstSelected ??= button;
     if (button.getAttribute('aria-pressed') !== String(pressed)) button.setAttribute('aria-pressed', String(pressed));
   }
   if (firstSelected) {
-    const label = blockLabel('Book', current);
-    label.classList.add('week-draft-label');
-    firstSelected.append(label);
+    draftLabel = blockLabel('Book', current);
+    draftLabel.classList.add('week-draft-label');
+    firstSelected.append(draftLabel);
   }
 }
 
@@ -126,6 +129,7 @@ function blockLabel(heading, { start, end }) {
   title.textContent = heading;
   const time = document.createElement('span');
   time.textContent = localTime.format(start) + '–' + localTime.format(end);
+  label.title = heading + ' ' + time.textContent;
   label.append(title, time);
   return label;
 }
@@ -135,15 +139,18 @@ function labelBusySlot(slot, blocks, start, dayStart) {
   slot.classList.add('week-occupied');
   for (const block of blocks) {
     if (Math.max(block.start, dayStart) < start) continue;
-    slot.append(blockLabel('Busy', block));
+    const label = blockLabel('Busy', block);
+    slot.title = label.title;
+    slot.append(label);
+    break;
   }
 }
 
 function render() {
-  weekLabel.textContent = range.formatRange(monday, monday + 4 * day);
+  const dates = weekDays.map(dayOfWeek => monday + ((dayOfWeek + 6) % 7) * day);
+  weekLabel.textContent = range.formatRange(dates[0], dates.at(-1));
   week.replaceChildren();
   cell('span', 'week-heading');
-  const dates = Array.from({ length: 5 }, (_, index) => monday + index * day);
   for (const date of dates) {
     const label = cell('span', 'week-heading');
     const parts = heading.formatToParts(date);
@@ -153,21 +160,21 @@ function render() {
       label.append(line);
     }
   }
-  const days = dates.map(date => roomDay(key(date)));
+  const hoursByDate = dates.map(date => roomDay(key(date)));
   const stretches = occupiedStretches();
-  const periods = { [opensAt]: 'Morning', 12: 'Afternoon', 18: 'Evening' };
+  const period = hour => hour < 12 ? 'Morning' : hour < 18 ? 'Afternoon' : 'Evening';
   for (let row = 0; row < (closesAt - opensAt) * slotsPerHour; row++) {
     const hour = opensAt + row / slotsPerHour;
     const startsHour = row % slotsPerHour === 0;
-    if (periods[hour]) cell('span', 'week-period', periods[hour]);
-    cell('span', 'week-time', startsHour ? String(hour).padStart(2, '0') + ':00' : '');
+    if (row === 0 || hour === 12 || hour === 18) cell('span', 'week-period', period(hour));
+    cell('span', 'week-time', startsHour ? clock(hour) : '');
     const slotClass = startsHour ? 'week-slot week-hour ' : 'week-slot ';
-    for (const [index, hours] of days.entries()) {
-      const start = hours.start + row * slotLength;
-      const end = start + slotLength;
-      const label = heading.format(dates[index]) + ' ' + localTime.format(start);
-      const part = openPart(start, end);
-      const occupied = stretches.filter(block => intersects(start, end, block));
+    for (const [index, hours] of hoursByDate.entries()) {
+      const start = hours.instant(hour);
+      const end = hours.instant(hour + slotMinutes / 60);
+      const label = heading.format(dates[index]) + ' ' + clock(hour);
+      const part = end > start ? openPart(start, end) : undefined;
+      const occupied = end > start ? stretches.filter(block => intersects(start, end, block)) : [];
       let slot;
       if (confirmed && intersects(start, end, confirmed)) {
         slot = cell('span', slotClass + 'week-confirmed');
@@ -176,7 +183,7 @@ function render() {
         const partial = part.start > start || part.end < end;
         slot = cell('button', slotClass + 'week-open' + (partial ? ' week-partial' : ''));
         slot.type = 'button';
-        Object.assign(slot.dataset, { start, from: part.start, to: part.end });
+        Object.assign(slot.dataset, { start, end, from: part.start, to: part.end });
         slot.setAttribute('aria-label', label + (partial ? ', partially available' : ''));
       } else {
         slot = cell('span', slotClass + (occupied.length ? 'week-busy' : 'week-unavailable'));
@@ -185,7 +192,7 @@ function render() {
       labelBusySlot(slot, occupied, start, hours.start);
     }
   }
-  cell('span', 'week-time', closesAt + ':00');
+  cell('span', 'week-time', clock(closesAt));
   markSelection();
   updateControls();
 }
@@ -194,10 +201,11 @@ previous.addEventListener('click', () => { monday -= 7 * day; render(); });
 next.addEventListener('click', () => { monday += 7 * day; render(); });
 
 function editTimes() {
-  const midnight = roomDay(selectedDate).start - opensAt * 60 * minute;
+  const hours = roomDay(selectedDate);
   const instant = value => {
-    const [hours, minutes] = value.split(':').map(Number);
-    return midnight + (hours * 60 + minutes) * minute;
+    if (!value) return NaN;
+    const [h, m] = value.split(':').map(Number);
+    return hours.instant(h + m / 60);
   };
   const start = instant(startTime.value);
   const end = instant(endTime.value);
@@ -205,8 +213,8 @@ function editTimes() {
     choose(start, end);
   } else {
     selected = undefined;
-    selection.textContent = 'Choose an available future time between 08:00 and 23:00 on ' +
-      chosenDay.format(roomDay(selectedDate).start) + '.';
+    selection.textContent = `Choose an available future time between ${clock(opensAt)} and ${clock(closesAt)} on ` +
+      chosenDay.format(hours.start) + '.';
     markSelection();
     updateControls();
   }
@@ -272,9 +280,10 @@ async function load() {
     data.busy.sort((a, b) => a.start - b.start);
     availability = data;
     const today = Date.parse(localDate.format(data.start));
-    const weekday = new Date(today).getUTCDay();
-    firstWeek = weekOf(today) + (weekday === 0 || weekday === 6 ? 7 * day : 0);
-    lastWeek = weekOf(Date.parse(localDate.format(data.end)));
+    const offsets = Array.from({ length: 7 }, (_, index) => index * day);
+    firstWeek = weekOf(today + offsets.find(offset => days.includes(weekday(today + offset))));
+    const finalDate = Date.parse(localDate.format(data.end));
+    lastWeek = Math.max(firstWeek, weekOf(finalDate - offsets.find(offset => days.includes(weekday(finalDate - offset)))));
     monday = Math.min(lastWeek, Math.max(firstWeek, monday ?? firstWeek));
     if (selected && !free(selected.start, selected.end)) {
       selected = undefined;

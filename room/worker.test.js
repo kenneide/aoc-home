@@ -2,11 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { registerHooks } from 'node:module';
 import { DatabaseSync } from 'node:sqlite';
-import { validBooking } from './hours.js';
 import { slots } from '../meet/calendar.js';
+
+const fixture = {
+  site: { origin: 'https://room.example.com', roomName: 'Room' },
+  schedule: { zone: 'Europe/Amsterdam', timeLabel: 'Local time', days: [1, 2, 3, 4, 5],
+    opensAt: 8, closesAt: 23, slotMinutes: 15, windowDays: 30 },
+  calendar: { provider: 'caldav', hosts: ['calendar.example'] },
+  deployment: { open: true, turnstileSiteKey: 'test-site-key' },
+};
 
 const hook = registerHooks({
   resolve(specifier, context, next) {
+    if (specifier === './settings.js') {
+      return { shortCircuit: true, url: 'data:text/javascript,' + encodeURIComponent('export default ' + JSON.stringify(fixture)) };
+    }
     if (specifier === 'cloudflare:workers') {
       return { shortCircuit: true, url: 'data:text/javascript,export class DurableObject { constructor(ctx, env) { this.ctx = ctx; this.env = env; } }' };
     }
@@ -14,6 +24,7 @@ const hook = registerHooks({
   },
 });
 const { Bookings, default: worker } = await import('./worker.js');
+const { validBooking } = await import('./hours.js');
 hook.deregister();
 
 function database(t) {
@@ -31,8 +42,8 @@ function database(t) {
   };
   const collection = 'https://calendar.example/meetings/';
   const bookings = new Bookings({ storage }, {
-    CALENDAR_PROVIDER: 'caldav', CALENDAR_USER: 'test', CALENDAR_PASSWORD: 'test',
-    WRITE_CALENDAR: collection, BUSY_CALENDARS: '[]', CALENDAR_HOSTS: '["calendar.example"]',
+    CALENDAR_USER: 'test', CALENDAR_PASSWORD: 'test',
+    WRITE_CALENDAR: collection, BUSY_CALENDARS: '[]',
   });
   return { bookings, collection };
 }
@@ -105,7 +116,7 @@ test('calendar subscription emits only busy blocks and no private event details'
   assert.match(feed, /SUMMARY:Busy\r\n/);
   assert.match(feed, /DTSTART:\d{8}T\d{6}Z/);
   assert.match(feed, /DTEND:\d{8}T\d{6}Z/);
-  assert.doesNotMatch(feed, /Private|example\.com|internal-id|123456789|DESCRIPTION|ATTENDEE|LOCATION/);
+  assert.doesNotMatch(feed, /Private|private@example\.com|internal-id|123456789|DESCRIPTION|ATTENDEE|LOCATION/);
 });
 
 

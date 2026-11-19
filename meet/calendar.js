@@ -29,11 +29,11 @@ function timestamp(value) {
   return new Date(value).toISOString().replace(/[-:]|\.\d{3}/g, '');
 }
 
-function millis(time) {
+function millis(time, calendarZone) {
   if (time.zone.tzid !== 'floating') return time.toUnixTime() * 1000;
   const wall = Date.UTC(time.year, time.month - 1, time.day, time.hour, time.minute, time.second);
   const offset = new Intl.DateTimeFormat('en', {
-    timeZone: zone, timeZoneName: 'shortOffset',
+    timeZone: calendarZone, timeZoneName: 'shortOffset',
   });
   const getOffset = instant => {
     const value = offset.formatToParts(instant).find(part => part.type === 'timeZoneName').value;
@@ -43,7 +43,7 @@ function millis(time) {
   return wall - getOffset(wall - getOffset(wall));
 }
 
-export function readBusy(source) {
+export function readBusy(source, calendarZone = zone) {
   const calendar = new ICAL.Component(ICAL.parse(source));
   if (calendar.name !== 'vcalendar') throw Error('Unexpected calendar response');
   const intervals = [];
@@ -51,7 +51,7 @@ export function readBusy(source) {
     for (const property of component.getAllProperties('freebusy')) {
       if (property.getParameter('fbtype') === 'FREE') continue;
       for (const period of property.getValues()) {
-        intervals.push({ start: millis(period.start), end: millis(period.getEnd()) });
+        intervals.push({ start: millis(period.start, calendarZone), end: millis(period.getEnd(), calendarZone) });
       }
     }
   }
@@ -60,8 +60,8 @@ export function readBusy(source) {
         component.getFirstPropertyValue('transp') === 'TRANSPARENT') continue;
     const event = new ICAL.Event(component);
     if (event.isRecurring()) throw Error('Calendar did not expand recurrence');
-    const start = millis(event.startDate);
-    const end = millis(event.endDate);
+    const start = millis(event.startDate, calendarZone);
+    const end = millis(event.endDate, calendarZone);
     if (end > start) intervals.push({ start, end });
   }
   return intervals;
@@ -82,7 +82,7 @@ export function meetingFile(booking) {
   return calendar.toString() + '\r\n';
 }
 
-export function calendarProvider(env, { eventDomain = 'meet.alanocinneide.com', serialize = meetingFile } = {}) {
+export function calendarProvider(env, { eventDomain = 'meet.alanocinneide.com', serialize = meetingFile, calendarZone = zone } = {}) {
   if (env.CALENDAR_PROVIDER !== 'caldav' || !env.CALENDAR_USER || !env.CALENDAR_PASSWORD) throw Error('Calendar setup required');
   function collection(value) {
     const url = new URL(value);
@@ -125,7 +125,7 @@ export function calendarProvider(env, { eventDomain = 'meet.alanocinneide.com', 
     const free = await report(`<c:free-busy-query xmlns:c="urn:ietf:params:xml:ns:caldav"><c:time-range ${range}/></c:free-busy-query>`);
     if (free.ok) {
       const body = await free.text();
-      if (body.includes('BEGIN:VFREEBUSY')) return readBusy(body);
+      if (body.includes('BEGIN:VFREEBUSY')) return readBusy(body, calendarZone);
     } else if (![400, 403, 405, 501].includes(free.status)) {
       throw Error('Free/busy unavailable: HTTP ' + free.status);
     }
@@ -146,7 +146,7 @@ export function calendarProvider(env, { eventDomain = 'meet.alanocinneide.com', 
     return (result.response ?? []).flatMap(item => {
       const data = item.propstat?.find(prop => /\s200\s/.test(prop.status))?.prop?.['calendar-data'];
       if (typeof data !== 'string') throw Error('Calendar data missing');
-      return readBusy(data);
+      return readBusy(data, calendarZone);
     });
   }
   const eventUrl = booking => target + encodeURIComponent(booking.id) + '.ics';

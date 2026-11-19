@@ -1,4 +1,5 @@
 import { DurableObject } from 'cloudflare:workers';
+import config from './settings.js';
 import { overlaps } from '../meet/calendar.js';
 import { availabilityCalendar, roomCalendar } from './calendar.js';
 
@@ -42,8 +43,8 @@ export default {
     if (!feed && !path.startsWith('/api/')) {
       return env.ASSETS.fetch(path === '/' ? new Request(new URL('/index.html', url), request) : request);
     }
-    const open = env.BOOKING_OPEN === 'true';
-    if (path === '/api/config' && request.method === 'GET') return json({ open, siteKey: env.TURNSTILE_SITE_KEY });
+    const open = (env.BOOKING_OPEN ?? String(config.deployment.open)) === 'true';
+    if (path === '/api/config' && request.method === 'GET') return json({ open, siteKey: config.deployment.turnstileSiteKey });
     if (!open) return unavailable();
     try {
       const ip = request.headers.get('CF-Connecting-IP') || 'local';
@@ -71,7 +72,7 @@ export default {
         return json({ starts: await service.available(duration) });
       }
       if (path === '/api/bookings' && request.method === 'POST') {
-        if (request.headers.get('Origin') !== env.PUBLIC_ORIGIN || url.origin !== env.PUBLIC_ORIGIN) {
+        if (request.headers.get('Origin') !== config.site.origin || url.origin !== config.site.origin) {
           return failure('Invalid request origin.', 403);
         }
         const data = await body(request);

@@ -1,31 +1,30 @@
 # Room booking
 
-The room Worker serves `https://room.alanocinneide.com/` and has its own deployment. The homepage, CV and existing meeting approval site use their existing deployments.
+Edit [room.config.json](room.config.json) to configure a new booking site. The build uses it for the public page, the booking rules, and the Cloudflare Worker configuration.
 
-## Verify locally
-
-Install Node dependencies with `npm ci` in both `meet/` and `room/`. From `room/`, run `npm test`, `npm run build`, and `npx wrangler deploy --dry-run`. The shared CalDAV adapter and availability rules live in `meet/calendar.js`. Run the tests in `meet/` when changing shared logic.
-
-## Configure production
-
-1. Create a dedicated private Room calendar in iCloud. Generate an Apple app-specific password and discover the final HTTPS CalDAV collection URL as described in the [meeting setup](../meet/README.md). Keep the calendar unshared. The owner can see the guest name and optional contact details in iCloud and can cancel a booking by deleting its event.
-2. From `room/`, run `npm run deploy` using a Cloudflare account with access to the zone and Workers. The custom domain is declared in Wrangler. For a fresh installation, deploy with `--var BOOKING_OPEN:false` during setup. Configure a Turnstile widget for `room.alanocinneide.com`.
-3. Configure the following Worker bindings. Set secrets in the Cloudflare dashboard or via `npx wrangler secret put NAME`.
-
-| Binding | Value |
+| Section | Settings |
 | --- | --- |
-| `CALENDAR_PROVIDER` | `caldav` |
-| `CALENDAR_USER` | Apple Account email, stored as a secret |
-| `CALENDAR_PASSWORD` | Apple app-specific password, stored as a secret |
-| `CALENDAR_HOSTS` | JSON array of allowed CalDAV hostnames |
-| `WRITE_CALENDAR` | Private Room collection URL with a trailing slash, stored as a secret |
-| `BUSY_CALENDARS` | `[]` to use only the Room calendar, or a JSON array of additional collection URLs |
-| `TURNSTILE_SITE_KEY` | Public widget key |
-| `TURNSTILE_SECRET_KEY` | Widget secret |
+| `site` | HTTPS origin without a trailing slash, page title, room name, and optional branding. Omit `brand` for a plain room-name header and footer. Set `brand.spectrum` to `true` to use this repository's spectrum artwork and favicon. |
+| `schedule` | IANA time zone, displayed time-zone label, bookable days (Sunday is 0), whole-hour opening and closing times, grid increment in minutes (a divisor of 60), and the number of days bookable ahead. |
+| `calendar` | Calendar adapter and the permitted CalDAV hostnames. Use `caldav` for iCloud. |
+| `deployment` | Cloudflare Worker name, public Turnstile site key, and whether booking is open. Set `open` to `false` for initial setup. |
 
-4. Verify HTTPS with booking closed. For the live test, temporarily restrict the hostname to the owner with Cloudflare Access, then set `BOOKING_OPEN=true`. Submit a name-only booking, check the private calendar event and unavailable slot, then delete the event and verify the slot reopens. Inspect desktop and mobile rendering, keyboard use, stored theme preference, and reduced motion. Remove the temporary Access policy and verify anonymous booking availability. The tracked Wrangler value keeps production bookings open on redeploy.
-5. To pause, set `BOOKING_OPEN=false`. For a provider or destination change, pause booking, resolve outstanding writes, and move any bookings that should continue blocking slots to the new calendar before reopening.
+## Build and deploy
 
-`room/calendar.js` selects the adapter. To add a provider, register a factory implementing `busy({start,end})` (UTC milliseconds), `exists(booking)` (stable ID lookup), and `create(booking)` (idempotent event creation). Google Calendar requires a separate adapter and credentials.
+1. Install dependencies with `npm ci` in both `meet/` and `room/`. From `room/`, run `npm test` and `npm run build`. The build generates the public assets in `dist/` and the deployment config at `.wrangler/room.json`. Use `npx wrangler deploy --config .wrangler/room.json --dry-run` to verify the Worker package.
+2. Create a dedicated private calendar. For iCloud, create an Apple app-specific password and discover the final HTTPS collection URL using the [CalDAV setup instructions](../meet/README.md). Create a Turnstile widget for the hostname in `site.origin` and put its public site key in the config file.
+3. Run `npm run deploy` from `room/` with a Cloudflare account that has access to the domain's zone and Workers. In Cloudflare, add the secrets below to the new Worker. You can also use `npx wrangler secret put NAME --config .wrangler/room.json`.
 
-The public API returns start times and confirmation for the submitted booking. The calendar is authoritative after confirmation. The Worker retains unresolved submission details until it confirms the event, verifies absence after the retry window, or the booking time passes. Manual calendar changes can race with the final availability check.
+| Secret | Value |
+| --- | --- |
+| `CALENDAR_USER` | Calendar account email |
+| `CALENDAR_PASSWORD` | App-specific password |
+| `WRITE_CALENDAR` | Private CalDAV collection URL with a trailing slash |
+| `BUSY_CALENDARS` | Optional JSON array of additional private CalDAV collection URLs |
+| `TURNSTILE_SECRET_KEY` | Private Turnstile verification key |
+
+4. Verify HTTPS, set `deployment.open` to `true`, and redeploy. Test a booking, confirm that the private event appears, then delete it and verify the slot reopens. The public `/availability.ics` subscription shows only busy intervals. Keep the source calendar unshared.
+
+For a provider or destination change, pause booking, resolve outstanding writes, and move any bookings that should continue blocking slots to the new calendar before reopening. Add a provider in `calendar.js` by implementing `busy({start,end})` (UTC milliseconds), `exists(booking)`, and idempotent `create(booking)`. Google Calendar requires a separate adapter and credentials.
+
+The calendar is authoritative after confirmation. The Worker retains unresolved submission details until it confirms the event, verifies absence after the retry window, or the booking time passes. Manual calendar changes can race with the final availability check.

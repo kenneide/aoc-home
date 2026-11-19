@@ -1,0 +1,43 @@
+{
+  "site": {
+    "origin": "https://room.alanocinneide.com",
+    "title": "Meeting Room Booking Form",
+    "roomName": "Room",
+    "brand": {
+      "name": "Alan O Cinneide Software BV",
+      "website": "https://alanocinneide.com/",
+      "email": "hello@alanocinneide.com",
+      "registration": {
+        "label": "KVK 84179686",
+        "url": "https://www.kvk.nl/zoeken/?source=all&q=84179686"
+      },
+      "spectrum": true
+    }
+  },
+  "schedule": {
+    "zone": "Europe/Amsterdam",
+    "timeLabel": "The Hague time",
+    "days": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "opensAt": 8,
+    "closesAt": 23,
+    "slotMinutes": 15,
+    "windowDays": 30
+  },
+  "calendar": {
+    "provider": "caldav",
+    "hosts": [
+      "p131-caldav.icloud.com"
+    ]
+  },
+  "deployment": {
+    "workerName": "aoc-room",
+    "open": true,
+    "turnstileSiteKey": "0x4AAAAAAGI7hplMEYBHfNH_"
+  }
+}
