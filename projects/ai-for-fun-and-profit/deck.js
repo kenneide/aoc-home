@@ -44,6 +44,10 @@ function animateDetails(slide) {
     animations.push(element.animate(frames, {duration: length, delay, easing, fill: 'backwards'}));
   };
   // Text stays in place. Rules, diagram accents and artwork carry the movement.
+  const ribbon = slide.querySelector('.deck-ribbon');
+  if (ribbon) play(ribbon, [
+    {opacity: 0.45, translate: '0 0.7rem'}, {opacity: 1, translate: '0 0'}
+  ], 0, duration * 2);
   const artwork = slide.querySelector('.hero-wave, .wave-edge');
   if (artwork) play(artwork, [
     {clipPath: 'inset(0 100% 0 0)'}, {clipPath: 'inset(0 0% 0 0)'}

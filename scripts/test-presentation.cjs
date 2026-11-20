@@ -18,8 +18,8 @@ artwork.animate=()=>{started++;return {cancel(){cancelled++;}};};
 const records = JSON.parse(readFileSync('projects/ai-for-fun-and-profit/slides.json', 'utf8'));
 const slides = records.map(({id, chapter, steps}) =>
   Object.assign(new Element(), {id, dataset: {chapter, steps}}));
-slides[0].querySelector=()=>artwork;
-slides[1].querySelector=()=>artwork;
+slides[0].querySelector=selector=>selector === '.deck-ribbon' ? artwork : null;
+slides[1].querySelector=selector=>selector === '.hero-wave, .wave-edge' ? artwork : null;
 const controls=new Element();
 const elements=Object.fromEntries(['#prev','#next','#present','#full','output'].map(k=>[k,new Element()]));
 elements['.controls']=controls;
@@ -46,23 +46,25 @@ const verifyState = (index, stage) => {
   assert.equal(slides[index].dataset.stage, stage);
 };
 key('ArrowRight');
-verifyState(3, 0);
+key('ArrowRight');
+verifyState(4, 0);
 elements['#next'].onclick();
-verifyState(3, 1);
-for (const [index, stage] of [[4, 0], [4, 1], [5, 0], [5, 1], [6, 0]]) {
+verifyState(4, 1);
+for (const [index, stage] of [[5, 0], [5, 1], [6, 0], [6, 1], [7, 0]]) {
   key('ArrowRight');
   verifyState(index, stage);
 }
-for (const [index, stage] of [[5, 1], [5, 0], [4, 1], [4, 0], [3, 1], [3, 0], [2, 0]]) {
+for (const [index, stage] of [[6, 1], [6, 0], [5, 1], [5, 0], [4, 1], [4, 0], [3, 0]]) {
   elements['#prev'].onclick();
   verifyState(index, stage);
 }
 key('End');verifyState(slides.length - 1, 0);
-assert.equal(elements['#next'].disabled,false);
-elements['#next'].onclick();verifyState(slides.length - 1, 1);
 assert.equal(elements['#next'].disabled,true);
-key('ArrowRight');verifyState(slides.length - 1, 1);
-key('ArrowLeft');verifyState(slides.length - 1, 0);
+key('ArrowRight');verifyState(slides.length - 1, 0);
+key('ArrowLeft');verifyState(slides.length - 2, 1);
+key('ArrowLeft');verifyState(slides.length - 2, 0);
+elements['#next'].onclick();verifyState(slides.length - 2, 1);
+elements['#next'].onclick();verifyState(slides.length - 1, 0);
 key('Home');assert.equal(elements['#prev'].disabled,true);
 key('Escape');assert(slides.every(s=>!s.hidden));
 assert.equal(body.children[0].children.filter(b=>b.attrs['aria-current']).length,1);

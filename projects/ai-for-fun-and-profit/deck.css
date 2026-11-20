@@ -316,6 +316,8 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 .reachable rect {fill:var(--colour-lime);stroke:var(--colour-ink)}
 .possibility-diagram .reachable text {fill:var(--colour-ink)}
 .presenting :is(.layout-possibilities, .layout-audience-close)[data-stage="0"] .practical-circle {r:125px}
+.possibility-diagram .audience-idea {font-size:34px;font-weight:700}
+.presenting .layout-audience-close[data-stage="0"] .audience-idea {visibility:hidden}
 .presenting .layout-possibilities[data-stage="0"] .reachable rect {fill:transparent;stroke:transparent}
 .presenting .layout-possibilities[data-stage="0"] .reachable text {fill:var(--text)}
 .gibson-icon {width:1em;height:1em;vertical-align:-.12em;margin-right:.25em}
@@ -356,4 +358,42 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
  .quote-template dd {margin:0}
  .layout-room-walkthrough h2 {font-size:3.9cqw}
  .gibson-gameplay img {max-height:21cqw}
+}
+
+/* House accents frame each example. Lime identifies newly reachable ideas. */
+:is(.layout-clipping,.layout-historical,.layout-calculation) {--slide-accent:var(--colour-blue)}
+:is(.layout-hiring,#hiring-scenarios) {--slide-accent:var(--colour-gold)}
+#worth-building {--slide-accent:var(--colour-orange)}
+:is(.layout-gibson-web,#slide-07) {--slide-accent:var(--colour-red)}
+:is(.layout-gymnative,#slide-10) {--slide-accent:var(--colour-green)}
+:is(.layout-room-door,.layout-room-walkthrough,#room-possibilities) {--slide-accent:var(--colour-orange)}
+.slide .eyebrow::before {background:var(--slide-accent,var(--colour-lime))}
+.slide:has(.slide-cue) .slide-cue {border-left:.22em solid var(--slide-accent,var(--colour-lime));padding-left:.65em}
+.calculation-timeline li {border-top:.25em solid var(--slide-accent)}
+.calculation-timeline li:nth-child(2) {--slide-accent:var(--colour-gold)}
+.calculation-timeline li:nth-child(3) {--slide-accent:var(--colour-orange)}
+.layout-hiring .revenue-fill {background:var(--colour-orange)}
+.layout-title-ribbon {background:var(--colour-ink);color:var(--colour-white)}
+.layout-thanks-ribbon {background:var(--colour-yellow);color:var(--colour-ink)}
+:is(.layout-title-ribbon,.layout-thanks-ribbon) .slide-inner {justify-content:center;padding-bottom:19%}
+:is(.layout-title-ribbon,.layout-thanks-ribbon) .eyebrow {display:none}
+:is(.layout-title-ribbon,.layout-thanks-ribbon) h2 {font-size:9cqw;margin-bottom:.18em;max-width:100%}
+:is(.layout-title-ribbon,.layout-thanks-ribbon) .message {font-size:3cqw;line-height:1.2;max-width:70%;margin-bottom:.6em}
+.layout-title-ribbon h2 {font-size:7.1cqw}
+.ribbon-byline {font-size:1.75cqw}
+.deck-ribbon {position:absolute;inset:auto 0 8% 0;width:100%;height:auto;transform:scaleY(.28);transform-origin:bottom;pointer-events:none}
+@media (max-width:650px) {
+ :is(.layout-title-ribbon,.layout-thanks-ribbon) .slide-inner {min-height:390px;padding-bottom:90px}
+ :is(.layout-title-ribbon,.layout-thanks-ribbon) h2 {font-size:clamp(40px,11cqw,65px)}
+ :is(.layout-title-ribbon,.layout-thanks-ribbon) .message,.ribbon-byline {font-size:18px}
+ .deck-ribbon {bottom:54px;transform:scaleY(.38)}
+}
+.layout-possibilities .worth-circle {fill:color-mix(in srgb,var(--slide-accent,var(--colour-lime)) 14%,var(--surface))}
+
+@media (min-width:651px) {
+ #room-possibilities .possibility-diagram {width:37cqw}
+}
+@media (min-width:651px) {
+ #room-possibilities h2 {font-size:3.8cqw;line-height:1.08}
+ #room-possibilities .possibility-diagram {height:28cqw}
 }

@@ -2,7 +2,7 @@
 
 From spreadsheets to AI-assisted software
 
-Local draft for the talk and discussion.
+Slides for the talk and discussion.
 
 Install the site's requirements in a Python environment (`pip install -r requirements.txt`), then run `npm run presentation:dev`. Open http://127.0.0.1:4174/projects/ai-for-fun-and-profit/ . The server binds only to loopback. `npm run presentation:build` generates without serving.
 
@@ -10,7 +10,7 @@ Edit `talk.json` for the title and subtitle shared by the deck and preview homep
 
 The examples run in this order: The Gibson App, GymNative, then room booking. The Gibson App uses a shared mobile gameplay image from https://www.gibson.app/images/sales_funnel/example_screens.png, official store badges and the Android store icon from the app source. The presenter supplied the Add Index Finger browser capture. Its approved label is “Browser gameplay preview.” GymNative uses local Haguegym captures with fictional leg-press workouts. The QR points to https://gym.alanocinneide.com/haguegym/?lang=en. The Haguegym pilot is underway. Older slides are preserved in `backup-slides.json`.
 
-The preview homepage links to the draft under Projects. The normal build excludes that link, the deck, and all notes and media. Preview output lives under ignored output/presentation-preview. Do not move materials into public assets. Future publication requires explicit approval, a deliberate production allowlist change, metadata review and a Projects link; nothing here publishes automatically. Do not deploy or push this draft.
+The site links to the presentation under Projects. The normal build generates the public slides and copies their allowlisted media. The loopback preview adds speaker notes and lives under ignored output/presentation-preview.
 
 ## VS Code launch
 

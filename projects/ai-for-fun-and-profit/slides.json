@@ -1,5 +1,19 @@
 [
   {
+    "id": "title",
+    "title": "What Becomes Worth Building?",
+    "body": "From spreadsheets to AI-assisted software",
+    "layout": "title-ribbon",
+    "chapter": "Opening",
+    "notes": {
+      "point": "What Becomes Worth Building?",
+      "story": "Introduce yourself and the question behind the talk. What becomes worth building when making a first version costs less?",
+      "transition": "Start with a job ad from 1892.",
+      "materials": "Company spectrum artwork",
+      "minutes": 0.25
+    }
+  },
+  {
     "id": "computer-wanted",
     "title": "A computer wanted",
     "body": "",
@@ -265,9 +279,22 @@
     "notes": {
       "point": "What’s practical to try now?",
       "story": "Cheaper calculation let businesses ask more questions about what they offered. Cheaper software lets businesses and entrepreneurs try small tools that can improve what they offer their clients. [Advance to expand the Practical circle. Pause.] What part of your work could you make easier? I enjoy helping people understand what’s possible, choose a small experiment, and see whether it helps. If something came to mind, I’d love to hear about it over a drink.",
-      "transition": "[Leave this slide on screen through the discussion.]",
+      "transition": "[Keep the expanded diagram up during discussion. Advance to Thank you when ready.]",
       "materials": "No additional material required",
       "minutes": 2
+    }
+  },
+  {
+    "id": "thank-you",
+    "title": "Thank you",
+    "body": "If something came to mind, let's discuss!",
+    "layout": "thanks-ribbon",
+    "notes": {
+      "point": "Thank you",
+      "story": "Thank everyone for coming and invite them to continue the conversation over a drink.",
+      "transition": "[Leave this slide on screen.]",
+      "materials": "Company spectrum artwork",
+      "minutes": 0.2
     }
   }
 ]
