@@ -5,13 +5,8 @@
       "name": "Presentation: local preview",
       "type": "node-terminal",
       "request": "launch",
-      "command": "PATH=\"${workspaceFolder}/.venv/bin:$PATH\" npm run presentation:dev",
-      "cwd": "${workspaceFolder}",
-      "serverReadyAction": {
-        "pattern": "Presentation ready: (http://127\\.0\\.0\\.1:4174/[^ ]+)",
-        "uriFormat": "%s",
-        "action": "openExternally"
-      }
+      "command": "PATH=\"${workspaceFolder}/.venv/bin:$PATH\" npm run presentation:dev -- --open",
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

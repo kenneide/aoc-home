@@ -63,37 +63,35 @@
   },
   {
     "id": "hiring",
-    "title": "Two billable days or three?",
+    "title": "Can we afford to hire?",
     "body": "",
     "layout": "hiring",
     "steps": 2,
     "source": "",
     "placeholder": null,
     "notes": {
-      "point": "Two billable days or three?",
-      "story": "A small design studio is turning down client work. The owner wants to know how many billable days would cover a hire costing €5,000 per month. Assume four weeks and €500 per billable day. At two days a week, they’re €1,000 short. Ask “What if they can bill three days a week?” [Advance.] Revenue rises to €6,000 and they’re €1,000 above cost. Ask “What if it takes a few months to get that busy?” [Pause.] The spreadsheet lets the owner explore what would have to be true for the hire to pay for itself.",
-      "transition": "Look at the questions the studio can now try.",
+      "point": "Can we afford to hire?",
+      "story": "A small design studio is turning down client work. A hire would cost €5,000 per month. Assume an illustrative four-week month at €500 per billable day. At two days a week, the studio would bring in €4,000 in additional revenue, €1,000 short of the cost. Ask “What if they can bill three days a week?” [Advance.] Revenue rises to €6,000, €1,000 above break-even. [Pause and point to the questions beside the chart.] “We could try any of these while we’re still discussing the decision.”",
+      "transition": "Once you have a model, each answer can lead to another question. What happens when it gets that easy to try another way of doing the work?",
       "materials": "Illustrative design studio example",
-      "minutes": 1
+      "minutes": 1,
+      "optional answers": "Pricing at two billable days a week requires €625 per day to break even. For demand, three months at the original two-day rate would leave a €3,000 cumulative shortfall in this simplified model. For staffing, a part-time hire needs its own cost and billable-days assumptions."
     },
-    "cue": "Can a small studio cover the cost of a hire?"
-  },
-  {
-    "id": "hiring-scenarios",
-    "title": "Which questions can we try?",
-    "body": "",
-    "layout": "possibilities",
-    "steps": 2,
-    "source": "",
-    "placeholder": null,
-    "notes": {
-      "point": "Which questions can we try?",
-      "story": "Start with the question in the overlap. The owner can check whether the hire covers its cost. [Advance.] Watch the circle grow around the other two questions. What if work starts slowly? What if we hire part-time? With a spreadsheet, running another scenario is easy enough to try.",
-      "transition": "The cost of trying a new question fell. What happens when the cost of trying a new tool falls?",
-      "materials": "Illustrative design studio example",
-      "minutes": 0.7
-    },
-    "cue": "Same model. Another question."
+    "cue": "Two billable days or three?",
+    "questions": [
+      [
+        "Pricing",
+        "What would we need to charge if we could only bill two days a week?"
+      ],
+      [
+        "Demand",
+        "How much cash would we need if work starts slowly?"
+      ],
+      [
+        "Staffing",
+        "Would hiring part-time work instead?"
+      ]
+    ]
   },
   {
     "id": "worth-building",
@@ -123,7 +121,7 @@
     "placeholder": null,
     "notes": {
       "point": "The Gibson App",
-      "story": "Players had long asked to play on a computer. The Gibson App already had gameplay on iOS and Android. Another platform adds work to build, test and support. [Advance.] Here is a browser gameplay preview of Add Index Finger. AI-assisted development helped the existing team pursue browser gameplay.",
+      "story": "Players had long asked to play on a computer. The Gibson App already had gameplay on iOS and Android. Another platform adds work to build, test and support. [Advance.] Here’s Add Index Finger running in the browser. Browser gameplay launches next week. AI-assisted development helped the existing team pursue browser gameplay.",
       "transition": "Here, the additional thing worth trying was a way to play on a computer.",
       "materials": "Official mobile artwork and store badges, plus the presenter’s Add Index Finger browser capture. The images show different lessons.",
       "minutes": 2
@@ -143,7 +141,7 @@
       "point": "Guitar gameplay on a computer",
       "story": "Supporting iOS and Android is already part of the work. [Advance.] The existing team can now pursue another way for people to play, by bringing gameplay to the browser. That opens a way to reach people who want to play on a computer.",
       "transition": "Next, an idea that came from my own workout notebook.",
-      "materials": "Continue directly to “Is the meeting room free at two?”",
+      "materials": "The Gibson App browser gameplay capture on the preceding slide.",
       "minutes": 1
     },
     "ideas": [
@@ -153,11 +151,11 @@
         "Android"
       ],
       [
-        "Play in",
-        "the browser"
+        "Play in the",
+        "browser"
       ]
     ],
-    "cue": "Another way for players to get started"
+    "cue": "The existing team could take it on."
   },
   {
     "id": "slide-08",
@@ -200,8 +198,9 @@
         "tracker"
       ],
       [
-        "A logger set up",
-        "for this gym"
+        "A logger",
+        "set up for",
+        "this gym"
       ]
     ],
     "cue": "Pilot underway. Will members log another workout?"
@@ -225,13 +224,13 @@
   },
   {
     "id": "room-possibilities",
-    "title": "What’s practical for a neighbourhood co-working space?",
+    "title": "Is an online tool worth it for one room?",
     "body": "",
     "layout": "possibilities",
     "source": "",
     "placeholder": null,
     "notes": {
-      "point": "What’s practical for a neighbourhood co-working space?",
+      "point": "Is an online tool worth it for one room?",
       "story": "A sheet on the door is cheap, familiar, and does the job when you’re there. [Advance.] For one shared room, a small online booking tool is now reasonable to try. Someone can see what’s free and reserve it from their desk.",
       "transition": "So I made one.",
       "materials": "Use the same circle expansion as in the earlier examples.",
@@ -245,8 +244,9 @@
         "the door"
       ],
       [
-        "Book the room",
-        "from your desk"
+        "Book the",
+        "room from",
+        "your desk"
       ]
     ],
     "cue": "Maybe a more sophisticated system is possible."
@@ -278,8 +278,8 @@
     "placeholder": null,
     "notes": {
       "point": "What’s practical to try now?",
-      "story": "Cheaper calculation let businesses ask more questions about what they offered. Cheaper software lets businesses and entrepreneurs try small tools that can improve what they offer their clients. [Advance to expand the Practical circle. Pause.] What part of your work could you make easier? I enjoy helping people understand what’s possible, choose a small experiment, and see whether it helps. If something came to mind, I’d love to hear about it over a drink.",
-      "transition": "[Keep the expanded diagram up during discussion. Advance to Thank you when ready.]",
+      "story": "Cheaper calculation let businesses ask more questions about what they offered. Cheaper software lets them try small tools that can improve what they offer their clients. Ask “What’s practical to try now?” [Advance to expand the Practical circle. Pause. Say thank you with this slide still on screen.] If something came to mind, I’d love to hear about it over a drink.",
+      "transition": "[Hold this slide during discussion. The Thank you slide is an optional sign-off afterward.]",
       "materials": "No additional material required",
       "minutes": 2
     }

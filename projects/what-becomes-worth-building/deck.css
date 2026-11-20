@@ -183,14 +183,14 @@ main,.presenting main{display:block;position:static;padding:0}
   .calculation-timeline p { font-size: 16px; }
 }
 
-.hiring-model { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4cqw; align-items: center; font-size: 2cqw; line-height: 1.25; }
+.hiring-model { display: grid; grid-template-columns: 1fr 1fr; gap: 5cqw; align-items: end; font-size: 2cqw; line-height: 1.25; }
 .hiring-model table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .hiring-model caption { text-align: left; margin-bottom: .75em; }
-.hiring-model th, .hiring-model td { text-align: left; border: 1px solid var(--border); padding: .58em; }
+.hiring-model th, .hiring-model td { text-align: left; border: 1px solid var(--border); padding: .38em .55em; }
 .hiring-model td { text-align: right; white-space: nowrap; }
 .hiring-model tr:first-child { background: var(--action); color: var(--on-action); }
-.hire-revenue { margin: 0; padding-top: 2em; }
-.revenue-track { position: relative; height: 1.6em; margin-block: 3.8em .4em; border: 1px solid var(--secondary-text); background: var(--surface); }
+.hire-revenue { display: flow-root; margin: .65em 0 0; }
+.revenue-track { position: relative; height: 1.6em; margin-block: 2.5em .4em; border: 1px solid var(--secondary-text); background: var(--surface); }
 .revenue-fill { display: block; height: 100%; width: var(--revenue); background: var(--action); }
 .break-even { position: absolute; bottom: calc(100% + .35em); left: var(--break-even); transform: translateX(-50%); text-align: center; font-size: .8em; font-weight: 600; white-space: nowrap; }
 .break-even::after { content: ''; position: absolute; top: calc(100% + .35em); left: calc(50% - 1px); height: 2em; width: 2px; background: var(--text); outline: 1px solid var(--background); }
@@ -201,15 +201,14 @@ main,.presenting main{display:block;position:static;padding:0}
 .possibility-diagram { display: block; width: 49cqw; margin-inline: auto; overflow: visible; }
 .possibility-diagram circle { stroke-width: 2; }
 .worth-circle { fill: var(--surface); stroke: var(--secondary-text); }
-.practical-circle { fill: var(--highlight); fill-opacity: .15; stroke: var(--text); r: 245px; }
-.possibility-diagram text { text-anchor: middle; fill: var(--text); font-size: 17px; font-weight: 600; }
+.practical-circle { fill: var(--highlight); fill-opacity: .15; stroke: var(--text); cx: 351px; r: 240px; }
+.possibility-diagram text { text-anchor: middle; fill: var(--text); font-size: 22px; font-weight: 600; }
 .possibility-diagram .diagram-labels text { font-size: 22px; }
 @media screen and (prefers-reduced-motion: no-preference) {
-  .presenting .practical-circle { transition: r var(--motion-settle) var(--motion-ease); }
+  .presenting .practical-circle { transition: r var(--motion-settle) var(--motion-ease), cx var(--motion-settle) var(--motion-ease); }
 }
 @media (max-width: 650px) {
   .hiring-model { grid-template-columns: 1fr; gap: 20px; font-size: 16px; }
-  .hire-revenue { padding-top: 0; }
   .layout-possibilities h2 { min-height: 2.12em; margin-bottom: 16px; }
   .possibility-diagram { width: 100%; }
 }
@@ -243,12 +242,17 @@ body:not(.presenting) .case-state + .case-state { margin-top: 2cqw; }
 
 .gibson-gameplay { width: min(100%, 61cqw); margin-inline: auto; gap: 1cqw; }
 .gibson-gameplay img { width: 100%; height: auto; max-height: 32cqw; border: 0; }
-.gibson-gameplay figcaption { text-align: left; margin: 0 0 .35em; }
+.gibson-browser {gap:.8cqw}
+.gibson-browser .case-cue {line-height:1.2}
+@media (min-width: 651px) {
+  .layout-gibson-web .slide-inner {padding-top:3.75%}
+}
+.case-state.gibson-browser img {width:auto;height:auto;max-height:33cqw;border:0}
 .gibson-platforms { display: flex; justify-content: center; gap: 1cqw; }
 .gibson-platforms img { width: min(145px, 35%); margin: 0; }
 @media (max-width: 650px) {
   .gibson-gameplay { width: 100%; gap: 12px; }
-  .gibson-gameplay img { max-height: none; }
+  .gibson-gameplay img, .case-state.gibson-browser img { max-height: none; }
 }
 
 body:not(.presenting) .layout-room-walkthrough { aspect-ratio: auto; }
@@ -295,32 +299,31 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 .slide .calculation-timeline h3 {font-size:2.05cqw;margin:.5cqw 0;align-self:start}
 .calculation-timeline .caption {padding:0;margin:0}
 .layout-calculation .slide-inner {padding-top:3.5%}
-.layout-hiring .hiring-model {margin-top:3cqw;grid-template-columns:1fr 1.5fr}
-.hire-before,.presenting .layout-hiring[data-stage="0"] .hire-after {display:none}
-.presenting .layout-hiring[data-stage="0"] .hire-before {display:inline}
+.hire-questions {border-left:.22em solid var(--highlight);padding-left:.8em}
+.slide .hire-questions h3 {font-size:1.25em;margin:0 0 .4em}
+.hire-questions ul {list-style:none;margin:0;padding:0}
+.hire-questions li {padding:.45em 0;border-top:1px solid var(--border)}
+.hire-questions li strong {display:block}
+.hire-before,.presenting .slide[data-stage="0"] .hire-after {display:none}
+.presenting .slide[data-stage="0"] .hire-before {display:inline}
 .revenue-fill {width:var(--second);background:var(--colour-lime)}
-.presenting .layout-hiring[data-stage="0"] .revenue-fill {width:var(--first)}
+.presenting .slide[data-stage="0"] .revenue-fill {width:var(--first)}
 .hire-result {display:block;margin-top:.65em}
-.diagram-pair,.close-pair,.room-pair {display:grid;grid-template-columns:1fr 1.45fr;gap:2cqw;align-items:center}
+.diagram-pair,.close-pair,.room-pair {display:grid;grid-template-columns:1fr 1.25fr;gap:2cqw;align-items:center}
 .close-pair {grid-template-columns:1.55fr 1fr}
 .diagram-pair .possibility-diagram,.close-pair .possibility-diagram {width:100%}
 .diagram-pair .possibility-diagram {max-width:43cqw}
 .close-pair .possibility-diagram {max-width:39cqw}
 .audience-questions {font-size:2.15cqw}
-.miniature {grid-template-columns:1fr;font-size:1.42cqw;gap:.55cqw}
-.miniature .hire-revenue {padding-top:0}
-.miniature .revenue-track {margin-top:2.6em}
 .quote-template {background:var(--surface);border:1px solid var(--border);border-top:.4em solid var(--colour-orange);padding:1.1em;font-size:1.75cqw}
 .quote-template dt {font-weight:700}
 .quote-template dd {margin:0 0 .5em;border-bottom:1px solid var(--border)}
 .reachable rect {fill:var(--colour-lime);stroke:var(--colour-ink)}
 .possibility-diagram .reachable text {fill:var(--colour-ink)}
-.presenting :is(.layout-possibilities, .layout-audience-close)[data-stage="0"] .practical-circle {r:125px}
-.possibility-diagram .audience-idea {font-size:34px;font-weight:700}
-.presenting .layout-audience-close[data-stage="0"] .audience-idea {visibility:hidden}
+.presenting :is(.layout-possibilities, .layout-audience-close)[data-stage="0"] .practical-circle {cx:370px;r:122px}
 .presenting .layout-possibilities[data-stage="0"] .reachable rect {fill:transparent;stroke:transparent}
 .presenting .layout-possibilities[data-stage="0"] .reachable text {fill:var(--text)}
-.gibson-icon {width:1em;height:1em;vertical-align:-.12em;margin-right:.25em}
+.gibson-icon {display:inline-block;width:1em;height:1em;vertical-align:-.12em;margin-right:.25em}
 .gibson-gameplay img {max-height:24cqw}
 .case-cue {text-align:center;font-size:1.65cqw;margin:0}
 .case-state img.gym-qr {width:11cqw;height:auto;margin:0 0 .6em}
@@ -329,9 +332,10 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 .case-state img {height:26cqw}
 .gibson-gameplay img {height:auto}
 .room-door-photo {height:30cqw}
-.room-pair {grid-template-columns:1fr 1fr}
-.room-pair figure {margin:0;text-align:center;font-size:1.6cqw}
-.room-pair img {display:block;width:100%;height:24cqw;object-fit:contain}
+.room-pair {grid-template-columns:1fr 1fr;align-items:stretch}
+.room-pair figure {display:grid;grid-template-rows:1fr auto;align-items:center;margin:0;text-align:center;font-size:2cqw;line-height:1.2}
+.room-pair figcaption {padding:.55em;background:var(--colour-lime);color:var(--colour-ink);font-weight:600}
+.room-pair svg {display:block;width:100%;height:auto}
 .room-link {font-size:1.7cqw;margin-top:1cqw}
 @media (prefers-reduced-motion:no-preference) {
  .presenting .revenue-fill {transition:width var(--motion-settle) var(--motion-ease)}
@@ -339,11 +343,11 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
  .presenting .layout-possibilities[data-stage="1"] .reachable rect,.presenting .layout-possibilities[data-stage="1"] .reachable text {transition-delay:var(--motion-settle)}
 }
 @media (max-width:650px) {
- .slide .slide-cue,.slide .analogy,.quote-template,.miniature,.case-cue,.gym-tailoring p,.room-link,.room-pair figure,.audience-questions {font-size:16px}
+ .slide .slide-cue,.slide .analogy,.quote-template,.case-cue,.gym-tailoring p,.room-link,.room-pair figure,.audience-questions {font-size:16px}
  .slide .analogy,.slide .slide-cue {margin-bottom:12px}
- .diagram-pair,.close-pair,.room-pair,.clipping,.layout-hiring .hiring-model {grid-template-columns:1fr}
+ .diagram-pair,.close-pair,.room-pair,.clipping {grid-template-columns:1fr}
  .diagram-pair .possibility-diagram,.close-pair .possibility-diagram {max-width:none}
- .clipping img,.computer-room .history-photo,.calculation-timeline img,.gibson-gameplay img,.room-pair img {height:auto;max-height:none}
+ .clipping img,.computer-room .history-photo,.calculation-timeline img,.gibson-gameplay img,.room-pair svg {height:auto;max-height:none}
  .clipping .caption,.slide .calculation-timeline h3 {font-size:19px}
  .calculation-timeline li {display:block}
  .case-state img.gym-qr {width:112px}
@@ -352,7 +356,9 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 
 @media (min-width:651px) {
  .possibility-diagram {width:40cqw}
- .diagram-pair .possibility-diagram {max-width:34cqw}
+ .diagram-pair .possibility-diagram {height:33cqw}
+ #worth-building .slide-inner {padding-top:3.5%}
+ #worth-building .possibility-diagram {height:29cqw}
  .close-pair .possibility-diagram {max-width:32cqw}
  .quote-template dl {display:grid;grid-template-columns:auto 1fr;gap:.45em .8em;margin:.8em 0 0}
  .quote-template dd {margin:0}
@@ -362,7 +368,7 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 
 /* House accents frame each example. Lime identifies newly reachable ideas. */
 :is(.layout-clipping,.layout-historical,.layout-calculation) {--slide-accent:var(--colour-blue)}
-:is(.layout-hiring,#hiring-scenarios) {--slide-accent:var(--colour-gold)}
+.layout-hiring {--slide-accent:var(--colour-gold)}
 #worth-building {--slide-accent:var(--colour-orange)}
 :is(.layout-gibson-web,#slide-07) {--slide-accent:var(--colour-red)}
 :is(.layout-gymnative,#slide-10) {--slide-accent:var(--colour-green)}
@@ -372,7 +378,7 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 .calculation-timeline li {border-top:.25em solid var(--slide-accent)}
 .calculation-timeline li:nth-child(2) {--slide-accent:var(--colour-gold)}
 .calculation-timeline li:nth-child(3) {--slide-accent:var(--colour-orange)}
-.layout-hiring .revenue-fill {background:var(--colour-orange)}
+.hiring-model .revenue-fill {background:var(--colour-orange)}
 .layout-title-ribbon {background:var(--colour-ink);color:var(--colour-white)}
 .layout-thanks-ribbon {background:var(--colour-yellow);color:var(--colour-ink)}
 :is(.layout-title-ribbon,.layout-thanks-ribbon) .slide-inner {justify-content:center;padding-bottom:19%}
@@ -396,4 +402,26 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 @media (min-width:651px) {
  #room-possibilities h2 {font-size:3.8cqw;line-height:1.08}
  #room-possibilities .possibility-diagram {height:28cqw}
+}
+
+/* Local presenter handout */
+.print-notes .controls h1 {font-size:1.2rem;margin:0}
+.print-notes main {width:min(100%, 210mm);gap:24px}
+.print-notes .case-before {display:none}
+.speaker-sheet {background:var(--surface)}
+.speaker-notes {padding:1.25rem 1.5rem;line-height:1.45;overflow-wrap:anywhere}
+.speaker-notes h2 {font-size:1.1em;margin:0 0 .65em}
+.speaker-notes p {margin:0 0 .7em}
+.speaker-notes p:last-child {margin-bottom:0}
+.speaker-notes p strong {display:block}
+
+@media print {
+ @page speaker-sheet {size:A4 portrait;margin:15mm}
+ .print-notes main {width:auto;margin:0}
+ .print-notes .speaker-sheet {page:speaker-sheet;break-after:page;break-inside:avoid}
+ .print-notes .speaker-sheet:last-child,.print-notes .slide {break-after:auto}
+ .print-notes .slide {aspect-ratio:16/9;min-height:0;container-type:inline-size}
+ .print-notes:not(.presenting) .slide .slide-inner {position:absolute}
+ .print-notes:not(.presenting) .slide {aspect-ratio:16/9}
+ .print-notes .speaker-notes {padding:6mm 0 0;font-size:12pt}
 }

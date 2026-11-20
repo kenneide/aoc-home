@@ -31,7 +31,8 @@ if publish:
  footer_status = 'Presentation'
 else:
  metadata = '<meta name="robots" content="noindex,nofollow">'
- notes_link = '<a href="notes.txt" target="_blank">Notes</a>'
+ notes_link = ('<a href="notes.txt" target="_blank" rel="noopener">Notes</a>'
+               '<a href="print-notes.html" target="_blank" rel="noopener">Print with notes</a>')
  footer_status = 'Local presentation preview'
 sections=[];notes=[f'# {deck_title}', deck_subtitle,'Proposed narration based on owner-supplied facts. Missing materials are placeholders.']
 def placeholder(label):
@@ -44,52 +45,64 @@ def analogy(kind):
  return (f'<p class="analogy"><strong>Cheaper {kind}</strong>'
          f' <span>→</span> {outcome}</p>')
 
-def hiring_model(mini=False):
+def hiring_model(questions):
  rate, weeks, cost, scale = 500, 4, 5000, 8000
- first, second = (days * rate * weeks for days in (2, 3))
+ days = (2, 3)
+ first, second = (count * rate * weeks for count in days)
  money = lambda amount: f'€{amount:,}'
  def states(before, after):
   return f'<span class="hire-before">{before}</span><span class="hire-after">{after}</span>'
- rows = [('Billable days per week', states(2, 3)), ('Per billable day', money(rate)),
+ def result(revenue):
+  difference = revenue - cost
+  if difference == 0:
+   return 'At break-even'
+  direction = 'above' if difference > 0 else 'below'
+  return f'{money(abs(difference))} {direction} break-even'
+ rows = [('Billable days per week', states(*days)), ('Per billable day', money(rate)),
          ('Monthly revenue', states(money(first), money(second)))]
- table = '<table><caption>Four-week month</caption><tbody>' + ''.join(
+ table = '<table><caption>Illustrative four-week month</caption><tbody>' + ''.join(
      f'<tr><th scope="row">{label}</th><td>{value}</td></tr>' for label, value in rows
  ) + '</tbody></table>'
  chart = (
-     '<figure class="hire-revenue"><figcaption>Monthly revenue</figcaption>'
+     '<figure class="hire-revenue" aria-label="Monthly revenue chart">'
      f'<div class="revenue-track" style="--first:{first/scale:.1%};--second:{second/scale:.1%};'
      f'--break-even:{cost/scale:.1%}"><span class="revenue-fill"></span>'
      f'<span class="break-even">{money(cost)}<br>break-even</span></div>'
      f'<div class="revenue-scale"><span>€0</span><span>{money(scale)}</span></div>'
-     f'<strong class="hire-result">{states("€1,000 below break-even", "€1,000 above break-even")}</strong></figure>'
+     f'<strong class="hire-result">{states(result(first), result(second))}</strong></figure>'
  )
- return f'<div class="hiring-model{" miniature" if mini else ""}">{table}{chart}</div>'
+ follow_ups = '<ul>' + ''.join(
+     f'<li><strong>{e(topic)}</strong> {e(question)}</li>' for topic, question in questions
+ ) + '</ul>'
+ return (f'<div class="hiring-model"><div class="hire-calculation">{table}{chart}</div>'
+         f'<section class="hire-questions hire-after"><h3>What else could we ask?</h3>'
+         f'{follow_ups}</section></div>')
 
-def diagram_text(lines, x, y, accent=False):
- first, *rest = lines
- label = f'<text x="{x}" y="{y}">{e(first)}' + ''.join(
-     f'<tspan x="{x}" dy="20"> {e(line)}</tspan>' for line in rest
+def diagram_text(lines, x, accent=False):
+ line_height = 24
+ y = 188 - (len(lines) - 1) * line_height / 2
+ label = '<text>' + ''.join(
+     f'<tspan x="{x}" y="{y + i * line_height}">{e(line)}</tspan>'
+     for i, line in enumerate(lines)
  ) + '</text>'
  if not accent:
   return label
- return (f'<g class="reachable"><rect x="{x-77}" y="{y-19}" width="154" '
-         f'height="{len(lines)*20+9}" rx="2"/>{label}</g>')
+ return (f'<g class="reachable"><rect x="{x-65}" y="{y-22}" width="130" '
+         f'height="{len(lines)*line_height+6}" rx="2"/>{label}</g>')
 
-def possibilities(ideas=(), audience_prompt=False):
- labels = '<text class="audience-idea" x="275" y="225">???</text>' if audience_prompt else ''
+def possibilities(ideas=()):
+ labels = ''
  if ideas:
-  existing, *new = ideas
-  labels = diagram_text(existing, 357, 188)
-  for lines, y in zip(new, (263, 133)):
-   labels += diagram_text(lines, 275, y, accent=True)
+  existing, new = ideas
+  labels = diagram_text(existing, 316) + diagram_text(new, 181, accent=True)
  return f'''<figure class="possibility-figure">
-  <svg class="possibility-diagram" viewBox="58 -34 630 498"
+  <svg class="possibility-diagram" viewBox="-10 -64 625 488"
        role="group" aria-label="Overlap between valuable and practical">
-    <circle class="worth-circle" cx="235" cy="215" r="173"/>
-    <circle class="practical-circle" cx="440" cy="215" r="125"/>
+    <circle class="worth-circle" cx="190" cy="180" r="195"/>
+    <circle class="practical-circle" cx="370" cy="180" r="122"/>
     <g class="diagram-labels">
-      <text x="137" y="221">Valuable</text>
-      <text x="493" y="221">Practical</text>
+      <text x="203" y="94">Valuable</text>
+      <text x="438" y="187">Practical</text>
     </g>
     {labels}
   </svg>
@@ -125,16 +138,24 @@ def gibson_web():
    </div>
    <p class="case-cue">Another platform to build, test and support.</p>
  </div>
- <div class="case-state case-after gibson-gameplay">
-   <figure>
-     <figcaption>Browser gameplay preview</figcaption>
-     <img src="media/gibson-browser.webp" alt="Add Index Finger in Gibson’s desktop browser player, with the browser frame and guitar fretboard visible">
-   </figure>
+ <div class="case-state case-after gibson-browser">
+   <img src="media/gibson-browser.webp" alt="Add Index Finger in Gibson’s desktop browser player, with the browser frame and guitar fretboard visible">
+   <p class="case-cue">Browser gameplay launches next week.</p>
  </div>''')
 
 def room_walkthrough():
- booking = capture('room-quarter-hour.webp', 'Online booking page with a sample afternoon slot selected', 'Booking page')
- calendar = capture('room-calendar.webp', 'Busy blocks in the subscribed room calendar in Apple Calendar', 'Subscribed room calendar')
+ def evidence(file, size, crop, alt, label):
+  width, height = size
+  x, y, crop_width, crop_height = crop
+  return (f'<figure><svg viewBox="{x} {y} {crop_width} {crop_height}" '
+          f'role="img" aria-label="{e(alt)}">'
+          f'<image href="media/{file}" width="{width}" height="{height}"/></svg>'
+          f'<figcaption>{e(label)}</figcaption></figure>')
+ booking = evidence('room-quarter-hour.webp', (1664, 492), (701, 143, 648, 340),
+                    'Selected 14:00–14:15 slot on the booking page', 'Book 14:00–14:15')
+ calendar = evidence('room-calendar.webp', (910, 575), (15, 282, 537, 138),
+                     'Anonymous busy blocks in the subscribed room calendar',
+                     'See room availability in your calendar')
  return (f'<div class="room-pair">{booking}{calendar}</div>'
          '<a class="room-link" href="https://room.alanocinneide.com/">room.alanocinneide.com ↗</a>')
 
@@ -173,15 +194,11 @@ for idx,s in enumerate(slides):
       for label, description, image, alt, credit in stops
   ) + '</ol>' + analogy('calculation')
  elif layout=='hiring':
-  body = hiring_model()
+  body = hiring_model(s['questions'])
  elif layout=='possibilities':
   if s['id'] == 'worth-building':
    body = analogy('software') + '<div class="diagram-pair">' + quote_template() + possibilities([
-       ['Reusable', 'quote template'], ['Brief → draft', 'quote + checklist']]) + '</div>'
-  elif s['id'] == 'hiring-scenarios':
-   body = '<div class="diagram-pair">' + hiring_model(mini=True) + possibilities([
-       ['Will the hire', 'cover its cost?'], ['What if we', 'hire part-time?'],
-       ['What if work', 'starts slowly?']]) + '</div>'
+       ['Reusable', 'quote', 'template'], ['Brief to', 'draft quote', '+ checklist']]) + '</div>'
   else:
    body = possibilities(s['ideas'])
  elif layout=='gymnative':
@@ -194,7 +211,7 @@ for idx,s in enumerate(slides):
  elif layout=='room-walkthrough':
   body = room_walkthrough()
  elif layout=='audience-close':
-  body = analogy('calculation') + analogy('software') + '<div class="close-pair">' + possibilities(audience_prompt=True) + '<ul class="audience-questions">' + ''.join(
+  body = analogy('calculation') + analogy('software') + '<div class="close-pair">' + possibilities() + '<ul class="audience-questions">' + ''.join(
       f'<li>{e(question)}</li>' for question in s['body'].splitlines()
   ) + '</ul></div>'
  elif layout=='quote':
@@ -243,14 +260,48 @@ for idx,s in enumerate(slides):
  notes.append('\n## '+s['id']+' — '+s['title']+'\n'+'\n'.join(f'\n**{k.title()}:** {v}' for k,v in n.items()))
 if not publish:
  (target/'notes.txt').write_text('\n'.join(notes))
-(target/'index.html').write_text(f'''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">{metadata}<title>{e(deck_title)} — {e(deck_subtitle)}</title><meta name="description" content="{e(deck_subtitle)}"><script src="../../theme.js"></script><link rel="stylesheet" href="../../design/tokens.css"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="deck.css"><header><img class="spectrum" src="../../assets/spectrum.svg" alt=""><div class="wrap header-row"><a href="/">Alan O Cinneide Software BV</a><button class="theme-toggle" aria-pressed="false" hidden>Dark mode</button></div><div class="wrap deck-heading"><h1>{e(deck_title)}</h1><p>{e(deck_subtitle)}</p></div></header><nav class="controls"><a href="/#projects">Back to site</a><button id="prev">← Previous</button><output aria-live="polite"></output><button id="next">Next →</button><button id="present">Present</button><button id="full">Full screen</button>{notes_link}</nav><main>'''+''.join(sections)+'''</main><footer><img class="spectrum" src="../../assets/spectrum.svg" alt=""><p>Alan O Cinneide Software BV · {footer_status}</p></footer><script src="deck.js"></script></html>''')
+ sheets = []
+ for number, (slide, preview) in enumerate(zip(slides, sections), 1):
+  note = slide['notes']
+  paragraphs = ''.join(
+      f'<p><strong>{label}</strong> {e(note[key])}</p>'
+      for key, label in [('optional answers', 'Optional answers'), ('transition', 'Next'), ('materials', 'Materials')]
+      if note.get(key)
+  )
+  sheets.append(f'<article class="speaker-sheet">{preview}<div class="speaker-notes">'
+                f'<h2>Notes · {number:02} / {len(slides):02}</h2>'
+                f'<p>{e(note["story"])}</p>{paragraphs}</div></article>')
+ (target/'print-notes.html').write_text(f'''<!doctype html>
+<html lang="en" data-theme="light">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+{metadata}
+<title>{e(deck_title)} — Print with notes</title>
+<link rel="stylesheet" href="../../design/tokens.css">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="deck.css">
+<body class="print-notes">
+<div class="controls"><h1>Print with notes</h1><button type="button" onclick="window.print()">Print or save PDF</button></div>
+<main>{''.join(sheets)}</main>
+</body>
+</html>''')
+(target/'index.html').write_text(f'''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">{metadata}<title>{e(deck_title)} — {e(deck_subtitle)}</title><meta name="description" content="{e(deck_subtitle)}"><script src="../../theme.js"></script><link rel="stylesheet" href="../../design/tokens.css"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="deck.css"><header><img class="spectrum" src="../../assets/spectrum.svg" alt=""><div class="wrap header-row"><a href="/">Alan O Cinneide Software BV</a><button class="theme-toggle" aria-pressed="false" hidden>Dark mode</button></div><div class="wrap deck-heading"><h1>{e(deck_title)}</h1><p>{e(deck_subtitle)}</p></div></header><nav class="controls"><a href="/#projects">Back to site</a><button id="prev">← Previous</button><output aria-live="polite"></output><button id="next">Next →</button><button id="present">Present</button><button id="full">Full screen</button>{notes_link}</nav><main>'''+''.join(sections)+f'''</main><footer><img class="spectrum" src="../../assets/spectrum.svg" alt=""><p>Alan O Cinneide Software BV · {footer_status}</p></footer><script src="deck.js"></script></html>''')
 for name in ['deck.js','deck.css']:
  shutil.copy2(project/name,target/name)
  version=hashlib.sha256((project/name).read_bytes()).hexdigest()[:12]
- page=target/'index.html'
- page.write_text(page.read_text().replace(f'"{name}"',f'"{name}?v={version}"'))
+ pages = ['index.html'] if publish else ['index.html', 'print-notes.html']
+ for file in pages:
+  page = target/file
+  page.write_text(page.read_text().replace(f'"{name}"', f'"{name}?v={version}"'))
 if not publish:
- print('Preview: http://127.0.0.1:4174/projects/what-becomes-worth-building/')
+ handout = root/'output/pdf/what-becomes-worth-building-speaker-notes.pdf'
+ checksum = handout.with_suffix('.sha256')
+ if handout.is_file() and checksum.is_file():
+  fingerprint = hashlib.sha256((target/'print-notes.html').read_bytes()).hexdigest()
+  if checksum.read_text().strip() == fingerprint:
+   shutil.copy2(handout, target/handout.name)
+   page = target/'index.html'
+   page.write_text(page.read_text().replace('href="print-notes.html"', f'href="{handout.name}"'))
 if '--serve' in sys.argv:
  from preview_server import serve
- serve(out)
+ serve(out, open_browser='--open' in sys.argv)
