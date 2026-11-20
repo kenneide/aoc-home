@@ -1,7 +1,7 @@
 """Build the static website and PDF from centralized public copy and factual identity data."""
 from pathlib import Path
 from html import escape as e
-import json, shutil
+import json, shutil, sys
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
@@ -29,7 +29,22 @@ def shell(title,desc,body,prefix='',is_cv=False,not_found=False):
 <footer><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap footer-row"><strong>{e(company['name'])}</strong><div class="footer-links"><a href="mailto:{cv['email']}">{cv['email']}</a><a href="{e(company['kvk']['url'])}">{e(shared['registryLabel'])} {company['kvk']['number']} ↗</a></div></div></footer></body></html>'''
 def project(item):
     return f'<article><h3><a href="{e(item["url"])}">{e(item["title"])} <span aria-hidden="true">↗</span></a></h3><p>{e(item["description"])}</p></article>'
-home=f'''<main id="main" class="wrap"><section class="hero" aria-labelledby="headline"><div><p class="eyebrow">{e(homepage['eyebrow'])}</p><h1 id="headline">{'<br>'.join(e(line) for line in homepage['headline'])}</h1><p class="intro">{e(homepage['intro'])}</p><a class="button" href="mailto:{e(company['inquiriesEmail'])}">{e(homepage['contactLink'])} <span aria-hidden="true">↗</span></a></div><div><div class="hero-art"><img src="assets/bands.svg" width="1280" height="640" alt=""></div><div class="art-caption" aria-hidden="true">{''.join('<span>'+e(caption)+'</span>' for caption in homepage['artCaptions'])}</div></div></section><div class="hero-meta"><span>{e(homepage['location'])}</span><a href="cv/">{e(homepage['experienceLink'])} <span aria-hidden="true">↗</span></a></div><section class="projects" aria-labelledby="projects-heading" id="projects"><p class="eyebrow">{e(homepage['projectsEyebrow'])}</p><h2 id="projects-heading">{e(homepage['projectsHeading'])}</h2><div class="project-list">{''.join(project(item) for item in homepage['projects'])}</div></section></main>'''
+preview_talk = sys.argv[1:] == ['--talk-preview-home']
+projects = homepage['projects']
+if preview_talk:
+    talk = json.loads((ROOT/'projects/ai-for-fun-and-profit/talk.json').read_text())
+    projects = [*projects, {
+        'title': talk['title'],
+        'url': 'projects/ai-for-fun-and-profit/',
+        'description': talk['subtitle'],
+    }]
+home=f'''<main id="main" class="wrap"><section class="hero" aria-labelledby="headline"><div><p class="eyebrow">{e(homepage['eyebrow'])}</p><h1 id="headline">{'<br>'.join(e(line) for line in homepage['headline'])}</h1><p class="intro">{e(homepage['intro'])}</p><a class="button" href="mailto:{e(company['inquiriesEmail'])}">{e(homepage['contactLink'])} <span aria-hidden="true">↗</span></a></div><div><div class="hero-art"><img src="assets/bands.svg" width="1280" height="640" alt=""></div><div class="art-caption" aria-hidden="true">{''.join('<span>'+e(caption)+'</span>' for caption in homepage['artCaptions'])}</div></div></section><div class="hero-meta"><span>{e(homepage['location'])}</span><a href="cv/">{e(homepage['experienceLink'])} <span aria-hidden="true">↗</span></a></div><section class="projects" aria-labelledby="projects-heading" id="projects"><p class="eyebrow">{e(homepage['projectsEyebrow'])}</p><h2 id="projects-heading">{e(homepage['projectsHeading'])}</h2><div class="project-list">{''.join(project(item) for item in projects)}</div></section></main>'''
+if preview_talk:
+    print(shell(company['name'], homepage['description'], home).replace(
+        '<head>', '<head><meta name="robots" content="noindex,nofollow">', 1
+    ))
+    sys.exit()
+
 def job(item):
     date,title,employer,place,description=item
     return f'<article class="job"><time>{e(date)}</time><h3>{e(title)}</h3><p class="employer">{e(employer)}</p><p class="place">{e(place)}</p><p>{e(description)}</p></article>'

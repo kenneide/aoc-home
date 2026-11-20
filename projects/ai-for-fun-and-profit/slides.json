@@ -193,9 +193,9 @@
     "placeholder": null,
     "notes": {
       "point": "Is the meeting room free at two?",
-      "story": "[Let people recognize the sheet, or ask them to picture it if the photo is pending.] “The current system works beautifully, provided you’re already standing in front of it.” [Pause.] What would it take to answer the same question from your desk?",
+      "story": "[Let people recognize the sheet.] “The current system works beautifully, provided you’re already standing in front of it.” [Pause.] What would it take to answer the same question from your desk?",
       "transition": "Think about it from the coworking operator’s side.",
-      "materials": "Presenter photo of the booking sheet on the meeting-room door. Crop or obscure names and booking details.",
+      "materials": "Presenter photo of the booking sheet on the meeting-room door, with handwritten details obscured.",
       "minutes": 0.7
     },
     "chapter": "Room booking"

@@ -274,8 +274,6 @@ body:not(.presenting) .case-state + .case-state { margin-top: 2cqw; }
   .gibson-gameplay img { max-height: none; }
 }
 
-.layout-room-door .media-slot { flex: 1; min-height: 0; margin-bottom: 1.5cqw; }
-.layout-room-door .media-slot p { font-size: 2.3cqw; }
 .room-state { width: min(100%, 83cqw); margin-inline: auto; }
 .room-state img { width: 100%; height: auto; }
 .room-stage-2 { margin-top: 4cqw; }
@@ -287,8 +285,6 @@ body:not(.presenting) .case-state + .case-state { margin-top: 2cqw; }
 body:not(.presenting) .layout-room-walkthrough { aspect-ratio: auto; }
 body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative; }
 @media (max-width: 650px) {
-  .layout-room-door .media-slot { min-height: 230px; }
-  .layout-room-door .media-slot p { font-size: 16px; }
   .room-state { width: 100%; }
 }
 
@@ -309,3 +305,8 @@ body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative
 .deck-heading h1 { margin: 0; font-size: clamp(1.75rem, 4vw, 3.5rem); line-height: 1.1; }
 .deck-heading p { margin: .5rem 0 0; color: var(--secondary-text); }
 .presenting .deck-heading { display: none; }
+
+.room-door-photo { display: block; width: 100%; height: 34cqw; object-fit: contain; }
+@media (max-width: 650px) {
+  .room-door-photo { height: auto; }
+}

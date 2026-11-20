@@ -45,6 +45,8 @@ Production uses the GitHub-connected Cloudflare Pages project `aoc-home`. Preser
 
 The homepage Projects section links to `https://gym.alanocinneide.com/`, `https://design.alanocinneide.com/` and `https://maestro.alanocinneide.com/`, each independently published from its own repository. All contact links remain `hello@alanocinneide.com`.
 
+The presentation preview adds **What Becomes Worth Building?** under Projects on the loopback homepage. Run `npm run presentation:dev` and open http://127.0.0.1:4174/#projects . The publish build excludes the draft and its link.
+
 
 ## Production hosting and updates
 

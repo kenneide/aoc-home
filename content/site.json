@@ -28,7 +28,7 @@
     "projectsHeading": "Projects",
     "projects": [
       {
-        "title": "Gym Circuit Logger",
+        "title": "GymNative",
         "url": "https://gym.alanocinneide.com/",
         "description": "A phone-first workout logger, with a demo and gym setup tools."
       },
