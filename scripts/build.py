@@ -29,10 +29,10 @@ def shell(title,desc,body,prefix='',is_cv=False,not_found=False):
 <footer><img class="spectrum" src="{prefix}assets/spectrum.svg" alt="" width="1280" height="48"><div class="wrap footer-row"><strong>{e(company['name'])}</strong><div class="footer-links"><a href="mailto:{cv['email']}">{cv['email']}</a><a href="{e(company['kvk']['url'])}">{e(shared['registryLabel'])} {company['kvk']['number']} ↗</a></div></div></footer></body></html>'''
 def project(item):
     return f'<article><h3><a href="{e(item["url"])}">{e(item["title"])} <span aria-hidden="true">↗</span></a></h3><p>{e(item["description"])}</p></article>'
-talk = json.loads((ROOT/'projects/ai-for-fun-and-profit/talk.json').read_text())
+talk = json.loads((ROOT/'projects/what-becomes-worth-building/talk.json').read_text())
 projects = [*homepage['projects'], {
     'title': talk['title'],
-    'url': 'projects/ai-for-fun-and-profit/',
+    'url': 'projects/what-becomes-worth-building/',
     'description': talk['subtitle'],
 }]
 home=f'''<main id="main" class="wrap"><section class="hero" aria-labelledby="headline"><div><p class="eyebrow">{e(homepage['eyebrow'])}</p><h1 id="headline">{'<br>'.join(e(line) for line in homepage['headline'])}</h1><p class="intro">{e(homepage['intro'])}</p><a class="button" href="mailto:{e(company['inquiriesEmail'])}">{e(homepage['contactLink'])} <span aria-hidden="true">↗</span></a></div><div><div class="hero-art"><img src="assets/bands.svg" width="1280" height="640" alt=""></div><div class="art-caption" aria-hidden="true">{''.join('<span>'+e(caption)+'</span>' for caption in homepage['artCaptions'])}</div></div></section><div class="hero-meta"><span>{e(homepage['location'])}</span><a href="cv/">{e(homepage['experienceLink'])} <span aria-hidden="true">↗</span></a></div><section class="projects" aria-labelledby="projects-heading" id="projects"><p class="eyebrow">{e(homepage['projectsEyebrow'])}</p><h2 id="projects-heading">{e(homepage['projectsHeading'])}</h2><div class="project-list">{''.join(project(item) for item in projects)}</div></section></main>'''
@@ -107,7 +107,7 @@ missing_body=f'''<main id="main" class="wrap error-page"><p class="eyebrow">404<
 (dist/'404.html').write_text(shell(missing['title']+' — '+company['name'],missing['description'],missing_body,'/',not_found=True))
 origin=copy['site']['origin']
 (dist/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {origin}/sitemap.xml\n')
-(dist/'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>{origin}/</loc></url><url><loc>{origin}/cv/</loc></url><url><loc>{origin}/projects/ai-for-fun-and-profit/</loc></url></urlset>')
+(dist/'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>{origin}/</loc></url><url><loc>{origin}/cv/</loc></url><url><loc>{origin}/projects/what-becomes-worth-building/</loc></url></urlset>')
 (dist/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n')
 
 subprocess.run([sys.executable, str(ROOT/'scripts/presentation.py'), '--publish'], check=True)

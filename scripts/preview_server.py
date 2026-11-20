@@ -8,7 +8,7 @@ import errno
 
 def serve(directory, port=4174):
     directory = Path(directory).resolve()
-    route = '/projects/ai-for-fun-and-profit/'
+    route = '/projects/what-becomes-worth-building/'
     url = f'http://127.0.0.1:{port}{route}'
     handler = partial(SimpleHTTPRequestHandler, directory=str(directory))
     try:

@@ -22,7 +22,7 @@ for file in public.rglob('*.html'):
     text=file.read_text()
     assert 'Alan O Cinneide' in text and 'Software BV' in text
     assert text.count('class="spectrum"')==2
-    if file != public/'projects/ai-for-fun-and-profit/index.html':
+    if file != public/'projects/what-becomes-worth-building/index.html':
         assert cv['linkedin'] in text
     assert text.count('class="theme-toggle"') == 1
     assert f'aria-pressed="false" hidden>{escape(copy["shared"]["themeToggle"])}</button>' in text
@@ -53,14 +53,14 @@ assert 'content="noindex"' in missing and 'rel="canonical"' not in missing
 assert 'href="/cv/"' in missing and 'src="/theme.js"' in missing
 assert copy['notFound']['title'] in missing
 urls=ET.parse(public/'sitemap.xml').findall('{*}url/{*}loc')
-assert {x.text for x in urls}=={origin+'/',origin+'/cv/',origin+'/projects/ai-for-fun-and-profit/'}
+assert {x.text for x in urls}=={origin+'/',origin+'/cv/',origin+'/projects/what-becomes-worth-building/'}
 assert f'Sitemap: {origin}/sitemap.xml' in (public/'robots.txt').read_text()
 for name in ['social-preview.png','favicon.ico','favicon-32.png','apple-touch-icon.png']:
     assert (public/'assets'/name).stat().st_size>0
 assert 'X-Content-Type-Options: nosniff' in (public/'_headers').read_text()
 print('Checks passed: canonical metadata, sharing, icons, sitemap and 404 recovery')
 # Only rendered slides and their assets belong in the public deck.
-deck = public/'projects/ai-for-fun-and-profit'
-assert f'rel="canonical" href="{origin}/projects/ai-for-fun-and-profit/"' in (deck/'index.html').read_text()
+deck = public/'projects/what-becomes-worth-building'
+assert f'rel="canonical" href="{origin}/projects/what-becomes-worth-building/"' in (deck/'index.html').read_text()
 assert {file.name for file in deck.iterdir()} == {'index.html', 'deck.js', 'deck.css', 'media'}
 assert not list(public.rglob('notes.txt'))

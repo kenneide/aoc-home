@@ -15,7 +15,7 @@ class Element {
 const artwork = new Element();
 let started=0,cancelled=0;
 artwork.animate=()=>{started++;return {cancel(){cancelled++;}};};
-const records = JSON.parse(readFileSync('projects/ai-for-fun-and-profit/slides.json', 'utf8'));
+const records = JSON.parse(readFileSync('projects/what-becomes-worth-building/slides.json', 'utf8'));
 const slides = records.map(({id, chapter, steps}) =>
   Object.assign(new Element(), {id, dataset: {chapter, steps}}));
 slides[0].querySelector=selector=>selector === '.deck-ribbon' ? artwork : null;
@@ -29,7 +29,7 @@ body.classList={contains:k=>classes.has(k),toggle(k){classes.has(k)?classes.dele
 const motion={matches:false,addEventListener(_,fn){this.change=fn;}};
 const listeners={};
 const context={document:{body,documentElement:new Element(),querySelector:k=>elements[k],querySelectorAll:()=>slides,createElement:()=>new Element()},location:{hash:''},history:{replaceState(){}},matchMedia:()=>motion,getComputedStyle:()=>({getPropertyValue:k=>k.includes('ease')?'ease-out':k.includes('accent')?'#b2c906':'400ms'}),addEventListener:(k,fn)=>listeners[k]=fn};
-vm.runInNewContext(readFileSync('projects/ai-for-fun-and-profit/deck.js','utf8'),context);
+vm.runInNewContext(readFileSync('projects/what-becomes-worth-building/deck.js','utf8'),context);
 assert(slides.every(s=>!s.hidden));
 elements['#present'].onclick();
 assert.equal(started,1);

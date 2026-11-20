@@ -4,7 +4,7 @@ import json, shutil, subprocess, sys, hashlib
 from html import escape as e
 root=Path(__file__).resolve().parent.parent
 publish = '--publish' in sys.argv
-project=root/'projects/ai-for-fun-and-profit'
+project=root/'projects/what-becomes-worth-building'
 slides=json.loads((project/'slides.json').read_text())
 assert len({s['id'] for s in slides})==len(slides)
 out = root/'dist' if publish else root/'output/presentation-preview'
@@ -12,7 +12,7 @@ if not publish:
  subprocess.run(['npm','run','build'],cwd=root,check=True)
  shutil.rmtree(out,ignore_errors=True)
  shutil.copytree(root/'dist',out)
-target = out/'projects/ai-for-fun-and-profit'
+target = out/'projects/what-becomes-worth-building'
 media = target/'media'
 media.mkdir(parents=True, exist_ok=True)
 for name in (
@@ -26,7 +26,7 @@ talk = json.loads((project/'talk.json').read_text())
 deck_title, deck_subtitle = talk['title'], talk['subtitle']
 if publish:
  origin = json.loads((root/'content/site.json').read_text())['site']['origin']
- metadata = f'<link rel="canonical" href="{e(origin)}/projects/ai-for-fun-and-profit/">'
+ metadata = f'<link rel="canonical" href="{e(origin)}/projects/what-becomes-worth-building/">'
  notes_link = ''
  footer_status = 'Presentation'
 else:
@@ -250,7 +250,7 @@ for name in ['deck.js','deck.css']:
  page=target/'index.html'
  page.write_text(page.read_text().replace(f'"{name}"',f'"{name}?v={version}"'))
 if not publish:
- print('Preview: http://127.0.0.1:4174/projects/ai-for-fun-and-profit/')
+ print('Preview: http://127.0.0.1:4174/projects/what-becomes-worth-building/')
 if '--serve' in sys.argv:
  from preview_server import serve
  serve(out)

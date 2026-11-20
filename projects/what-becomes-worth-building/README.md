@@ -4,7 +4,7 @@ From spreadsheets to AI-assisted software
 
 Slides for the talk and discussion.
 
-Install the site's requirements in a Python environment (`pip install -r requirements.txt`), then run `npm run presentation:dev`. Open http://127.0.0.1:4174/projects/ai-for-fun-and-profit/ . The server binds only to loopback. `npm run presentation:build` generates without serving.
+Install the site's requirements in a Python environment (`pip install -r requirements.txt`), then run `npm run presentation:dev`. Open http://127.0.0.1:4174/projects/what-becomes-worth-building/ . The server binds only to loopback. `npm run presentation:build` generates without serving.
 
 Edit `talk.json` for the title and subtitle shared by the deck and preview homepage. Edit `slides.json` for copy, placeholders and per-slide notes. The Notes link opens generated notes in a separate tab. Present enables single-slide mode; arrows, Space, Page Up/Down and Home/End navigate when the slide area has focus. Escape returns to overview. Full screen is optional. Hashes such as #slide-09 select slides.
 
