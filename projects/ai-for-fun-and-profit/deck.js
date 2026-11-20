@@ -6,6 +6,8 @@ const status = document.querySelector('output');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const chapters = slides.flatMap((slide, i) => slide.dataset.chapter ? [[i, slide.dataset.chapter]] : []);
 let index = Math.max(0, slides.findIndex(slide => '#' + slide.id === location.hash));
+const stepCount = slide => Number(slide.dataset.steps || 1);
+let stage = 0;
 let animations = [];
 let animatedSlide = null;
 
@@ -58,9 +60,12 @@ function animateDetails(slide) {
 function update() {
   const presenting = document.body.classList.contains('presenting');
   slides.forEach((slide, position) => { slide.hidden = presenting && position !== index; });
+  slides[index].dataset.stage = stage;
   previous.disabled = index === 0;
   next.disabled = index === slides.length - 1;
-  status.textContent = `${index + 1} / ${slides.length}`;
+  const count = stepCount(slides[index]);
+  const revealStatus = presenting && count > 1 ? ` · Step ${stage + 1} of ${count}` : '';
+  status.textContent = `${index + 1} / ${slides.length}${revealStatus}`;
   const chapter = chapters.findLastIndex(([start]) => start <= index);
   [...map.children].forEach((button, position) => {
     if (position === chapter) button.setAttribute('aria-current', 'step');
@@ -76,19 +81,31 @@ function update() {
     animatedSlide = null;
   }
 }
-function go(to) {
+function go(to, fromLaterSlide = false) {
   index = Math.max(0, Math.min(slides.length - 1, to));
+  stage = fromLaterSlide ? stepCount(slides[index]) - 1 : 0;
   history.replaceState(null, '', '#' + slides[index].id);
   update();
   if (!document.body.classList.contains('presenting')) slides[index].scrollIntoView();
 }
+function step(direction) {
+  const presenting = document.body.classList.contains('presenting');
+  const nextStage = stage + direction;
+  if (presenting && nextStage >= 0 && nextStage < stepCount(slides[index])) {
+    stage = nextStage;
+    update();
+    return;
+  }
+  go(index + direction, presenting && direction < 0);
+}
 function togglePresentation() {
+  stage = 0;
   document.body.classList.toggle('presenting');
   present.textContent = document.body.classList.contains('presenting') ? 'All slides' : 'Present';
   update();
 }
-previous.onclick = () => go(index - 1);
-next.onclick = () => go(index + 1);
+previous.onclick = () => step(-1);
+next.onclick = () => step(1);
 present.onclick = togglePresentation;
 document.querySelector('#full').onclick = async () => {
   try {
@@ -101,14 +118,20 @@ document.querySelector('#full').onclick = async () => {
 };
 addEventListener('hashchange', () => {
   const found = slides.findIndex(slide => '#' + slide.id === location.hash);
-  if (found >= 0) { index = found; update(); }
+  if (found >= 0) { index = found; stage = 0; update(); }
 });
 motion.addEventListener('change', () => { cancelMotion(); update(); });
 addEventListener('keydown', event => {
   if (!document.body.classList.contains('presenting') || event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input,textarea,select,[contenteditable=true]')) return;
   if (['Enter', ' '].includes(event.key) && event.target.closest('button,a')) return;
-  const to = {ArrowRight:index+1, ArrowDown:index+1, PageDown:index+1, ArrowLeft:index-1, ArrowUp:index-1, PageUp:index-1, Home:0, End:slides.length-1, ' ':index+(event.shiftKey?-1:1)}[event.key];
+  const direction = {
+    ArrowRight: 1, ArrowDown: 1, PageDown: 1,
+    ArrowLeft: -1, ArrowUp: -1, PageUp: -1,
+    ' ': event.shiftKey ? -1 : 1,
+  }[event.key];
   if (event.key === 'Escape') { event.preventDefault(); togglePresentation(); present.focus(); }
-  if (to !== undefined) { event.preventDefault(); go(to); }
+  if (event.key === 'Home') { event.preventDefault(); go(0); }
+  if (event.key === 'End') { event.preventDefault(); go(slides.length - 1); }
+  if (direction) { event.preventDefault(); step(direction); }
 });
 update();

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "more-software",
+    "title": "The world wants more software",
+    "body": "“the world wants a gigantic amount more software, hundred times, maybe a thousand times more software.”",
+    "layout": "quote",
+    "source": "https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf",
+    "placeholder": null,
+    "notes": {
+      "point": "The world wants more software",
+      "story": "Sam Altman, Federal Reserve conference, July 22, 2025, transcript page 19. This is speculation, not a measured forecast. Why more software? Perhaps millions of small specialist workflows, personal applications, automations and niche business tools rather than only large consumer apps.",
+      "transition": "Next: App Store submissions reviewed: +49% since 2022",
+      "materials": "https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf",
+      "minutes": 1.2
+    }
+  },
+  {
+    "id": "submission-activity",
+    "title": "App Store submissions reviewed: +49% since 2022",
+    "body": "",
+    "layout": "chart",
+    "source": "https://www.apple.com/legal/app-store/transparency/",
+    "placeholder": null,
+    "notes": {
+      "point": "App Store submissions reviewed: +49% since 2022",
+      "story": "Exact counts: 2022: 6,101,913; 2023: 6,892,500; 2024: 7,771,599; 2025: 9,100,620. Growth is 49.1%. Includes updates and resubmissions, not distinct new apps. This shows increased submission activity, not that AI caused growth. Internal tools, scripts, web apps and personal automations may never appear in an app store.",
+      "transition": "Next: What becomes worth building?",
+      "materials": "https://www.apple.com/legal/app-store/transparency/",
+      "minutes": 1.2
+    },
+    "chart": [
+      [
+        2022,
+        6101913
+      ],
+      [
+        2023,
+        6892500
+      ],
+      [
+        2024,
+        7771599
+      ],
+      [
+        2025,
+        9100620
+      ]
+    ]
+  }
+]

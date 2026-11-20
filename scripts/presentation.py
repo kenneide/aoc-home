@@ -17,16 +17,87 @@ def placeholder(label):
  return f'<div class="media-slot"><span class="slot-mark">＋</span><p>[PLACEHOLDER: {e(label)}]</p></div>'
 def columns(items, cls='columns'):
  return '<div class="'+cls+'">'+''.join(f'<div><span class="ordinal">{j:02}</span><h3>{e(title)}</h3><p>{e(body)}</p></div>' for j,(title,body) in enumerate(items,1))+'</div>'
+def hiring_model(days, stage):
+ rate, weeks, cost, scale = 500, 4, 5000, 8000
+ revenue = days * rate * weeks
+ difference = revenue - cost
+ money = lambda amount: f'€{amount:,}'
+ result = f'{money(abs(difference))} {"below" if difference < 0 else "above"}'
+ rows = [
+     ('Billable days per week', days),
+     ('Revenue per billable day', money(rate)),
+     ('Additional monthly revenue', money(revenue)),
+     ('Monthly cost of the hire', money(cost)),
+     ('Result against monthly cost', result),
+ ]
+ table = '<table><caption>Illustrative four-week month</caption><tbody>' + ''.join(
+     f'<tr><th scope="row">{label}</th><td>{value}</td></tr>' for label, value in rows
+ ) + '</tbody></table>'
+ return (f'<div class="hiring-model stage-{stage}">{table}'
+         f'<figure class="hire-revenue"><figcaption>Monthly revenue · <strong>{money(revenue)}</strong></figcaption>'
+         f'<div class="revenue-track" aria-hidden="true" style="--revenue:{revenue / scale:.1%};'
+         f'--break-even:{cost / scale:.1%}"><span class="revenue-fill"></span>'
+         f'<span class="break-even">{money(cost)}<br>break-even</span></div>'
+         f'<div class="revenue-scale" aria-hidden="true"><span>€0</span><span>{money(scale)}</span></div></figure></div>')
+
+def possibilities(quote_beat):
+ return (f'''<figure class="possibility-figure">
+  <svg class="possibility-diagram {'quote-diagram' if quote_beat else ''}" viewBox="0 -32 700 494"
+       role="group" aria-label="Overlap between worth exploring and practical to try">
+    <circle class="worth-circle" cx="235" cy="215" r="173"/>
+    <circle class="practical-circle" cx="440" cy="215" r="125"/>
+    <g class="diagram-labels">
+      <text x="137" y="209">Worth</text><text x="137" y="233">exploring</text>
+      <text x="493" y="209">Practical</text><text x="493" y="233">to try</text>
+    </g>
+    <g class="hiring-questions">
+      <text x="359" y="194">Will the<tspan x="359" dy="20">hire cover</tspan><tspan x="359" dy="20">its cost?</tspan></text>
+      <text x="277" y="129">What if work<tspan x="277" dy="21">starts slowly?</tspan></text>
+      <text x="277" y="285">What if we<tspan x="277" dy="21">hire part-time?</tspan></text>
+    </g>
+    <g class="quote-questions">
+      <text x="359" y="194">Reusable<tspan x="359" dy="20">quote</tspan><tspan x="359" dy="20">template</tspan></text>
+      <g class="quote-tool">
+        <rect x="203" y="258" width="148" height="62" rx="2"/>
+        <text x="277" y="281">Brief → draft<tspan x="277" dy="21">quote + checklist</tspan></text>
+      </g>
+    </g>
+  </svg>
+  <figcaption class="quote-next-step">{'Show a draft quote to someone who writes quotes. Does it save them work?' if quote_beat else ''}</figcaption>
+ </figure>''')
+
 layouts=['opening','constraints','manifesto','case','roadmap','import','comparison','gym','demo','business','gallery','review','process','opportunities','question','closing']
 for idx,s in enumerate(slides):
  n=s['notes'];assert all(n.values())
  number=idx+1;layout=s["layout"]; number={"case":4,"roadmap":5,"import":6,"comparison":7,"gym":8,"demo":9,"business":10,"gallery":11,"review":12,"process":13,"opportunities":14,"question":15,"closing":16}.get(layout,0)
  title=e(s['title']);body=f'<p class="message">{e(s["body"]).replace(chr(10),"<br>")}</p>'
  visual='';caption=''
- if layout=='historical':
-  body='<img class="history-photo" src="media/computers.jpg" alt="NACA staff working at desks with flight recordings and calculators, 1949"><p class="caption">NASA · NACA computer room, 1949 / E49-54</p>'
+ if layout=='clipping':
+  body = ('<figure class="clipping"><img src="media/aoc-1892-nytimes.png" '
+          'alt="Newspaper clipping headed A COMPUTER WANTED.">'
+          '<figcaption class="caption">The New York Times · May 2, 1892 · p. 8 · Scan via Dan Nguyen</figcaption></figure>')
+ elif layout=='historical':
+  body = ('<figure class="computer-room"><img class="history-photo" src="media/computers.jpg" '
+          'alt="NACA staff at desks with papers and a covered Friden calculator">'
+          '<figcaption class="caption">1949 · <a href="https://www.flickr.com/photos/nasacommons/7538108706">NASA E49-54</a></figcaption></figure>')
  elif layout=='calculation':
-  body='<div class="split"><div>'+body+'<p>We started calculating things that had not been practical.</p></div><img class="visicalc" src="media/visicalc.png" alt="VisiCalc spreadsheet running on Apple II"></div><p class="caption">VisiCalc · Apple II · 1979 release / later screenshot</p>'
+  stops = [
+      ('1949 · Human computers', 'People work through flight-test calculations.',
+       'computers.jpg', 'NACA staff working at desks', 'NASA E49-54'),
+      ('1959 · IBM 1401', 'Businesses process payroll and billing.',
+       'aoc-ibm1401.jpg', 'IBM card reader, processing unit and printer', 'U.S. Ballistic Research Laboratories · 1961'),
+      ('1979 · VisiCalc on the Apple II', 'Change a budget assumption and see totals update.',
+       'visicalc.png', 'VisiCalc spreadsheet with a column of totals', 'Gortu / apple2history.org · Later capture'),
+  ]
+  body = '<ol class="calculation-timeline">' + ''.join(
+      f'<li><img src="media/{image}" alt="{alt}"><h3>{label}</h3>'
+      f'<p>{description}</p><p class="caption">{credit}</p></li>'
+      for label, description, image, alt, credit in stops
+  ) + '</ol>'
+ elif layout=='hiring':
+  body = hiring_model(2, 0) + hiring_model(3, 1)
+ elif layout=='possibilities':
+  body = possibilities(s['id'] == 'worth-building')
  elif layout=='quote':
   body=body+'<p>Sam Altman · July 2025</p><p class="caption">100–1,000×: Altman’s speculation</p>'
  elif layout=='chart':
@@ -67,7 +138,7 @@ for idx,s in enumerate(slides):
   body='<p class="message">Think beyond your constraints.<br>Build with AI.<br>Deliver with discipline.</p><a class="contact" href="mailto:hello@alanocinneide.com">hello@alanocinneide.com ↗</a>';visual='<img class="wave-edge" src="../../assets/bands.svg" alt="">'
  if s.get('source'): body+=f'<a class="source-link" href="{e(s["source"])}">Source ↗</a>'
  number=idx+1
- sections.append(f'<section id="{s["id"]}" data-chapter="{e(s.get("chapter",""))}" class="slide layout-{layout}" aria-labelledby="title-{number}"><div class="slide-inner"><p class="eyebrow">AI for Fun & Profit / {number:02}</p><h2 id="title-{number}">{title}</h2>{body}'+(f'<p class="caption">{caption}</p>' if caption else '')+f'<div class="slide-footer"><span>Alan O Cinneide Software BV</span><span>{number:02} / {len(slides)}</span></div></div>{visual}</section>')
+ sections.append(f'<section id="{s["id"]}" data-chapter="{e(s.get("chapter",""))}" data-steps="{s.get("steps",1)}" class="slide layout-{layout}" aria-labelledby="title-{number}"><div class="slide-inner"><p class="eyebrow">AI for Fun & Profit / {number:02}</p><h2 id="title-{number}">{title}</h2>{body}'+(f'<p class="caption">{caption}</p>' if caption else '')+f'<div class="slide-footer"><span>Alan O Cinneide Software BV</span><span>{number:02} / {len(slides)}</span></div></div>{visual}</section>')
  notes.append('\n## '+s['id']+' — '+s['title']+'\n'+'\n'.join(f'\n**{k.title()}:** {v}' for k,v in n.items()))
 (target/'notes.txt').write_text('\n'.join(notes))
 (target/'index.html').write_text('''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>AI for Fun & Profit — local draft</title><script src="../../theme.js"></script><link rel="stylesheet" href="../../design/tokens.css"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="deck.css"><header><img class="spectrum" src="../../assets/spectrum.svg" alt=""><div class="wrap header-row"><a href="/">Alan O Cinneide Software BV</a><button class="theme-toggle" aria-pressed="false" hidden>Dark mode</button></div></header><nav class="controls"><a href="/#projects">Back to site</a><button id="prev">← Previous</button><output aria-live="polite"></output><button id="next">Next →</button><button id="present">Present</button><button id="full">Full screen</button><a href="notes.txt" target="_blank">Notes</a></nav><main>'''+''.join(sections)+'''</main><footer><img class="spectrum" src="../../assets/spectrum.svg" alt=""><p>Alan O Cinneide Software BV · Local presentation draft</p></footer><script src="deck.js"></script></html>''')

@@ -15,7 +15,9 @@ class Element {
 const artwork = new Element();
 let started=0,cancelled=0;
 artwork.animate=()=>{started++;return {cancel(){cancelled++;}};};
-const slides=Array.from({length:18},(_,i)=>Object.assign(new Element(),{dataset:{chapter: i===0?'The opportunity':''},id:`slide-${String(i+1).padStart(2,'0')}`}));
+const records = JSON.parse(readFileSync('projects/ai-for-fun-and-profit/slides.json', 'utf8'));
+const slides = records.map(({id, chapter, steps}) =>
+  Object.assign(new Element(), {id, dataset: {chapter, steps}}));
 slides[0].querySelector=()=>artwork;
 slides[1].querySelector=()=>artwork;
 const controls=new Element();
@@ -39,8 +41,24 @@ assert.equal(cancelled,2);
 assert.equal(controls.children[0].hidden,true);
 elements['#next'].onclick();assert.equal(started,2);
 const key=key=>listeners.keydown({key,target:{closest:()=>null},preventDefault(){}});
+const verifyState = (index, stage) => {
+  assert.equal(slides.findIndex(slide => !slide.hidden), index);
+  assert.equal(slides[index].dataset.stage, stage);
+};
+key('ArrowRight');
+verifyState(3, 0);
+elements['#next'].onclick();
+verifyState(3, 1);
+for (const [index, stage] of [[4, 0], [4, 1], [5, 0], [5, 1], [5, 2], [6, 0]]) {
+  key('ArrowRight');
+  verifyState(index, stage);
+}
+for (const [index, stage] of [[5, 2], [5, 1], [5, 0], [4, 1], [4, 0], [3, 1], [3, 0], [2, 0]]) {
+  elements['#prev'].onclick();
+  verifyState(index, stage);
+}
 key('End');assert.equal(elements['#next'].disabled,true);
-key('ArrowRight');assert.equal(elements.output.textContent,'18 / 18');
+key('ArrowRight');verifyState(slides.length - 1, 0);
 key('Home');assert.equal(elements['#prev'].disabled,true);
 key('Escape');assert(slides.every(s=>!s.hidden));
 assert.equal(body.children[0].children.filter(b=>b.attrs['aria-current']).length,1);

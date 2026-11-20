@@ -1,97 +1,98 @@
 [
   {
-    "id": "human-computers",
-    "title": "This used to be a computer.",
+    "id": "computer-wanted",
+    "title": "A computer wanted",
     "body": "",
-    "layout": "historical",
-    "source": "https://www.flickr.com/photos/nasacommons/7538108706",
+    "layout": "clipping",
+    "source": "https://danwin.com/2013/02/the-first-mention-of-computer-in-the-new-york-times/",
     "placeholder": null,
     "notes": {
-      "point": "This used to be a computer.",
-      "story": "Introduce the event: Drink & Discover, MyWorkLounge, Friday 20 November 2026. In 1949 NACA staff transcribed flight recordings and used slide rules and electric calculators to reduce data to engineering units. Calculation required skilled people, equipment and time. Electronic computers later automated much of this work.",
-      "transition": "Next: When calculation became cheap",
-      "materials": "https://www.flickr.com/photos/nasacommons/7538108706",
-      "minutes": 1.2
+      "point": "A computer wanted",
+      "story": "[Let the headline sit for a few seconds.] “What do you think they were hiring for?” [Take a guess from the room.] The U.S. Nautical Almanac Office had two vacancies for people to do calculations. The civil service exam included trigonometry and astronomy. Their calculations helped produce tables that sailors used to navigate by the sky.",
+      "transition": "Let’s look at what a room full of computers looked like.",
+      "materials": "New York Times, May 2, 1892, p. 8. Scan reproduced by Dan Nguyen: https://danwin.com/2013/02/the-first-mention-of-computer-in-the-new-york-times/ · Page attribution: https://srtate.github.io/old/100.f17/lectures/UNCG-CSC100-F17-LECT3-ComputerScience.pdf",
+      "minutes": 0.833
     },
-    "chapter": "The opportunity"
+    "chapter": "When calculation got cheap"
+  },
+  {
+    "id": "human-computers",
+    "title": "A room full of computers",
+    "body": "",
+    "layout": "historical",
+    "source": "",
+    "placeholder": null,
+    "notes": {
+      "point": "A room full of computers",
+      "story": "[Give the audience several seconds to look.] These are human computers at a NACA flight-test station in 1949. Staff copied readings from film and strips of recording paper. They used slide rules and electric calculators, like the covered Friden at the front, to turn those readings into figures in units the engineers could use. Each test meant more readings and more calculations.",
+      "transition": "Now look at how that work changed when machines could do more of the arithmetic.",
+      "materials": "NASA E49-54 · https://www.flickr.com/photos/nasacommons/7538108706",
+      "minutes": 0.75
+    }
   },
   {
     "id": "cheap-calculation",
-    "title": "When calculation became cheap",
-    "body": "Human calculation → Electronic computers → Interactive spreadsheets",
-    "layout": "calculation",
-    "source": "https://www.bricklin.com/history/saiproduct1_m.htm",
-    "placeholder": null,
-    "notes": {
-      "point": "When calculation became cheap",
-      "story": "These were distinct developments: electronic computers automated calculation; VisiCalc, released for Apple II in 1979, brought interactive business modelling to ordinary business users. We did not just calculate the same things faster: scenarios, forecasts, budgets and sensitivity analysis became practical to explore. Cheaper technology can expand demand. Screenshot is a later capture, not a launch photograph.",
-      "transition": "Next: The world wants more software",
-      "materials": "https://www.bricklin.com/history/saiproduct1_m.htm",
-      "minutes": 1.2
-    }
-  },
-  {
-    "id": "more-software",
-    "title": "The world wants more software",
-    "body": "“the world wants a gigantic amount more software, hundred times, maybe a thousand times more software.”",
-    "layout": "quote",
-    "source": "https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf",
-    "placeholder": null,
-    "notes": {
-      "point": "The world wants more software",
-      "story": "Sam Altman, Federal Reserve conference, July 22, 2025, transcript page 19. This is speculation, not a measured forecast. Why more software? Perhaps millions of small specialist workflows, personal applications, automations and niche business tools rather than only large consumer apps.",
-      "transition": "Next: App Store submissions reviewed: +49% since 2022",
-      "materials": "https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf",
-      "minutes": 1.2
-    }
-  },
-  {
-    "id": "submission-activity",
-    "title": "App Store submissions reviewed: +49% since 2022",
+    "title": "From the computer room to your desk",
     "body": "",
-    "layout": "chart",
-    "source": "https://www.apple.com/legal/app-store/transparency/",
+    "layout": "calculation",
+    "source": "",
     "placeholder": null,
     "notes": {
-      "point": "App Store submissions reviewed: +49% since 2022",
-      "story": "Exact counts: 2022: 6,101,913; 2023: 6,892,500; 2024: 7,771,599; 2025: 9,100,620. Growth is 49.1%. Includes updates and resubmissions, not distinct new apps. This shows increased submission activity, not that AI caused growth. Internal tools, scripts, web apps and personal automations may never appear in an app store.",
-      "transition": "Next: What becomes worth building?",
-      "materials": "https://www.apple.com/legal/app-store/transparency/",
-      "minutes": 1.2
-    },
-    "chart": [
-      [
-        2022,
-        6101913
-      ],
-      [
-        2023,
-        6892500
-      ],
-      [
-        2024,
-        7771599
-      ],
-      [
-        2025,
-        9100620
-      ]
-    ]
+      "point": "From the computer room to your desk",
+      "story": "[Walk left to right.] These are snapshots of overlapping eras. At NACA, people worked through flight-test calculations with equipment at their desks. Businesses used the IBM 1401 for recurring jobs such as payroll and billing. Imagine collecting a stack of records, running them together and getting a printed result. VisiCalc on the Apple II let the person working on a budget change one assumption and see affected totals update right there. That made it practical to try another number while the question was still fresh. [Optional aside: The U.S. Census Bureau received UNIVAC I in 1951.]",
+      "transition": "Say you run a small design studio and you’re turning down client work. Could you afford to bring someone on?",
+      "materials": "NASA: https://www.flickr.com/photos/nasacommons/7538108706 · IBM: https://www.ibm.com/history/1401 · System photo: https://commons.wikimedia.org/wiki/File:BRL61-IBM_1401.jpg · VisiCalc: https://www.computerhistory.org/timeline/1979/ · Later screenshot: https://commons.wikimedia.org/wiki/File:Visicalc.png · UNIVAC: https://www.census.gov/about/history/bureau-history/census-innovations/technology/univac-i.html",
+      "minutes": 1.083
+    }
+  },
+  {
+    "id": "hiring",
+    "title": "Can we afford to hire?",
+    "body": "",
+    "layout": "hiring",
+    "steps": 2,
+    "source": "",
+    "placeholder": null,
+    "notes": {
+      "point": "Can we afford to hire?",
+      "story": "A small design studio is turning down client work. The owner wants to know how many billable days would cover a hire costing €5,000 per month. Assume four weeks and €500 per billable day. At two days a week, they’re €1,000 short. Ask “What if they can bill three days a week?” [Advance.] Revenue rises to €6,000 and they’re €1,000 above cost. Ask “What if it takes a few months to get that busy?” [Pause.] The spreadsheet lets the owner explore what would have to be true for the hire to pay for itself.",
+      "transition": "Look at the questions the studio can now try.",
+      "materials": "Illustrative design studio example",
+      "minutes": 1
+    }
+  },
+  {
+    "id": "hiring-scenarios",
+    "title": "Which questions can we try?",
+    "body": "",
+    "layout": "possibilities",
+    "steps": 2,
+    "source": "",
+    "placeholder": null,
+    "notes": {
+      "point": "Which questions can we try?",
+      "story": "Start with the question in the overlap. The owner can check whether the hire covers its cost. [Advance.] Watch the circle grow around the other two questions. What if work starts slowly? What if we hire part-time? With a spreadsheet, running another scenario is easy enough to try.",
+      "transition": "[Advance and keep the expanded diagram in view.]",
+      "materials": "Illustrative design studio example",
+      "minutes": 0.7
+    }
   },
   {
     "id": "worth-building",
     "title": "What becomes worth building?",
-    "body": "An idea that wasn’t worth three months of development might be worth three afternoons of experimentation.",
-    "layout": "experiment",
+    "body": "",
+    "layout": "possibilities",
+    "steps": 3,
     "source": "",
     "placeholder": null,
     "notes": {
       "point": "What becomes worth building?",
-      "story": "A rhetorical illustration, not a factual estimate. Consider gym logging, specialist guitar editing, kitchen inventory and meal planning, or automating repetitive business work. These examples illustrate possibilities, not claims that every project exists. AI lowers the cost of experimentation; good products still require judgment. Start with the working personal gym application.",
-      "transition": "Next: Open it and log",
-      "materials": "No additional material required",
-      "minutes": 1.2
-    }
+      "story": "The spreadsheet made it easy enough to try another assumption. AI can make it easy enough to try a first version of a tool. In both cases, lowering the cost of the experiment changes which ideas we get to test. [Advance.] The same studio wants to spend less time writing quotes. A reusable template is already practical to try. What about a small tool that takes a client brief and starts a quote and project checklist? [Advance.] Put a draft quote in front of someone who writes quotes and see whether it saves them work.",
+      "transition": "One of those ideas started with something I wanted to do at the gym.",
+      "materials": "Illustrative design studio example",
+      "minutes": 1.3
+    },
+    "chapter": "The opportunity"
   },
   {
     "id": "slide-08",

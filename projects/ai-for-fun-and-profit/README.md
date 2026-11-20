@@ -1,6 +1,6 @@
 # AI for Fun & Profit
 
-Local first draft: 18 slides, approximately 27 minutes plus discussion.
+Local draft for the talk and discussion.
 
 Install the site's requirements in a Python environment (`pip install -r requirements.txt`), then run `npm run presentation:dev`. Open http://127.0.0.1:4174/projects/ai-for-fun-and-profit/ . The server binds only to loopback. `npm run presentation:build` generates without serving.
 
@@ -32,4 +32,7 @@ Presentation mode draws the existing spectrum artwork into view once, then settl
 - Altman quotation: https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf — July 22, 2025, page 19; speculative.
 - Apple exact annual counts and report links: https://www.apple.com/legal/app-store/transparency/ . Updates and resubmissions included; no causal claim about AI.
 
-Opening replaces the old introduction; gym now precedes Zoundio. Existing demonstration media remain placeholders.
+In Present mode, the existing navigation advances through the hiring calculation and the two overlap diagrams. Stepping back reverses each reveal. Direct slide links start at the first state. The overview and print show the final states. The Altman quote and App Store chart are retained in `backup-slides.json` for future use.
+
+- The New York Times, May 2, 1892, p. 8. The supplied F13 lecture URL returns 404. The local clipping comes from Dan Nguyen’s reproduction of the archive scan at https://danwin.com/2013/02/the-first-mention-of-computer-in-the-new-york-times/ . The publication date and page were cross-checked against the ProQuest attribution in https://srtate.github.io/old/100.f17/lectures/UNCG-CSC100-F17-LECT3-ComputerScience.pdf .
+- IBM 1401 system photo: U.S. Ballistic Research Laboratories, Report 1115, 1961. Public-domain image via https://commons.wikimedia.org/wiki/File:BRL61-IBM_1401.jpg . The timeline year refers to the introduction of the 1401, documented at https://www.ibm.com/history/1401 .
