@@ -168,7 +168,7 @@
       "point": "Guitar gameplay on a computer",
       "story": "Supporting iOS and Android is already part of the work. [Advance.] The existing team can now pursue another way for people to play, by bringing gameplay to the browser. That opens a way to reach people who want to play on a computer.",
       "transition": "We’ve seen what this opens up for a gym and for a team making music software. Now let’s look at something everyone here already uses.",
-      "materials": "Use this spoken transition once the meeting-room beat is ready. The current deck continues to Room to play.",
+      "materials": "Continue directly to “Is the meeting room free at two?”",
       "minutes": 1
     },
     "ideas": [
@@ -185,90 +185,79 @@
     ]
   },
   {
-    "id": "slide-11",
-    "title": "Room to play",
-    "body": "Experimentation becomes easier to justify",
+    "id": "sheet-on-the-door",
+    "title": "Is the meeting room free at two?",
+    "body": "",
+    "layout": "room-door",
+    "source": "",
+    "placeholder": null,
     "notes": {
-      "point": "Room to play",
-      "story": "Show one or two actual creative experiments once selected. Explain curiosity and what was learned; do not imply that placeholder projects exist.",
-      "transition": "Next: An impressive result is a beginning",
-      "materials": "One or two real AI-assisted creative experiments",
-      "minutes": 1.34
+      "point": "Is the meeting room free at two?",
+      "story": "[Let people recognize the sheet, or ask them to picture it if the photo is pending.] “The current system works beautifully, provided you’re already standing in front of it.” [Pause.] What would it take to answer the same question from your desk?",
+      "transition": "Think about it from the coworking operator’s side.",
+      "materials": "Presenter photo of the booking sheet on the meeting-room door. Crop or obscure names and booking details.",
+      "minutes": 0.7
     },
-    "placeholder": "One or two real AI-assisted creative experiments",
-    "layout": "gallery",
-    "chapter": "Room to play"
+    "chapter": "Room booking"
   },
   {
-    "id": "slide-12",
-    "title": "An impressive result is a beginning",
-    "body": "Assumptions · Bugs · Abstractions · System design",
-    "notes": {
-      "point": "An impressive result is a beginning",
-      "story": "Explain why generating code is different from delivering software. Review and judgment catch incorrect assumptions, bugs and inappropriate abstractions. Good products still require problem definition, product judgment, design, architecture, integration, testing, security and ongoing maintenance.",
-      "transition": "Next: How I build with AI",
-      "materials": "No additional material required",
-      "minutes": 1.34
-    },
+    "id": "room-possibilities",
+    "title": "What’s practical for one meeting room?",
+    "body": "",
+    "layout": "possibilities",
+    "source": "",
     "placeholder": null,
-    "layout": "review",
-    "chapter": "Engineering"
+    "notes": {
+      "point": "What’s practical for one meeting room?",
+      "story": "A sheet on the door is cheap, familiar, and does the job when you’re there. [Advance.] For one shared room, a small online booking tool is now reasonable to try. Someone can see what’s free and reserve it from their desk.",
+      "transition": "So I made one.",
+      "materials": "Use the same circle expansion as in the earlier examples.",
+      "minutes": 0.55
+    },
+    "steps": 2,
+    "ideas": [
+      [
+        "Put a",
+        "booking",
+        "sheet on",
+        "the door"
+      ],
+      [
+        "See what’s",
+        "free and book",
+        "from your desk"
+      ]
+    ]
   },
   {
-    "id": "slide-13",
-    "title": "How I build with AI",
-    "body": "Problem → Experience → Requirements → Tasks\nAgents → Review / test / debug → Feedback ↻",
-    "notes": {
-      "point": "How I build with AI",
-      "story": "Walk through the iterative process. Clear architecture, version control, automated tests and incremental changes make AI leverage dependable. Validate outcomes against real needs.",
-      "transition": "Next: What would fit your work better?",
-      "materials": "No additional material required",
-      "minutes": 1.79
-    },
+    "id": "room-booking",
+    "title": "So I made one",
+    "body": "",
+    "layout": "room-walkthrough",
+    "source": "",
     "placeholder": null,
-    "layout": "process"
-  },
-  {
-    "id": "slide-14",
-    "title": "What would fit your work better?",
-    "body": "Administration · Spreadsheets · Internal tools\nBusiness data · Services · Prototypes",
     "notes": {
-      "point": "What would fit your work better?",
-      "story": "Invite recognition of repetitive work and poorly fitting tools. An existing product, simpler workflow or lightweight automation may be preferable to custom software.",
-      "transition": "Next: What would the ideal solution look like?",
-      "materials": "No additional material required",
-      "minutes": 1.34
+      "point": "So I made one",
+      "story": "I built this beforehand. These stills show the real booking page with fictional calendar data and a local test response. The first grid selected half-hour blocks. [Advance.] I changed the grid to quarter-hour slots. On Wednesday, the busy block ends at two. Select 14:00–14:15, enter a name and book. [Advance.] The page confirms the time. [Let the confirmation sit.] The point of this small tool is to save someone a walk to the door.",
+      "transition": "[Advance after the booking confirmation has had a moment.] Think about your own work. What’s practical to try now?",
+      "materials": "Offline stills from the historical and current booking UI with sample data. The public site is https://room.alanocinneide.com/ . The test confirmation used a local API fixture.",
+      "minutes": 1.75
     },
-    "placeholder": null,
-    "layout": "opportunities",
-    "chapter": "Your ideas"
-  },
-  {
-    "id": "slide-15",
-    "title": "What would the ideal solution look like?",
-    "body": "Who needs it?\nWhat gets in their way?\nWhat would better look like?",
-    "notes": {
-      "point": "What would the ideal solution look like?",
-      "story": "Give the audience a moment to consider one problem. Investigate practicality after articulating the ideal outcome.",
-      "transition": "Next: What would be worth building?",
-      "materials": "No additional material required",
-      "minutes": 0.89
-    },
-    "placeholder": null,
-    "layout": "question"
+    "steps": 3
   },
   {
     "id": "slide-16",
-    "title": "What would be worth building?",
-    "body": "Think beyond your constraints.\nBuild with AI.\nDeliver with discipline.",
-    "notes": {
-      "point": "What would be worth building?",
-      "story": "Don’t start by asking what you can build. Start by asking what would be worth building. I help people turn ideas and problems into working software, combining product thinking, engineering experience, and AI-assisted development to make the process faster, more accessible, and more reliable. Invite conversation afterward.",
-      "transition": "Discussion and informal conversations.",
-      "materials": "No additional material required",
-      "minutes": 1.34
-    },
+    "title": "What’s practical to try now?",
+    "body": "What only works because you know how to run it?\nWhat do you spend time doing by hand every week?\nWhat do you rebuild for every client?",
+    "layout": "audience-close",
+    "chapter": "Practical to try",
     "placeholder": null,
-    "layout": "closing"
+    "notes": {
+      "point": "What’s practical to try now?",
+      "story": "[If people need a starting point, mention a spreadsheet only one person understands, a weekly report assembled by hand, or a client intake or quote that starts from scratch each time.]\n\nThink about the last time you did one of those things. [Pause for about ten seconds.] Where did the time go? If you could make just that part easier, what would you want to happen?\n\nThat’s the part of the work I’ve come to enjoy most. I like sitting down with someone, seeing how they actually do the work, and figuring out what’s practical to try. AI can help get a first version working. Then we can try it on a real example and see whether it helps. If it does, we can work out what it would take to make it dependable.\n\nIf something came to mind, I’d love to hear about it over a drink.",
+      "transition": "[Leave this slide on screen through the discussion.]",
+      "materials": "No additional material required",
+      "minutes": 2
+    }
   }
 ]

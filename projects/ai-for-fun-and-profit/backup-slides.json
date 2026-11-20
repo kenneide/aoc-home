@@ -46,5 +46,64 @@
         9100620
       ]
     ]
+  },
+  {
+    "id": "slide-11",
+    "title": "Room to play",
+    "body": "Experimentation becomes easier to justify",
+    "notes": {
+      "point": "Room to play",
+      "story": "Show one or two actual creative experiments once selected. Explain curiosity and what was learned; do not imply that placeholder projects exist.",
+      "transition": "Next: An impressive result is a beginning",
+      "materials": "One or two real AI-assisted creative experiments",
+      "minutes": 1.34
+    },
+    "placeholder": "One or two real AI-assisted creative experiments",
+    "layout": "gallery",
+    "chapter": "Room to play"
+  },
+  {
+    "id": "slide-12",
+    "title": "An impressive result is a beginning",
+    "body": "Assumptions · Bugs · Abstractions · System design",
+    "notes": {
+      "point": "An impressive result is a beginning",
+      "story": "Explain why generating code is different from delivering software. Review and judgment catch incorrect assumptions, bugs and inappropriate abstractions. Good products still require problem definition, product judgment, design, architecture, integration, testing, security and ongoing maintenance.",
+      "transition": "Next: How I build with AI",
+      "materials": "No additional material required",
+      "minutes": 1.34
+    },
+    "placeholder": null,
+    "layout": "review",
+    "chapter": "Engineering"
+  },
+  {
+    "id": "slide-13",
+    "title": "How I build with AI",
+    "body": "Problem → Experience → Requirements → Tasks\nAgents → Review / test / debug → Feedback ↻",
+    "notes": {
+      "point": "How I build with AI",
+      "story": "Walk through the iterative process. Clear architecture, version control, automated tests and incremental changes make AI leverage dependable. Validate outcomes against real needs.",
+      "transition": "Next: What would fit your work better?",
+      "materials": "No additional material required",
+      "minutes": 1.79
+    },
+    "placeholder": null,
+    "layout": "process"
+  },
+  {
+    "id": "slide-14",
+    "title": "What would fit your work better?",
+    "body": "Administration · Spreadsheets · Internal tools\nBusiness data · Services · Prototypes",
+    "notes": {
+      "point": "What would fit your work better?",
+      "story": "Invite recognition of repetitive work and poorly fitting tools. An existing product, simpler workflow or lightweight automation may be preferable to custom software.",
+      "transition": "Next: What would the ideal solution look like?",
+      "materials": "No additional material required",
+      "minutes": 1.34
+    },
+    "placeholder": null,
+    "layout": "opportunities",
+    "chapter": "Your ideas"
   }
 ]

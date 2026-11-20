@@ -1,4 +1,6 @@
-# AI for Fun & Profit
+# What Becomes Worth Building?
+
+From spreadsheets to AI-assisted software
 
 Local draft for the talk and discussion.
 
@@ -6,7 +8,7 @@ Install the site's requirements in a Python environment (`pip install -r require
 
 Edit slides.json for copy, placeholders and per-slide notes. The Notes link opens generated notes in a separate tab. Present enables single-slide mode; arrows, Space, Page Up/Down and Home/End navigate when the slide area has focus. Escape returns to overview. Full screen is optional. Hashes such as #slide-09 select slides.
 
-The GymNative slides use local captures of the Haguegym build with three fictional leg-press workouts. Confirm the pilot status in the notes before presenting. The Zoundio slide uses public Gibson assets stored locally. The shared mobile gameplay crop comes from https://www.gibson.app/images/sales_funnel/example_screens.png, with Gibson’s App Store and Google Play badges. The browser image is the presenter-supplied Add Index Finger capture, cropped to the browser window with personal browser labels removed. Confirm the broader release wording and timing in rehearsal. The creative experiment media remain pending.
+The GymNative slides use local captures of the Haguegym build with three fictional leg-press workouts. Confirm the pilot status in the notes before presenting. The Zoundio slide uses public Gibson assets stored locally. The shared mobile gameplay crop comes from https://www.gibson.app/images/sales_funnel/example_screens.png, with Gibson’s App Store and Google Play badges. The browser image is the presenter-supplied Add Index Finger capture, cropped to the browser window with personal browser labels removed. Confirm the broader release wording and timing in rehearsal. The older creative, engineering and opportunity slides are preserved in `backup-slides.json`. The booking confirmation advances directly to the final audience slide, which stays on screen during discussion.
 
 The normal build excludes this directory and all notes/media. Preview output lives under ignored output/presentation-preview. Do not move materials into public assets. Future publication requires explicit approval, a deliberate production allowlist change, metadata review and a Projects link; nothing here publishes automatically. Do not deploy or push this draft.
 
@@ -36,3 +38,7 @@ In Present mode, the existing navigation advances through the hiring calculation
 
 - The New York Times, May 2, 1892, p. 8. The supplied F13 lecture URL returns 404. The local clipping comes from Dan Nguyen’s reproduction of the archive scan at https://danwin.com/2013/02/the-first-mention-of-computer-in-the-new-york-times/ . The publication date and page were cross-checked against the ProQuest attribution in https://srtate.github.io/old/100.f17/lectures/UNCG-CSC100-F17-LECT3-ComputerScience.pdf .
 - IBM 1401 system photo: U.S. Ballistic Research Laboratories, Report 1115, 1961. Public-domain image via https://commons.wikimedia.org/wiki/File:BRL61-IBM_1401.jpg . The timeline year refers to the introduction of the 1401, documented at https://www.ibm.com/history/1401 .
+
+## Meeting-room walkthrough
+
+The door slide has a labeled photo slot. Use a crop that obscures names and booking details when the presenter supplies the photo. The walkthrough uses offline screenshots of the real booking UI with fictional availability and a local booking API fixture. The half-hour grid is from `11c7c40`, before the quarter-hour change in `17c58e6`. The current grid and confirmation were captured from the local booking build. The public booking page is https://room.alanocinneide.com/ .

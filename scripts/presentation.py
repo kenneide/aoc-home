@@ -12,7 +12,9 @@ shutil.rmtree(out,ignore_errors=True)
 shutil.copytree(root/'dist',out)
 target=out/'projects/ai-for-fun-and-profit';target.mkdir(parents=True)
 shutil.copytree(project/'media',target/'media',dirs_exist_ok=True)
-sections=[];notes=['# AI for Fun & Profit — presenter notes','Proposed narration based on owner-supplied facts. Missing materials are placeholders.']
+deck_title = 'What Becomes Worth Building?'
+deck_subtitle = 'From spreadsheets to AI-assisted software'
+sections=[];notes=[f'# {deck_title}', deck_subtitle,'Proposed narration based on owner-supplied facts. Missing materials are placeholders.']
 def placeholder(label):
  return f'<div class="media-slot"><span class="slot-mark">＋</span><p>[PLACEHOLDER: {e(label)}]</p></div>'
 def columns(items, cls='columns'):
@@ -106,6 +108,18 @@ def zoundio_web():
    </figure>
  </div>''')
 
+def room_walkthrough():
+ states = [
+     ('half-hour', 'Wednesday at 14:00 selected in the old half-hour calendar grid', 'Earlier grid · 14:00–14:30'),
+     ('quarter-hour', 'Wednesday at 14:00 selected just after a busy block in the quarter-hour grid', 'Revised grid · 14:00–14:15'),
+     ('confirmed', 'Room booked for Wednesday 18 November, 14:00–14:15 The Hague time', 'Booking confirmed'),
+ ]
+ return ''.join(
+     f'<div class="case-state room-state room-stage-{stage}">'
+     f'{capture(f"room-{file}.webp", alt, label)}</div>'
+     for stage, (file, alt, label) in enumerate(states)
+ ) + '<p class="caption sample-credit">Local test booking · Sample calendar</p>'
+
 layouts=['opening','constraints','manifesto','case','roadmap','import','comparison','gym','demo','business','gallery','review','process','opportunities','question','closing']
 for idx,s in enumerate(slides):
  n=s['notes'];assert all(n.values())
@@ -142,6 +156,14 @@ for idx,s in enumerate(slides):
   body = gymnative()
  elif layout=='zoundio-web':
   body = zoundio_web()
+ elif layout=='room-door':
+  body = placeholder('Presenter photo of the booking sheet on the meeting-room door')
+ elif layout=='room-walkthrough':
+  body = room_walkthrough()
+ elif layout=='audience-close':
+  body = '<ul class="audience-questions">' + ''.join(
+      f'<li>{e(question)}</li>' for question in s['body'].splitlines()
+  ) + '</ul>'
  elif layout=='quote':
   body=body+'<p>Sam Altman · July 2025</p><p class="caption">100–1,000×: Altman’s speculation</p>'
  elif layout=='chart':
@@ -182,10 +204,10 @@ for idx,s in enumerate(slides):
   body='<p class="message">Think beyond your constraints.<br>Build with AI.<br>Deliver with discipline.</p><a class="contact" href="mailto:hello@alanocinneide.com">hello@alanocinneide.com ↗</a>';visual='<img class="wave-edge" src="../../assets/bands.svg" alt="">'
  if s.get('source'): body+=f'<a class="source-link" href="{e(s["source"])}">Source ↗</a>'
  number=idx+1
- sections.append(f'<section id="{s["id"]}" data-chapter="{e(s.get("chapter",""))}" data-steps="{s.get("steps",1)}" class="slide layout-{layout}" aria-labelledby="title-{number}"><div class="slide-inner"><p class="eyebrow">AI for Fun & Profit / {number:02}</p><h2 id="title-{number}">{title}</h2>{body}'+(f'<p class="caption">{caption}</p>' if caption else '')+f'<div class="slide-footer"><span>Alan O Cinneide Software BV</span><span>{number:02} / {len(slides)}</span></div></div>{visual}</section>')
+ sections.append(f'<section id="{s["id"]}" data-chapter="{e(s.get("chapter",""))}" data-steps="{s.get("steps",1)}" class="slide layout-{layout}" aria-labelledby="title-{number}"><div class="slide-inner"><p class="eyebrow">{e(deck_title)} / {number:02}</p><h2 id="title-{number}">{title}</h2>{body}'+(f'<p class="caption">{caption}</p>' if caption else '')+f'<div class="slide-footer"><span>Alan O Cinneide Software BV</span><span>{number:02} / {len(slides)}</span></div></div>{visual}</section>')
  notes.append('\n## '+s['id']+' — '+s['title']+'\n'+'\n'.join(f'\n**{k.title()}:** {v}' for k,v in n.items()))
 (target/'notes.txt').write_text('\n'.join(notes))
-(target/'index.html').write_text('''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>AI for Fun & Profit — local draft</title><script src="../../theme.js"></script><link rel="stylesheet" href="../../design/tokens.css"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="deck.css"><header><img class="spectrum" src="../../assets/spectrum.svg" alt=""><div class="wrap header-row"><a href="/">Alan O Cinneide Software BV</a><button class="theme-toggle" aria-pressed="false" hidden>Dark mode</button></div></header><nav class="controls"><a href="/#projects">Back to site</a><button id="prev">← Previous</button><output aria-live="polite"></output><button id="next">Next →</button><button id="present">Present</button><button id="full">Full screen</button><a href="notes.txt" target="_blank">Notes</a></nav><main>'''+''.join(sections)+'''</main><footer><img class="spectrum" src="../../assets/spectrum.svg" alt=""><p>Alan O Cinneide Software BV · Local presentation draft</p></footer><script src="deck.js"></script></html>''')
+(target/'index.html').write_text(f'''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>{e(deck_title)} — {e(deck_subtitle)}</title><script src="../../theme.js"></script><link rel="stylesheet" href="../../design/tokens.css"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="deck.css"><header><img class="spectrum" src="../../assets/spectrum.svg" alt=""><div class="wrap header-row"><a href="/">Alan O Cinneide Software BV</a><button class="theme-toggle" aria-pressed="false" hidden>Dark mode</button></div><div class="wrap deck-heading"><h1>{e(deck_title)}</h1><p>{e(deck_subtitle)}</p></div></header><nav class="controls"><a href="/#projects">Back to site</a><button id="prev">← Previous</button><output aria-live="polite"></output><button id="next">Next →</button><button id="present">Present</button><button id="full">Full screen</button><a href="notes.txt" target="_blank">Notes</a></nav><main>'''+''.join(sections)+'''</main><footer><img class="spectrum" src="../../assets/spectrum.svg" alt=""><p>Alan O Cinneide Software BV · Local presentation draft</p></footer><script src="deck.js"></script></html>''')
 for name in ['deck.js','deck.css']:
  shutil.copy2(project/name,target/name)
  version=hashlib.sha256((project/name).read_bytes()).hexdigest()[:12]

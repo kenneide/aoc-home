@@ -273,3 +273,39 @@ body:not(.presenting) .case-state + .case-state { margin-top: 2cqw; }
   .gibson-gameplay { width: 100%; gap: 12px; }
   .gibson-gameplay img { max-height: none; }
 }
+
+.layout-room-door .media-slot { flex: 1; min-height: 0; margin-bottom: 1.5cqw; }
+.layout-room-door .media-slot p { font-size: 2.3cqw; }
+.room-state { width: min(100%, 83cqw); margin-inline: auto; }
+.room-state img { width: 100%; height: auto; }
+.room-stage-2 { margin-top: 4cqw; }
+@media screen {
+  .presenting [data-stage="0"] .room-state:not(.room-stage-0),
+  .presenting [data-stage="1"] .room-state:not(.room-stage-1),
+  .presenting [data-stage="2"] .room-state:not(.room-stage-2) { display: none; }
+}
+body:not(.presenting) .layout-room-walkthrough { aspect-ratio: auto; }
+body:not(.presenting) .layout-room-walkthrough .slide-inner { position: relative; }
+@media (max-width: 650px) {
+  .layout-room-door .media-slot { min-height: 230px; }
+  .layout-room-door .media-slot p { font-size: 16px; }
+  .room-state { width: 100%; }
+}
+
+@media (min-width: 651px) {
+  #room-possibilities h2 { max-width: 100%; font-size: 4.4cqw; line-height: 5.194cqw; }
+}
+@media (max-width: 650px) {
+  #room-possibilities h2 { font-size: 31px; line-height: 38.16px; min-height: 76.32px; }
+}
+
+.audience-questions { list-style: none; margin: 0; padding: 0; font-size: 3.45cqw; line-height: 1.16; }
+.audience-questions li { padding: .58em 0; border-top: 1px solid var(--border); }
+@media (max-width: 650px) {
+  .audience-questions { font-size: 24px; }
+}
+
+.deck-heading { padding-block: 1.5rem; }
+.deck-heading h1 { margin: 0; font-size: clamp(1.75rem, 4vw, 3.5rem); line-height: 1.1; }
+.deck-heading p { margin: .5rem 0 0; color: var(--secondary-text); }
+.presenting .deck-heading { display: none; }
