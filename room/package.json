@@ -1,0 +1,1 @@
+{"name":"aoc-room","private":true,"type":"module","scripts":{"build":"python3 build.py","test":"node --test","deploy":"npm run build && wrangler deploy --config .wrangler/room.json"},"dependencies":{"ical.js":"^2.2.1","fast-xml-parser":"^5.7.0","jose":"^6.0.0"},"devDependencies":{"wrangler":"^4.0.0"}}
