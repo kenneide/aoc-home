@@ -8,7 +8,7 @@ Install the site's requirements in a Python environment (`pip install -r require
 
 Edit `talk.json` for the title and subtitle shared by the deck and preview homepage. Edit `slides.json` for copy, placeholders and per-slide notes. The Notes link opens generated notes in a separate tab. Present enables single-slide mode; arrows, Space, Page Up/Down and Home/End navigate when the slide area has focus. Escape returns to overview. Full screen is optional. Hashes such as #slide-09 select slides.
 
-The GymNative slides use local captures of the Haguegym build with three fictional leg-press workouts. Confirm the pilot status in the notes before presenting. The Zoundio slide uses public Gibson assets stored locally. The shared mobile gameplay crop comes from https://www.gibson.app/images/sales_funnel/example_screens.png, with Gibson’s App Store and Google Play badges. The browser image is the presenter-supplied Add Index Finger capture, cropped to the browser window with personal browser labels removed. Confirm the broader release wording and timing in rehearsal. The older creative, engineering and opportunity slides are preserved in `backup-slides.json`. The booking confirmation advances directly to the final audience slide, which stays on screen during discussion.
+The examples run in this order: The Gibson App, GymNative, then room booking. The Gibson App uses a shared mobile gameplay image from https://www.gibson.app/images/sales_funnel/example_screens.png, official store badges and the Android store icon from the app source. The presenter supplied the Add Index Finger browser capture. Its approved label is “Browser gameplay preview.” GymNative uses local Haguegym captures with fictional leg-press workouts. The QR points to https://gym.alanocinneide.com/haguegym/?lang=en. The Haguegym pilot is underway. Older slides are preserved in `backup-slides.json`.
 
 The preview homepage links to the draft under Projects. The normal build excludes that link, the deck, and all notes and media. Preview output lives under ignored output/presentation-preview. Do not move materials into public assets. Future publication requires explicit approval, a deliberate production allowlist change, metadata review and a Projects link; nothing here publishes automatically. Do not deploy or push this draft.
 
@@ -18,7 +18,7 @@ Select **Presentation: local preview** in Run and Debug and press **F5**. This u
 
 ## Visual direction
 
-The deck adapts the sibling design system’s title, section, comparison, roadmap, visual and closing compositions. Sixteen slides use individual layouts: spectrum opening, constraints, manifesto, case study, stepped workflow, import pipeline, comparison, phone stage, demonstration, business roles, creative gallery, review grid, iteration process, opportunities, audience question and closing. Lime, yellow, orange and ink specimen surfaces retain their artwork palettes; ordinary reading surfaces follow the shared semantic theme. Media slots remain explicit placeholders, never simulated product screenshots.
+The deck uses the sibling design system’s locally hosted type, semantic colors and motion. A shared arrow line connects the history, software pivot and close. Lime highlights newly reachable ideas as the Practical circle grows around them.
 
 Repeated launches reuse a server on port 4174 when it serves the matching presentation. Refresh the browser to see rebuilt content. If another application owns the port, the launcher reports the conflict without stopping that application.
 
@@ -28,17 +28,17 @@ Presentation mode draws the existing spectrum artwork into view once, then settl
 
 ## Opening sources and assets
 
-- NASA E49-54, 1949 computer room: https://www.flickr.com/photos/nasacommons/7538108706 — NASA credit; no known copyright restrictions. Editorial historical use under https://www.nasa.gov/nasa-brand-center/images-and-media/ . Locally stored, no image alterations.
+- NASA Glenn Research Center GRC-1957-C-43712, 21 January 1957. The requested NACA Lewis photograph is stored locally from the NASA Image and Video Library. Archive caption and credit: https://www.flickr.com/photos/44494372@N05/53912325323 . Editorial historical use: https://www.nasa.gov/nasa-brand-center/images-and-media/ .
 - VisiCalc screenshot: https://commons.wikimedia.org/wiki/File:Visicalc.png — public-domain text screenshot, credited to Gortu / apple2history.org; later capture, not a launch photograph.
 - VisiCalc history: https://www.bricklin.com/history/saiproduct1_m.htm
 - Altman quotation: https://www.federalreserve.gov/mediacenter/files/capital-framework-conference-fireside-chat-transcript.pdf — July 22, 2025, page 19; speculative.
 - Apple exact annual counts and report links: https://www.apple.com/legal/app-store/transparency/ . Updates and resubmissions included; no causal claim about AI.
 
-In Present mode, the existing navigation advances through the hiring calculation and the two overlap diagrams. Stepping back reverses each reveal. Direct slide links start at the first state. The overview and print show the final states. The Altman quote and App Store chart are retained in `backup-slides.json` for future use.
+In Present mode, the existing navigation advances through the hiring calculation, the diagram reveals and the product captures. Stepping back reverses each reveal. Direct slide links start at the first state. The overview and print show the final states. The Altman quote and App Store chart are retained in `backup-slides.json` for future use.
 
 - The New York Times, May 2, 1892, p. 8. The supplied F13 lecture URL returns 404. The local clipping comes from Dan Nguyen’s reproduction of the archive scan at https://danwin.com/2013/02/the-first-mention-of-computer-in-the-new-york-times/ . The publication date and page were cross-checked against the ProQuest attribution in https://srtate.github.io/old/100.f17/lectures/UNCG-CSC100-F17-LECT3-ComputerScience.pdf .
 - IBM 1401 system photo: U.S. Ballistic Research Laboratories, Report 1115, 1961. Public-domain image via https://commons.wikimedia.org/wiki/File:BRL61-IBM_1401.jpg . The timeline year refers to the introduction of the 1401, documented at https://www.ibm.com/history/1401 .
 
 ## Meeting-room walkthrough
 
-The door slide uses the presenter’s photo, cropped with handwritten booking details obscured. Only the prepared WebP is copied into the preview. The walkthrough uses offline screenshots of the real booking UI with fictional availability and a local booking API fixture. The half-hour grid is from `11c7c40`, before the quarter-hour change in `17c58e6`. The current grid and confirmation were captured from the local booking build. The public booking page is https://room.alanocinneide.com/ .
+The door slide uses the presenter’s photo, cropped with handwritten booking details obscured. The booking slide uses a local capture of the actual booking UI with fictional afternoon availability. The presenter supplied the subscribed Apple Calendar capture, which shows anonymous busy blocks. The public booking link is https://room.alanocinneide.com/ .

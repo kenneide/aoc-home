@@ -62,8 +62,8 @@ function update() {
   slides.forEach((slide, position) => { slide.hidden = presenting && position !== index; });
   slides[index].dataset.stage = stage;
   previous.disabled = index === 0;
-  next.disabled = index === slides.length - 1;
   const count = stepCount(slides[index]);
+  next.disabled = index === slides.length - 1 && (!presenting || stage === count - 1);
   const revealStatus = presenting && count > 1 ? ` · Step ${stage + 1} of ${count}` : '';
   status.textContent = `${index + 1} / ${slides.length}${revealStatus}`;
   const chapter = chapters.findLastIndex(([start]) => start <= index);
@@ -96,7 +96,8 @@ function step(direction) {
     update();
     return;
   }
-  go(index + direction, presenting && direction < 0);
+  const destination = index + direction;
+  if (destination >= 0 && destination < slides.length) go(destination, presenting && direction < 0);
 }
 function togglePresentation() {
   stage = 0;

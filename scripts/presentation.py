@@ -22,66 +22,69 @@ def placeholder(label):
  return f'<div class="media-slot"><span class="slot-mark">＋</span><p>[PLACEHOLDER: {e(label)}]</p></div>'
 def columns(items, cls='columns'):
  return '<div class="'+cls+'">'+''.join(f'<div><span class="ordinal">{j:02}</span><h3>{e(title)}</h3><p>{e(body)}</p></div>' for j,(title,body) in enumerate(items,1))+'</div>'
-def hiring_model(days, stage):
+def analogy(kind):
+ outcome = {'calculation': 'More questions businesses can ask',
+            'software': 'More tools businesses can try'}[kind]
+ return (f'<p class="analogy"><strong>Cheaper {kind}</strong>'
+         f' <span>→</span> {outcome}</p>')
+
+def hiring_model(mini=False):
  rate, weeks, cost, scale = 500, 4, 5000, 8000
- revenue = days * rate * weeks
- difference = revenue - cost
+ first, second = (days * rate * weeks for days in (2, 3))
  money = lambda amount: f'€{amount:,}'
- result = f'{money(abs(difference))} {"below" if difference < 0 else "above"}'
- rows = [
-     ('Billable days per week', days),
-     ('Revenue per billable day', money(rate)),
-     ('Additional monthly revenue', money(revenue)),
-     ('Monthly cost of the hire', money(cost)),
-     ('Result against monthly cost', result),
- ]
- table = '<table><caption>Illustrative four-week month</caption><tbody>' + ''.join(
+ def states(before, after):
+  return f'<span class="hire-before">{before}</span><span class="hire-after">{after}</span>'
+ rows = [('Billable days per week', states(2, 3)), ('Per billable day', money(rate)),
+         ('Monthly revenue', states(money(first), money(second)))]
+ table = '<table><caption>Four-week month</caption><tbody>' + ''.join(
      f'<tr><th scope="row">{label}</th><td>{value}</td></tr>' for label, value in rows
  ) + '</tbody></table>'
- return (f'<div class="hiring-model stage-{stage}">{table}'
-         f'<figure class="hire-revenue"><figcaption>Monthly revenue · <strong>{money(revenue)}</strong></figcaption>'
-         f'<div class="revenue-track" aria-hidden="true" style="--revenue:{revenue / scale:.1%};'
-         f'--break-even:{cost / scale:.1%}"><span class="revenue-fill"></span>'
-         f'<span class="break-even">{money(cost)}<br>break-even</span></div>'
-         f'<div class="revenue-scale" aria-hidden="true"><span>€0</span><span>{money(scale)}</span></div></figure></div>')
+ chart = (
+     '<figure class="hire-revenue"><figcaption>Monthly revenue</figcaption>'
+     f'<div class="revenue-track" style="--first:{first/scale:.1%};--second:{second/scale:.1%};'
+     f'--break-even:{cost/scale:.1%}"><span class="revenue-fill"></span>'
+     f'<span class="break-even">{money(cost)}<br>break-even</span></div>'
+     f'<div class="revenue-scale"><span>€0</span><span>{money(scale)}</span></div>'
+     f'<strong class="hire-result">{states("€1,000 below break-even", "€1,000 above break-even")}</strong></figure>'
+ )
+ return f'<div class="hiring-model{" miniature" if mini else ""}">{table}{chart}</div>'
 
-def diagram_text(lines, x, y):
+def diagram_text(lines, x, y, accent=False):
  first, *rest = lines
- return f'<text x="{x}" y="{y}">{e(first)}' + ''.join(
+ label = f'<text x="{x}" y="{y}">{e(first)}' + ''.join(
      f'<tspan x="{x}" dy="20"> {e(line)}</tspan>' for line in rest
  ) + '</text>'
+ if not accent:
+  return label
+ return (f'<g class="reachable"><rect x="{x-77}" y="{y-19}" width="154" '
+         f'height="{len(lines)*20+9}" rx="2"/>{label}</g>')
 
-def possibilities(quote_beat, ideas=None):
- example = ''
+def possibilities(ideas=()):
+ labels = ''
  if ideas:
-  existing, new = ideas
-  example = diagram_text(existing, 359, 223 - 10 * len(existing)) + diagram_text(new, 275, 298 - 8 * len(new))
-
- return (f'''<figure class="possibility-figure">
-  <svg class="possibility-diagram {'quote-diagram' if quote_beat else 'example-diagram' if ideas else ''}" viewBox="0 -32 700 494"
-       role="group" aria-label="Overlap between worth exploring and practical to try">
+  existing, *new = ideas
+  labels = diagram_text(existing, 357, 188)
+  for lines, y in zip(new, (263, 133)):
+   labels += diagram_text(lines, 275, y, accent=True)
+ return f'''<figure class="possibility-figure">
+  <svg class="possibility-diagram" viewBox="58 -34 630 498"
+       role="group" aria-label="Overlap between valuable and practical">
     <circle class="worth-circle" cx="235" cy="215" r="173"/>
     <circle class="practical-circle" cx="440" cy="215" r="125"/>
     <g class="diagram-labels">
-      <text x="137" y="209">Worth</text><text x="137" y="233">exploring</text>
-      <text x="493" y="209">Practical</text><text x="493" y="233">to try</text>
+      <text x="137" y="221">Valuable</text>
+      <text x="493" y="221">Practical</text>
     </g>
-    {example}
-    <g class="hiring-questions">
-      <text x="359" y="194">Will the<tspan x="359" dy="20">hire cover</tspan><tspan x="359" dy="20">its cost?</tspan></text>
-      <text x="277" y="129">What if work<tspan x="277" dy="21">starts slowly?</tspan></text>
-      <text x="277" y="285">What if we<tspan x="277" dy="21">hire part-time?</tspan></text>
-    </g>
-    <g class="quote-questions">
-      <text x="359" y="194">Reusable<tspan x="359" dy="20">quote</tspan><tspan x="359" dy="20">template</tspan></text>
-      <g class="quote-tool">
-        <rect x="203" y="258" width="148" height="62" rx="2"/>
-        <text x="277" y="281">Brief → draft<tspan x="277" dy="21">quote + checklist</tspan></text>
-      </g>
-    </g>
+    {labels}
   </svg>
-  <figcaption class="quote-next-step">{'Show a draft quote to someone who writes quotes. Does it save them work?' if quote_beat else ''}</figcaption>
- </figure>''')
+ </figure>'''
+
+def quote_template():
+ return (
+     '<div class="quote-template"><strong>Reusable quote template</strong>'
+     '<dl><dt>Client</dt><dd>Client name</dd><dt>Scope</dt><dd>Work to deliver</dd>'
+     '<dt>Price</dt><dd>Project total</dd></dl></div>'
+ )
 
 def capture(file, alt, label):
  return (f'<figure><img src="media/{file}" alt="{e(alt)}">'
@@ -93,35 +96,31 @@ def gymnative():
  home = capture('haguegym-home.webp', 'Haguegym-branded start screen with Machine Circuit and Leg press selected', 'Haguegym’s ready-to-start circuit')
  return (f'<div class="case-state case-before capture-pair">{log}{progress}</div>'
          f'<div class="case-state case-after gym-tailoring">{home}'
-         '<p class="message">The gym sets up the circuit. Members can get straight to logging.</p></div>'
-         '<p class="caption sample-credit">Haguegym · Sample workout data</p>')
+         '<div><img class="gym-qr" src="media/haguegym-qr.png" alt="QR code for the Haguegym app">'
+         '<p class="message">Scan. Open your gym’s app. Start logging.</p>'
+         '<p>Your gym’s equipment and workouts are already set up.</p></div></div>')
 
-def zoundio_web():
+def gibson_web():
  return ('''<div class="case-state case-before gibson-gameplay">
    <img src="media/gibson-mobile.webp" alt="Gibson App mobile guitar gameplay showing scrolling notes">
    <div class="gibson-platforms">
      <img src="media/gibson-app-store.png" alt="iPhone · App Store">
      <img src="media/gibson-google-play.png" alt="Android · Google Play">
    </div>
+   <p class="case-cue">Another platform to build, test and support.</p>
  </div>
  <div class="case-state case-after gibson-gameplay">
    <figure>
-     <figcaption>Web gameplay · gibson.app</figcaption>
+     <figcaption>Browser gameplay preview</figcaption>
      <img src="media/gibson-browser.webp" alt="Add Index Finger in Gibson’s desktop browser player, with the browser frame and guitar fretboard visible">
    </figure>
  </div>''')
 
 def room_walkthrough():
- states = [
-     ('half-hour', 'Wednesday at 14:00 selected in the old half-hour calendar grid', 'Earlier grid · 14:00–14:30'),
-     ('quarter-hour', 'Wednesday at 14:00 selected just after a busy block in the quarter-hour grid', 'Revised grid · 14:00–14:15'),
-     ('confirmed', 'Room booked for Wednesday 18 November, 14:00–14:15 The Hague time', 'Booking confirmed'),
- ]
- return ''.join(
-     f'<div class="case-state room-state room-stage-{stage}">'
-     f'{capture(f"room-{file}.webp", alt, label)}</div>'
-     for stage, (file, alt, label) in enumerate(states)
- ) + '<p class="caption sample-credit">Local test booking · Sample calendar</p>'
+ booking = capture('room-quarter-hour.webp', 'Online booking page with a sample afternoon slot selected', 'Booking page')
+ calendar = capture('room-calendar.webp', 'Busy blocks in the subscribed room calendar in Apple Calendar', 'Subscribed room calendar')
+ return (f'<div class="room-pair">{booking}{calendar}</div>'
+         '<a class="room-link" href="https://room.alanocinneide.com/">room.alanocinneide.com ↗</a>')
 
 layouts=['opening','constraints','manifesto','case','roadmap','import','comparison','gym','demo','business','gallery','review','process','opportunities','question','closing']
 for idx,s in enumerate(slides):
@@ -132,41 +131,50 @@ for idx,s in enumerate(slides):
  if layout=='clipping':
   body = ('<figure class="clipping"><img src="media/aoc-1892-nytimes.png" '
           'alt="Newspaper clipping headed A COMPUTER WANTED.">'
-          '<figcaption class="caption">The New York Times · May 2, 1892 · p. 8 · Scan via Dan Nguyen</figcaption></figure>')
+          '<figcaption class="caption">The New York Times · May 2, 1892</figcaption></figure>')
  elif layout=='historical':
-  body = ('<figure class="computer-room"><img class="history-photo" src="media/computers.jpg" '
-          'alt="NACA staff at desks with papers and a covered Friden calculator">'
-          '<figcaption class="caption">1949 · <a href="https://www.flickr.com/photos/nasacommons/7538108706">NASA E49-54</a></figcaption></figure>')
+  body = ('<figure class="computer-room"><img class="history-photo" src="media/naca-lewis.jpg" '
+          'alt="Women working at rows of desks in the NACA Lewis computing office">'
+          '<figcaption class="caption">1957 · <a href="https://www.flickr.com/photos/44494372@N05/53912325323">NASA Glenn Research Center · GRC-1957-C-43712</a></figcaption></figure>')
  elif layout=='calculation':
   stops = [
-      ('1949 · Human computers', 'People work through flight-test calculations.',
-       'computers.jpg', 'NACA staff working at desks', 'NASA E49-54'),
-      ('1959 · IBM 1401', 'Businesses process payroll and billing.',
-       'aoc-ibm1401.jpg', 'IBM card reader, processing unit and printer', 'U.S. Ballistic Research Laboratories · 1961'),
-      ('1979 · VisiCalc on the Apple II', 'Change a budget assumption and see totals update.',
-       'visicalc.png', 'VisiCalc spreadsheet with a column of totals', 'Gortu / apple2history.org · Later capture'),
+      ('Government research and other large institutions', 'Analyze flight tests.',
+       'naca-lewis.jpg', 'NACA staff working at desks', '1957 · NACA Lewis office'),
+      ('Large businesses', 'Run payroll and billing.',
+       'aoc-ibm1401.jpg', 'IBM card reader, processing unit and printer', '1959 · IBM 1401'),
+      ('Smaller businesses', 'Explore a hiring decision at your desk.',
+       'visicalc.png', 'VisiCalc spreadsheet with a column of totals', '1979 · VisiCalc on the Apple II'),
   ]
   body = '<ol class="calculation-timeline">' + ''.join(
       f'<li><img src="media/{image}" alt="{alt}"><h3>{label}</h3>'
       f'<p>{description}</p><p class="caption">{credit}</p></li>'
       for label, description, image, alt, credit in stops
-  ) + '</ol>'
+  ) + '</ol>' + analogy('calculation')
  elif layout=='hiring':
-  body = hiring_model(2, 0) + hiring_model(3, 1)
+  body = hiring_model()
  elif layout=='possibilities':
-  body = possibilities(s['id'] == 'worth-building', s.get('ideas'))
+  if s['id'] == 'worth-building':
+   body = analogy('software') + '<div class="diagram-pair">' + quote_template() + possibilities([
+       ['Reusable', 'quote template'], ['Brief → draft', 'quote + checklist']]) + '</div>'
+  elif s['id'] == 'hiring-scenarios':
+   body = '<div class="diagram-pair">' + hiring_model(mini=True) + possibilities([
+       ['Will the hire', 'cover its cost?'], ['What if we', 'hire part-time?'],
+       ['What if work', 'starts slowly?']]) + '</div>'
+  else:
+   body = possibilities(s['ideas'])
  elif layout=='gymnative':
   body = gymnative()
- elif layout=='zoundio-web':
-  body = zoundio_web()
+ elif layout=='gibson-web':
+  body = gibson_web()
+  title = '<img class="gibson-icon" src="media/gibson-icon.png" alt="">' + title
  elif layout=='room-door':
   body = '<img class="room-door-photo" src="media/room-door.webp" alt="A paper booking sheet attached to the glass meeting-room door">'
  elif layout=='room-walkthrough':
   body = room_walkthrough()
  elif layout=='audience-close':
-  body = '<ul class="audience-questions">' + ''.join(
+  body = analogy('calculation') + analogy('software') + '<div class="close-pair">' + possibilities() + '<ul class="audience-questions">' + ''.join(
       f'<li>{e(question)}</li>' for question in s['body'].splitlines()
-  ) + '</ul>'
+  ) + '</ul></div>'
  elif layout=='quote':
   body=body+'<p>Sam Altman · July 2025</p><p class="caption">100–1,000×: Altman’s speculation</p>'
  elif layout=='chart':
@@ -205,6 +213,8 @@ for idx,s in enumerate(slides):
   body='<div class="question-prompts"><p>Who needs it?</p><p>What gets in their way?</p><p>What would better look like?</p></div>'
  elif number==16:
   body='<p class="message">Think beyond your constraints.<br>Build with AI.<br>Deliver with discipline.</p><a class="contact" href="mailto:hello@alanocinneide.com">hello@alanocinneide.com ↗</a>';visual='<img class="wave-edge" src="../../assets/bands.svg" alt="">'
+ if s.get('cue'):
+  body = f'<p class="slide-cue">{e(s["cue"])}</p>' + body
  if s.get('source'): body+=f'<a class="source-link" href="{e(s["source"])}">Source ↗</a>'
  number=idx+1
  sections.append(f'<section id="{s["id"]}" data-chapter="{e(s.get("chapter",""))}" data-steps="{s.get("steps",1)}" class="slide layout-{layout}" aria-labelledby="title-{number}"><div class="slide-inner"><p class="eyebrow">{e(deck_title)} / {number:02}</p><h2 id="title-{number}">{title}</h2>{body}'+(f'<p class="caption">{caption}</p>' if caption else '')+f'<div class="slide-footer"><span>Alan O Cinneide Software BV</span><span>{number:02} / {len(slides)}</span></div></div>{visual}</section>')

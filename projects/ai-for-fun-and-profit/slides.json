@@ -13,7 +13,8 @@
       "materials": "New York Times, May 2, 1892, p. 8. Scan reproduced by Dan Nguyen: https://danwin.com/2013/02/the-first-mention-of-computer-in-the-new-york-times/ · Page attribution: https://srtate.github.io/old/100.f17/lectures/UNCG-CSC100-F17-LECT3-ComputerScience.pdf",
       "minutes": 0.833
     },
-    "chapter": "When calculation got cheap"
+    "chapter": "When calculation got cheap",
+    "cue": "Who did the calculating?"
   },
   {
     "id": "human-computers",
@@ -24,11 +25,12 @@
     "placeholder": null,
     "notes": {
       "point": "A room full of computers",
-      "story": "[Give the audience several seconds to look.] These are human computers at a NACA flight-test station in 1949. Staff copied readings from film and strips of recording paper. They used slide rules and electric calculators, like the covered Friden at the front, to turn those readings into figures in units the engineers could use. Each test meant more readings and more calculations.",
+      "story": "At the NACA Lewis laboratory, human computers plotted data from photographs of wind-tunnel instrument readings. One test could produce scores of data points, and working through them could take days.",
       "transition": "Now look at how that work changed when machines could do more of the arithmetic.",
-      "materials": "NASA E49-54 · https://www.flickr.com/photos/nasacommons/7538108706",
+      "materials": "NASA Glenn Research Center · GRC-1957-C-43712 · https://www.flickr.com/photos/44494372@N05/53912325323",
       "minutes": 0.75
-    }
+    },
+    "cue": "Turning wind-tunnel readings into results"
   },
   {
     "id": "cheap-calculation",
@@ -39,27 +41,28 @@
     "placeholder": null,
     "notes": {
       "point": "From the computer room to your desk",
-      "story": "[Walk left to right.] These are snapshots of overlapping eras. At NACA, people worked through flight-test calculations with equipment at their desks. Businesses used the IBM 1401 for recurring jobs such as payroll and billing. Imagine collecting a stack of records, running them together and getting a printed result. VisiCalc on the Apple II let the person working on a budget change one assumption and see affected totals update right there. That made it practical to try another number while the question was still fresh. [Optional aside: The U.S. Census Bureau received UNIVAC I in 1951.]",
+      "story": "These are milestones in who could afford calculation at scale. Government laboratories and other large institutions could staff computing rooms. Large businesses used machines like the IBM 1401 for recurring payroll and billing. Desktop spreadsheets put what-if questions, like whether to hire, within reach of much smaller businesses.",
       "transition": "Say you run a small design studio and you’re turning down client work. Could you afford to bring someone on?",
-      "materials": "NASA: https://www.flickr.com/photos/nasacommons/7538108706 · IBM: https://www.ibm.com/history/1401 · System photo: https://commons.wikimedia.org/wiki/File:BRL61-IBM_1401.jpg · VisiCalc: https://www.computerhistory.org/timeline/1979/ · Later screenshot: https://commons.wikimedia.org/wiki/File:Visicalc.png · UNIVAC: https://www.census.gov/about/history/bureau-history/census-innovations/technology/univac-i.html",
+      "materials": "NASA: https://www.flickr.com/photos/44494372@N05/53912325323 · IBM: https://www.ibm.com/history/1401 · System photo: https://commons.wikimedia.org/wiki/File:BRL61-IBM_1401.jpg · VisiCalc: https://www.computerhistory.org/timeline/1979/ · Later screenshot: https://commons.wikimedia.org/wiki/File:Visicalc.png · UNIVAC: https://www.census.gov/about/history/bureau-history/census-innovations/technology/univac-i.html",
       "minutes": 1.083
     }
   },
   {
     "id": "hiring",
-    "title": "Can we afford to hire?",
+    "title": "Two billable days or three?",
     "body": "",
     "layout": "hiring",
     "steps": 2,
     "source": "",
     "placeholder": null,
     "notes": {
-      "point": "Can we afford to hire?",
+      "point": "Two billable days or three?",
       "story": "A small design studio is turning down client work. The owner wants to know how many billable days would cover a hire costing €5,000 per month. Assume four weeks and €500 per billable day. At two days a week, they’re €1,000 short. Ask “What if they can bill three days a week?” [Advance.] Revenue rises to €6,000 and they’re €1,000 above cost. Ask “What if it takes a few months to get that busy?” [Pause.] The spreadsheet lets the owner explore what would have to be true for the hire to pay for itself.",
       "transition": "Look at the questions the studio can now try.",
       "materials": "Illustrative design studio example",
       "minutes": 1
-    }
+    },
+    "cue": "Can a small studio cover the cost of a hire?"
   },
   {
     "id": "hiring-scenarios",
@@ -72,44 +75,93 @@
     "notes": {
       "point": "Which questions can we try?",
       "story": "Start with the question in the overlap. The owner can check whether the hire covers its cost. [Advance.] Watch the circle grow around the other two questions. What if work starts slowly? What if we hire part-time? With a spreadsheet, running another scenario is easy enough to try.",
-      "transition": "[Advance and keep the expanded diagram in view.]",
+      "transition": "The cost of trying a new question fell. What happens when the cost of trying a new tool falls?",
       "materials": "Illustrative design studio example",
       "minutes": 0.7
-    }
+    },
+    "cue": "Same model. Another question."
   },
   {
     "id": "worth-building",
     "title": "What becomes worth building?",
     "body": "",
     "layout": "possibilities",
-    "steps": 3,
+    "steps": 2,
     "source": "",
     "placeholder": null,
     "notes": {
       "point": "What becomes worth building?",
-      "story": "The spreadsheet made it easy enough to try another assumption. AI can make it easy enough to try a first version of a tool. In both cases, lowering the cost of the experiment changes which ideas we get to test. [Advance.] The same studio wants to spend less time writing quotes. A reusable template is already practical to try. What about a small tool that takes a client brief and starts a quote and project checklist? [Advance.] Put a draft quote in front of someone who writes quotes and see whether it saves them work.",
-      "transition": "One of those ideas started with something I wanted to do at the gym.",
+      "story": "A reusable quote template is already practical. [Advance.] What if the studio could turn a client brief into a draft quote and checklist? AI can make the first version cheaper to build. The tool itself can work with or without AI. See whether it saves time for someone who writes quotes.",
+      "transition": "Players of The Gibson App had been asking for another way to play.",
       "materials": "Illustrative design studio example",
       "minutes": 1.3
     },
-    "chapter": "The opportunity"
+    "chapter": "The opportunity",
+    "cue": "AI can make a first version cheaper. Try a tool for one job, with or without AI."
+  },
+  {
+    "id": "slide-04",
+    "title": "The Gibson App",
+    "body": "",
+    "layout": "gibson-web",
+    "steps": 2,
+    "source": "",
+    "placeholder": null,
+    "notes": {
+      "point": "The Gibson App",
+      "story": "Players had long asked to play on a computer. The Gibson App already had gameplay on iOS and Android. Another platform adds work to build, test and support. [Advance.] Here is a browser gameplay preview of Add Index Finger. AI-assisted development helped the existing team pursue browser gameplay.",
+      "transition": "Here, the additional thing worth trying was a way to play on a computer.",
+      "materials": "Official mobile artwork and store badges, plus the presenter’s Add Index Finger browser capture. The images show different lessons.",
+      "minutes": 2
+    },
+    "chapter": "The Gibson App",
+    "cue": "Players wanted to play on a computer"
+  },
+  {
+    "id": "slide-07",
+    "title": "Guitar gameplay on a computer",
+    "body": "",
+    "layout": "possibilities",
+    "steps": 2,
+    "source": "",
+    "placeholder": null,
+    "notes": {
+      "point": "Guitar gameplay on a computer",
+      "story": "Supporting iOS and Android is already part of the work. [Advance.] The existing team can now pursue another way for people to play, by bringing gameplay to the browser. That opens a way to reach people who want to play on a computer.",
+      "transition": "Next, an idea that came from my own workout notebook.",
+      "materials": "Continue directly to “Is the meeting room free at two?”",
+      "minutes": 1
+    },
+    "ideas": [
+      [
+        "Support",
+        "iOS and",
+        "Android"
+      ],
+      [
+        "Play in",
+        "the browser"
+      ]
+    ],
+    "cue": "Another way for players to get started"
   },
   {
     "id": "slide-08",
-    "title": "GymNative · A workout logger that knows your gym",
+    "title": "GymNative · From paper to phone",
     "body": "",
     "layout": "gymnative",
     "steps": 2,
     "source": "",
     "placeholder": null,
     "notes": {
-      "point": "GymNative · A workout logger that knows your gym",
-      "story": "“I wanted to put the paper aside, log what I lifted on my phone, and see whether I was getting stronger.” On the left, I’m entering 35 kilos and 12 reps on the leg press. On the right, I can look back and see the weight I logged over three sample workouts. [Advance.] This is the Haguegym view. The branding, the machine circuit and its starting exercise are already there. The gym sets up the equipment and workout once. Members can open it and get straight to logging.",
+      "point": "GymNative · From paper to phone",
+      "story": "I wanted to put the paper aside, log my workouts on my phone, and see whether I was getting stronger. I saw other people at the gym logging on paper too. [Advance.] Haguegym can give its members an app with its equipment and workouts already set up. Members can scan a code and get straight to logging.",
       "transition": "A general tracker could already do part of this. What would make a logger for one gym worth trying?",
       "materials": "Local Haguegym captures with fictional workouts.",
       "minutes": 1.5
     },
-    "chapter": "The gym"
+    "chapter": "The gym",
+    "cue": "I wanted to put down the paper, log on my phone, and see my progress."
   },
   {
     "id": "slide-10",
@@ -121,9 +173,9 @@
     "placeholder": null,
     "notes": {
       "point": "A logger set up for this gym",
-      "story": "Using a general tracker is already practical. [Advance.] AI-assisted development made a first version tailored to one gym practical to try. The pilot question is “Will members come back and log their next workout?” The work is deciding what the gym should configure, how a member opens it and logs a first set, and what we would need to see to keep going. I’d look for members returning to log another workout, and ask where anyone got stuck. [Confirm the Haguegym pilot status before presenting. Keep outcomes open.]",
-      "transition": "At Zoundio, the question was how the existing team could reach people who wanted to play on a computer.",
-      "materials": "Confirm Haguegym pilot status. Use the repeat-workout question without claiming an outcome.",
+      "story": "Using a general tracker is already practical. [Advance.] AI-assisted development made a first version tailored to one gym practical to try. The Haguegym pilot is underway. The question is “Will members come back and log their next workout?” The work is deciding what the gym should configure, how a member opens it and logs a first set, and what we would need to see to keep going. I’d look for members returning to log another workout, and ask where anyone got stuck.",
+      "transition": "Now let’s look at a tool for one room in a coworking space.",
+      "materials": "Haguegym pilot underway. Use the repeat-workout question without claiming an outcome.",
       "minutes": 1.5
     },
     "ideas": [
@@ -137,52 +189,8 @@
         "A logger set up",
         "for this gym"
       ]
-    ]
-  },
-  {
-    "id": "slide-04",
-    "title": "Zoundio · Guitar gameplay in the browser",
-    "body": "",
-    "layout": "zoundio-web",
-    "steps": 2,
-    "source": "",
-    "placeholder": null,
-    "notes": {
-      "point": "Zoundio · Guitar gameplay in the browser",
-      "story": "People had long asked to play on a computer. We already had guitar gameplay on iOS and Android, and each app needs ongoing support. A dedicated PC app would have added a platform with its own expertise and upkeep. [Advance.] Here’s the upcoming version running in a browser, on the Add Index Finger lesson. AI-assisted development helped make it practical for the existing team to pursue web gameplay. [Confirm release wording and timing before presenting.]",
-      "transition": "Here, the additional thing worth trying was a way to play on a computer.",
-      "materials": "Public Gibson App mobile gameplay crop with App Store and Google Play badges, followed by the presenter-supplied Add Index Finger browser gameplay capture. The images show different lessons. Confirm release wording and timing.",
-      "minutes": 2
-    },
-    "chapter": "Zoundio"
-  },
-  {
-    "id": "slide-07",
-    "title": "Guitar gameplay on a computer",
-    "body": "",
-    "layout": "possibilities",
-    "steps": 2,
-    "source": "",
-    "placeholder": null,
-    "notes": {
-      "point": "Guitar gameplay on a computer",
-      "story": "Supporting iOS and Android is already part of the work. [Advance.] The existing team can now pursue another way for people to play, by bringing gameplay to the browser. That opens a way to reach people who want to play on a computer.",
-      "transition": "We’ve seen what this opens up for a gym and for a team making music software. Now let’s look at something everyone here already uses.",
-      "materials": "Continue directly to “Is the meeting room free at two?”",
-      "minutes": 1
-    },
-    "ideas": [
-      [
-        "Support",
-        "iOS and",
-        "Android"
-      ],
-      [
-        "Play on a",
-        "computer",
-        "via the web"
-      ]
-    ]
+    ],
+    "cue": "Pilot underway. Will members log another workout?"
   },
   {
     "id": "sheet-on-the-door",
@@ -198,17 +206,18 @@
       "materials": "Presenter photo of the booking sheet on the meeting-room door, with handwritten details obscured.",
       "minutes": 0.7
     },
-    "chapter": "Room booking"
+    "chapter": "Room booking",
+    "cue": "The answer is on the door."
   },
   {
     "id": "room-possibilities",
-    "title": "What’s practical for one meeting room?",
+    "title": "What’s practical for a neighbourhood co-working space?",
     "body": "",
     "layout": "possibilities",
     "source": "",
     "placeholder": null,
     "notes": {
-      "point": "What’s practical for one meeting room?",
+      "point": "What’s practical for a neighbourhood co-working space?",
       "story": "A sheet on the door is cheap, familiar, and does the job when you’re there. [Advance.] For one shared room, a small online booking tool is now reasonable to try. Someone can see what’s free and reserve it from their desk.",
       "transition": "So I made one.",
       "materials": "Use the same circle expansion as in the earlier examples.",
@@ -217,44 +226,45 @@
     "steps": 2,
     "ideas": [
       [
-        "Put a",
-        "booking",
+        "Booking",
         "sheet on",
         "the door"
       ],
       [
-        "See what’s",
-        "free and book",
+        "Book the room",
         "from your desk"
       ]
-    ]
+    ],
+    "cue": "Maybe a more sophisticated system is possible."
   },
   {
     "id": "room-booking",
-    "title": "So I made one",
+    "title": "Book online. Subscribe to the room calendar.",
     "body": "",
     "layout": "room-walkthrough",
     "source": "",
     "placeholder": null,
     "notes": {
-      "point": "So I made one",
-      "story": "I built this beforehand. These stills show the real booking page with fictional calendar data and a local test response. The first grid selected half-hour blocks. [Advance.] I changed the grid to quarter-hour slots. On Wednesday, the busy block ends at two. Select 14:00–14:15, enter a name and book. [Advance.] The page confirms the time. [Let the confirmation sit.] The point of this small tool is to save someone a walk to the door.",
-      "transition": "[Advance after the booking confirmation has had a moment.] Think about your own work. What’s practical to try now?",
-      "materials": "Offline stills from the historical and current booking UI with sample data. The public site is https://room.alanocinneide.com/ . The test confirmation used a local API fixture.",
+      "point": "Book online. Subscribe to the room calendar.",
+      "story": "I built the first version in about an hour. Members can check availability and book from their desks. They can also subscribe and see room availability alongside their own calendars.",
+      "transition": "Think about your own work. What’s practical to try now?",
+      "materials": "Local booking-page capture with fictional availability and presenter-supplied Calendar capture showing room availability as busy blocks.",
       "minutes": 1.75
     },
-    "steps": 3
+    "steps": 1,
+    "cue": "First version built in about an hour."
   },
   {
     "id": "slide-16",
     "title": "What’s practical to try now?",
-    "body": "What only works because you know how to run it?\nWhat do you spend time doing by hand every week?\nWhat do you rebuild for every client?",
+    "body": "A spreadsheet only you know how to run\nA task you do by hand every week\nA service you repeat for every client",
     "layout": "audience-close",
+    "steps": 2,
     "chapter": "Practical to try",
     "placeholder": null,
     "notes": {
       "point": "What’s practical to try now?",
-      "story": "[If people need a starting point, mention a spreadsheet only one person understands, a weekly report assembled by hand, or a client intake or quote that starts from scratch each time.]\n\nThink about the last time you did one of those things. [Pause for about ten seconds.] Where did the time go? If you could make just that part easier, what would you want to happen?\n\nThat’s the part of the work I’ve come to enjoy most. I like sitting down with someone, seeing how they actually do the work, and figuring out what’s practical to try. AI can help get a first version working. Then we can try it on a real example and see whether it helps. If it does, we can work out what it would take to make it dependable.\n\nIf something came to mind, I’d love to hear about it over a drink.",
+      "story": "Cheaper calculation let businesses ask more questions about what they offered. Cheaper software lets businesses and entrepreneurs try small tools that can improve what they offer their clients. [Advance to expand the Practical circle. Pause.] What part of your work could you make easier? I enjoy helping people understand what’s possible, choose a small experiment, and see whether it helps. If something came to mind, I’d love to hear about it over a drink.",
       "transition": "[Leave this slide on screen through the discussion.]",
       "materials": "No additional material required",
       "minutes": 2

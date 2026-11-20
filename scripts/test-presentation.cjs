@@ -49,16 +49,20 @@ key('ArrowRight');
 verifyState(3, 0);
 elements['#next'].onclick();
 verifyState(3, 1);
-for (const [index, stage] of [[4, 0], [4, 1], [5, 0], [5, 1], [5, 2], [6, 0]]) {
+for (const [index, stage] of [[4, 0], [4, 1], [5, 0], [5, 1], [6, 0]]) {
   key('ArrowRight');
   verifyState(index, stage);
 }
-for (const [index, stage] of [[5, 2], [5, 1], [5, 0], [4, 1], [4, 0], [3, 1], [3, 0], [2, 0]]) {
+for (const [index, stage] of [[5, 1], [5, 0], [4, 1], [4, 0], [3, 1], [3, 0], [2, 0]]) {
   elements['#prev'].onclick();
   verifyState(index, stage);
 }
-key('End');assert.equal(elements['#next'].disabled,true);
-key('ArrowRight');verifyState(slides.length - 1, 0);
+key('End');verifyState(slides.length - 1, 0);
+assert.equal(elements['#next'].disabled,false);
+elements['#next'].onclick();verifyState(slides.length - 1, 1);
+assert.equal(elements['#next'].disabled,true);
+key('ArrowRight');verifyState(slides.length - 1, 1);
+key('ArrowLeft');verifyState(slides.length - 1, 0);
 key('Home');assert.equal(elements['#prev'].disabled,true);
 key('Escape');assert(slides.every(s=>!s.hidden));
 assert.equal(body.children[0].children.filter(b=>b.attrs['aria-current']).length,1);
