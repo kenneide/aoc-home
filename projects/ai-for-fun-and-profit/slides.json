@@ -96,103 +96,93 @@
   },
   {
     "id": "slide-08",
-    "title": "Open it and log",
-    "body": "No registration.\nNo setup ritual.\nStart logging.",
+    "title": "GymNative · A workout logger that knows your gym",
+    "body": "",
+    "layout": "gymnative",
+    "steps": 2,
+    "source": "",
+    "placeholder": null,
     "notes": {
-      "point": "Open it and log",
-      "story": "Describe the personal gym problem and desired experience. Explain the mobile-friendly PWA and local anonymous device-specific data. AI accelerated implementation and iteration.",
-      "transition": "Next: A workout, logged",
-      "materials": "Real gym app screenshot",
-      "minutes": 1.79
+      "point": "GymNative · A workout logger that knows your gym",
+      "story": "“I wanted to put the paper aside, log what I lifted on my phone, and see whether I was getting stronger.” On the left, I’m entering 35 kilos and 12 reps on the leg press. On the right, I can look back and see the weight I logged over three sample workouts. [Advance.] This is the Haguegym view. The branding, the machine circuit and its starting exercise are already there. The gym sets up the equipment and workout once. Members can open it and get straight to logging.",
+      "transition": "A general tracker could already do part of this. What would make a logger for one gym worth trying?",
+      "materials": "Local Haguegym captures with fictional workouts.",
+      "minutes": 1.5
     },
-    "placeholder": "Real gym app screenshot",
-    "layout": "gym",
     "chapter": "The gym"
   },
   {
-    "id": "slide-09",
-    "title": "A workout, logged",
-    "body": "Open → Log an exercise → Inspect progress",
-    "notes": {
-      "point": "A workout, logged",
-      "story": "Demonstrate the working product using prepared demo data. If unavailable, walk through approved screenshots. Avoid exposing personal workout data accidentally.",
-      "transition": "Next: The gym does the setup",
-      "materials": "Live gym app demonstration and fallback screenshots",
-      "minutes": 2.23
-    },
-    "placeholder": "Live gym app demonstration and fallback screenshots",
-    "layout": "demo"
-  },
-  {
     "id": "slide-10",
-    "title": "The gym does the setup",
-    "body": "Gym: equipment · workouts · branding\nMember: ready to use",
-    "notes": {
-      "point": "The gym does the setup",
-      "story": "Explain how reducing member setup led to a configurable white-label concept for machines or free weights. The gym is the potential customer. Working personal product; commercial opportunity under development.",
-      "transition": "Next: Zoundio: creating guitar lessons",
-      "materials": "No additional material required",
-      "minutes": 1.34
-    },
+    "title": "A logger set up for this gym",
+    "body": "",
+    "layout": "possibilities",
+    "steps": 2,
+    "source": "",
     "placeholder": null,
-    "layout": "business"
+    "notes": {
+      "point": "A logger set up for this gym",
+      "story": "Using a general tracker is already practical. [Advance.] AI-assisted development made a first version tailored to one gym practical to try. The pilot question is “Will members come back and log their next workout?” The work is deciding what the gym should configure, how a member opens it and logs a first set, and what we would need to see to keep going. I’d look for members returning to log another workout, and ask where anyone got stuck. [Confirm the Haguegym pilot status before presenting. Keep outcomes open.]",
+      "transition": "At Zoundio, the question was how the existing team could reach people who wanted to play on a computer.",
+      "materials": "Confirm Haguegym pilot status. Use the repeat-workout question without claiming an outcome.",
+      "minutes": 1.5
+    },
+    "ideas": [
+      [
+        "Use a",
+        "general",
+        "workout",
+        "tracker"
+      ],
+      [
+        "A logger set up",
+        "for this gym"
+      ]
+    ]
   },
   {
     "id": "slide-04",
-    "title": "Zoundio: creating guitar lessons",
-    "body": "The lesson author’s experience matters",
+    "title": "Zoundio · Guitar gameplay in the browser",
+    "body": "",
+    "layout": "zoundio-web",
+    "steps": 2,
+    "source": "",
+    "placeholder": null,
     "notes": {
-      "point": "Zoundio: creating guitar lessons",
-      "story": "Introduce music education and interactive guitar lessons. Explain cumbersome specialized authoring workflows without exposing internal implementation.",
-      "transition": "Next: Why awkward workflows survive",
-      "materials": "Screenshot of approved original Zoundio authoring workflow",
-      "minutes": 1.79
+      "point": "Zoundio · Guitar gameplay in the browser",
+      "story": "People had long asked to play on a computer. We already had guitar gameplay on iOS and Android, and each app needs ongoing support. A dedicated PC app would have added a platform with its own expertise and upkeep. [Advance.] Here’s the upcoming version running in a browser, on the Add Index Finger lesson. AI-assisted development helped make it practical for the existing team to pursue web gameplay. [Confirm release wording and timing before presenting.]",
+      "transition": "Here, the additional thing worth trying was a way to play on a computer.",
+      "materials": "Public Gibson App mobile gameplay crop with App Store and Google Play badges, followed by the presenter-supplied Add Index Finger browser gameplay capture. The images show different lessons. Confirm release wording and timing.",
+      "minutes": 2
     },
-    "placeholder": "Screenshot of approved original Zoundio authoring workflow",
-    "layout": "case",
     "chapter": "Zoundio"
   },
   {
-    "id": "slide-05",
-    "title": "Why awkward workflows survive",
-    "body": "Historical constraints → Specialized tools → Lasting habits",
-    "notes": {
-      "point": "Why awkward workflows survive",
-      "story": "Explain why organizations preserve working processes even when they become awkward. This is a conceptual diagram, not an exact internal workflow.",
-      "transition": "Next: Use the tools musicians know",
-      "materials": "No additional material required",
-      "minutes": 1.79
-    },
-    "placeholder": null,
-    "layout": "roadmap"
-  },
-  {
-    "id": "slide-06",
-    "title": "Use the tools musicians know",
-    "body": "Familiar authoring → Import / conversion → Native lesson data",
-    "notes": {
-      "point": "Use the tools musicians know",
-      "story": "Describe the better authoring approach. AI-assisted development helped make new conversion and import capabilities practical. Do not name unconfirmed formats or claim measured savings.",
-      "transition": "Next: Build the right tool",
-      "materials": "Approved new Zoundio import workflow screenshot",
-      "minutes": 1.79
-    },
-    "placeholder": "Approved new Zoundio import workflow screenshot",
-    "layout": "import"
-  },
-  {
     "id": "slide-07",
-    "title": "Build the right tool",
-    "body": "A better authoring workflow can improve everything downstream",
-    "notes": {
-      "point": "Build the right tool",
-      "story": "Compare specialized authoring with familiar tools plus import. Discuss potential organizational benefits without invented metrics. Sometimes recognizing the wrong tool is the valuable work.",
-      "transition": "Next: Room to play",
-      "materials": "No additional material required",
-      "minutes": 1.34
-    },
+    "title": "Guitar gameplay on a computer",
+    "body": "",
+    "layout": "possibilities",
+    "steps": 2,
+    "source": "",
     "placeholder": null,
-    "layout": "comparison"
+    "notes": {
+      "point": "Guitar gameplay on a computer",
+      "story": "Supporting iOS and Android is already part of the work. [Advance.] The existing team can now pursue another way for people to play, by bringing gameplay to the browser. That opens a way to reach people who want to play on a computer.",
+      "transition": "We’ve seen what this opens up for a gym and for a team making music software. Now let’s look at something everyone here already uses.",
+      "materials": "Use this spoken transition once the meeting-room beat is ready. The current deck continues to Room to play.",
+      "minutes": 1
+    },
+    "ideas": [
+      [
+        "Support",
+        "iOS and",
+        "Android"
+      ],
+      [
+        "Play on a",
+        "computer",
+        "via the web"
+      ]
+    ]
   },
   {
     "id": "slide-11",

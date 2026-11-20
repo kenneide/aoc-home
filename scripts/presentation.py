@@ -40,9 +40,20 @@ def hiring_model(days, stage):
          f'<span class="break-even">{money(cost)}<br>break-even</span></div>'
          f'<div class="revenue-scale" aria-hidden="true"><span>€0</span><span>{money(scale)}</span></div></figure></div>')
 
-def possibilities(quote_beat):
+def diagram_text(lines, x, y):
+ first, *rest = lines
+ return f'<text x="{x}" y="{y}">{e(first)}' + ''.join(
+     f'<tspan x="{x}" dy="20"> {e(line)}</tspan>' for line in rest
+ ) + '</text>'
+
+def possibilities(quote_beat, ideas=None):
+ example = ''
+ if ideas:
+  existing, new = ideas
+  example = diagram_text(existing, 359, 223 - 10 * len(existing)) + diagram_text(new, 275, 298 - 8 * len(new))
+
  return (f'''<figure class="possibility-figure">
-  <svg class="possibility-diagram {'quote-diagram' if quote_beat else ''}" viewBox="0 -32 700 494"
+  <svg class="possibility-diagram {'quote-diagram' if quote_beat else 'example-diagram' if ideas else ''}" viewBox="0 -32 700 494"
        role="group" aria-label="Overlap between worth exploring and practical to try">
     <circle class="worth-circle" cx="235" cy="215" r="173"/>
     <circle class="practical-circle" cx="440" cy="215" r="125"/>
@@ -50,6 +61,7 @@ def possibilities(quote_beat):
       <text x="137" y="209">Worth</text><text x="137" y="233">exploring</text>
       <text x="493" y="209">Practical</text><text x="493" y="233">to try</text>
     </g>
+    {example}
     <g class="hiring-questions">
       <text x="359" y="194">Will the<tspan x="359" dy="20">hire cover</tspan><tspan x="359" dy="20">its cost?</tspan></text>
       <text x="277" y="129">What if work<tspan x="277" dy="21">starts slowly?</tspan></text>
@@ -65,6 +77,34 @@ def possibilities(quote_beat):
   </svg>
   <figcaption class="quote-next-step">{'Show a draft quote to someone who writes quotes. Does it save them work?' if quote_beat else ''}</figcaption>
  </figure>''')
+
+def capture(file, alt, label):
+ return (f'<figure><img src="media/{file}" alt="{e(alt)}">'
+         f'<figcaption>{e(label)}</figcaption></figure>')
+
+def gymnative():
+ log = capture('haguegym-log.webp', 'Leg press set entered as 35 kg and 12 reps', 'Log a set')
+ progress = capture('haguegym-progress.webp', 'The sample leg press history rises from 25 kg to 35 kg', 'Look back at progress')
+ home = capture('haguegym-home.webp', 'Haguegym-branded start screen with Machine Circuit and Leg press selected', 'Haguegym’s ready-to-start circuit')
+ return (f'<div class="case-state case-before capture-pair">{log}{progress}</div>'
+         f'<div class="case-state case-after gym-tailoring">{home}'
+         '<p class="message">The gym sets up the circuit. Members can get straight to logging.</p></div>'
+         '<p class="caption sample-credit">Haguegym · Sample workout data</p>')
+
+def zoundio_web():
+ return ('''<div class="case-state case-before gibson-gameplay">
+   <img src="media/gibson-mobile.webp" alt="Gibson App mobile guitar gameplay showing scrolling notes">
+   <div class="gibson-platforms">
+     <img src="media/gibson-app-store.png" alt="iPhone · App Store">
+     <img src="media/gibson-google-play.png" alt="Android · Google Play">
+   </div>
+ </div>
+ <div class="case-state case-after gibson-gameplay">
+   <figure>
+     <figcaption>Web gameplay · gibson.app</figcaption>
+     <img src="media/gibson-browser.webp" alt="Add Index Finger in Gibson’s desktop browser player, with the browser frame and guitar fretboard visible">
+   </figure>
+ </div>''')
 
 layouts=['opening','constraints','manifesto','case','roadmap','import','comparison','gym','demo','business','gallery','review','process','opportunities','question','closing']
 for idx,s in enumerate(slides):
@@ -97,7 +137,11 @@ for idx,s in enumerate(slides):
  elif layout=='hiring':
   body = hiring_model(2, 0) + hiring_model(3, 1)
  elif layout=='possibilities':
-  body = possibilities(s['id'] == 'worth-building')
+  body = possibilities(s['id'] == 'worth-building', s.get('ideas'))
+ elif layout=='gymnative':
+  body = gymnative()
+ elif layout=='zoundio-web':
+  body = zoundio_web()
  elif layout=='quote':
   body=body+'<p>Sam Altman · July 2025</p><p class="caption">100–1,000×: Altman’s speculation</p>'
  elif layout=='chart':

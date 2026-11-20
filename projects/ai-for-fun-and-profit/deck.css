@@ -234,3 +234,42 @@ main,.presenting main{display:block;position:static;padding:0}
   .possibility-diagram { width: 100%; }
   .quote-next-step { font-size: 16px; }
 }
+
+.example-diagram .hiring-questions { display: none; }
+.case-state { display: grid; gap: 2.5cqw; align-items: center; }
+.capture-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 75%; margin-inline: auto; }
+.gym-tailoring { grid-template-columns: auto minmax(0, 1fr); max-width: 73%; margin-inline: auto; }
+.case-state figure { margin: 0; }
+.case-state img { display: block; width: auto; height: 32cqw; max-width: 100%; object-fit: contain; margin-inline: auto; border: 1px solid var(--border); }
+.case-state figcaption { font-size: 1.55cqw; text-align: center; margin-top: .4em; }
+.sample-credit { text-align: center; padding: 0; margin: .35em 0 0; }
+
+@media screen {
+  .presenting [data-stage="0"] .case-after,
+  .presenting [data-stage="1"] .case-before { display: none; }
+  .presenting [data-stage="0"] .example-diagram .practical-circle { r: 125px; }
+}
+@media (max-width: 650px) {
+  .capture-pair, .gym-tailoring { max-width: 100%; }
+  .gym-tailoring { grid-template-columns: 1fr; }
+  .case-state img { width: 100%; height: auto; }
+  .case-state figcaption, .sample-credit { font-size: 13px; }
+  .case-state + .case-state { margin-top: 20px; }
+}
+
+body:not(.presenting) :is(.layout-gymnative, .layout-zoundio-web) { aspect-ratio: auto; }
+body:not(.presenting) :is(.layout-gymnative, .layout-zoundio-web) .slide-inner { position: relative; }
+body:not(.presenting) .case-state + .case-state { margin-top: 2cqw; }
+@media (min-width: 651px) {
+  :is(.layout-gymnative, .layout-zoundio-web) h2 { font-size: 3.4cqw; max-width: 100%; }
+}
+
+.gibson-gameplay { width: min(100%, 61cqw); margin-inline: auto; gap: 1cqw; }
+.gibson-gameplay img { width: 100%; height: auto; max-height: 32cqw; border: 0; }
+.gibson-gameplay figcaption { text-align: left; margin: 0 0 .35em; }
+.gibson-platforms { display: flex; justify-content: center; gap: 1cqw; }
+.gibson-platforms img { width: min(145px, 35%); margin: 0; }
+@media (max-width: 650px) {
+  .gibson-gameplay { width: 100%; gap: 12px; }
+  .gibson-gameplay img { max-height: none; }
+}

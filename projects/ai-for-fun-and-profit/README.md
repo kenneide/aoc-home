@@ -6,7 +6,7 @@ Install the site's requirements in a Python environment (`pip install -r require
 
 Edit slides.json for copy, placeholders and per-slide notes. The Notes link opens generated notes in a separate tab. Present enables single-slide mode; arrows, Space, Page Up/Down and Home/End navigate when the slide area has focus. Escape returns to overview. Full screen is optional. Hashes such as #slide-09 select slides.
 
-Supply approved old/new Zoundio screenshots, gym screenshots and a demo with fallback captures, and one or two actual creative experiments. Zoundio process descriptions are conceptual, not disclosures of internal implementation. No performance or commercial results are claimed. Review all narration before the event.
+The GymNative slides use local captures of the Haguegym build with three fictional leg-press workouts. Confirm the pilot status in the notes before presenting. The Zoundio slide uses public Gibson assets stored locally. The shared mobile gameplay crop comes from https://www.gibson.app/images/sales_funnel/example_screens.png, with Gibson’s App Store and Google Play badges. The browser image is the presenter-supplied Add Index Finger capture, cropped to the browser window with personal browser labels removed. Confirm the broader release wording and timing in rehearsal. The creative experiment media remain pending.
 
 The normal build excludes this directory and all notes/media. Preview output lives under ignored output/presentation-preview. Do not move materials into public assets. Future publication requires explicit approval, a deliberate production allowlist change, metadata review and a Projects link; nothing here publishes automatically. Do not deploy or push this draft.
 
