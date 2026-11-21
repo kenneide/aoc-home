@@ -80,8 +80,8 @@ function render(){
   $('plot-controls').hidden=!plotting;
   $('graph-title').textContent=t('Grafiek','Graph');
   $('graph-help').textContent=plotting
-    ?t('Tik om een punt te zetten, of gebruik de pijltjes en Enter. Sleep of gebruik Shift + pijltjes om te verschuiven.','Tap to place a point, or use arrow keys and Enter. Drag or use Shift + arrow keys to pan.')
-    :t('Sleep of gebruik de pijltjes om te verschuiven.','Drag or use the arrow keys to pan.');
+    ?t('Tik om een punt te zetten, of gebruik de pijltjes en Enter. Zoom met twee vingers. Sleep of gebruik Shift + pijltjes om te verschuiven.','Tap to place a point, or use arrow keys and Enter. Pinch to zoom. Drag or use Shift + arrow keys to pan.')
+    :t('Zoom met twee vingers. Sleep of gebruik de pijltjes om te verschuiven.','Pinch to zoom. Drag or use the arrow keys to pan.');
   $('line-label').textContent=t('Lijn','Line');
   $('clear-points').textContent=t('Wis punten','Clear points');
   $('reset-view').textContent=t('Herstel weergave','Reset view');
@@ -109,6 +109,8 @@ function render(){
 }
 function showQuestion(){
   cursor=null;
+  drag=null;
+  touches.clear();
   $('cursor-status').textContent='';
   render();
   $('family').focus();
@@ -138,15 +140,49 @@ bindLanguage(lang=>{if(state.lang!==lang){state.lang=lang;render();}});
 $('line-picker').onchange=e=>{state.series=Number(e.target.value);e.target.className='s'+state.series;save();};
 $('clear-points').onclick=()=>{if(state.points[state.series]) state.points[state.series]=[];renderGraph();save();};
 $('reset-view').onclick=()=>{cursor=null;changeView(()=>defaultView(model.graph));};
-const zoom=factor=>changeView(v=>({...v,z:Math.min(4,Math.max(0.035,v.z*factor))}));
+const clampZoom=z=>Math.min(4,Math.max(0.035,z));
+const zoom=factor=>changeView(v=>({...v,z:clampZoom(v.z*factor)}));
 $('zoom-in').onclick=()=>zoom(1.25);
 $('zoom-out').onclick=()=>zoom(0.8);
+const touches=new Map();
+function pinchGeometry(){
+  const [a,b]=touches.values();
+  return {
+    x:(a.clientX+b.clientX)/2,
+    y:(a.clientY+b.clientY)/2,
+    distance:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),
+  };
+}
 svg.addEventListener('pointerdown',e=>{
-  if(!e.isPrimary||e.button!==0) return;
+  if(e.button!==0) return;
+  if(e.pointerType==='touch'){
+    touches.set(e.pointerId,e);
+    if(touches.size>1){
+      drag=null;
+      svg.setPointerCapture(e.pointerId);
+      return;
+    }
+  } else if(!e.isPrimary||touches.size) return;
   drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};
   svg.setPointerCapture(e.pointerId);
 });
 svg.addEventListener('pointermove',e=>{
+  if(touches.has(e.pointerId)){
+    const before=touches.size===2?pinchGeometry():null;
+    touches.set(e.pointerId,e);
+    if(before){
+      const after=pinchGeometry();
+      if(!before.distance||!after.distance) return;
+      const rect=svg.getBoundingClientRect();
+      const offset=point=>projection.drag(point.x-rect.left-rect.width/2,point.y-rect.top-rect.height/2);
+      const [oldX,oldY]=offset(before), [newX,newY]=offset(after);
+      changeView(v=>{
+        const z=clampZoom(v.z*after.distance/before.distance);
+        return {...v,z,x:v.x+oldX-newX*v.z/z,y:v.y-oldY+newY*v.z/z};
+      });
+      return;
+    }
+  }
   if(drag?.id!==e.pointerId) return;
   const x=e.clientX-drag.x,y=e.clientY-drag.y;
   if(!drag.moved&&Math.hypot(x,y)<6) return;
@@ -154,12 +190,13 @@ svg.addEventListener('pointermove',e=>{
   Object.assign(drag,{x:e.clientX,y:e.clientY,moved:true});
   changeView(v=>({...v,x:v.x-dx,y:v.y+dy}));
 });
-svg.addEventListener('pointerup',e=>{
+function endPointer(e){
+  touches.delete(e.pointerId);
   if(drag?.id!==e.pointerId) return;
-  if(!drag.moved) place(projection.point(e));
+  if(e.type==='pointerup'&&!drag.moved) place(projection.point(e));
   drag=null;
-});
-svg.addEventListener('pointercancel',()=>{drag=null;});
+}
+for(const event of ['pointerup','pointercancel','lostpointercapture']) svg.addEventListener(event,endPointer);
 svg.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&state.p.family==='plot'){e.preventDefault();place(cursor??[0,0]);return;}
   const delta={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,1],ArrowDown:[0,-1]}[e.key];

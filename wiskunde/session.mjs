@@ -1,4 +1,4 @@
-import {families,topics,generate,signature} from './maths.mjs';
+import {families,topics,generate,signature,balanceStages} from './maths.mjs';
 
 export const key='aoc-wiskunde-v1';
 const historyLimit=20;
@@ -26,7 +26,7 @@ export function next(s, random=Math.random, topic=s.topic) {
     id=signature(p);
     if(!s.recent.includes(id)) break;
   }
-  if(family==='balance') s.balance=(s.balance+1)%5;
+  if(family==='balance') s.balance=(s.balance+1)%balanceStages;
   s.recent=[...s.recent,id].slice(-60);
   Object.assign(s,{p,revealed:false,points:[],view:null,series:0});
 }
@@ -45,15 +45,21 @@ function validQuestion(s) {
     (!s.view||([s.view.x,s.view.y,s.view.z].every(Number.isFinite)&&s.view.z>0));
 }
 
+function retiredQuestion({p}) {
+  return p.family==='balance'&&p.stage===balanceStages;
+}
+
 export function restore(raw) {
   try {
     const s=JSON.parse(raw);
     if(!validQuestion(s)||!['nl','en'].includes(s.lang)||
       !Array.isArray(s.recent)||s.recent.length>60||!s.recent.every(x=>typeof x==='string')||
       !Array.isArray(s.round)||!s.round.every(x=>families.includes(x))||
-      !Number.isInteger(s.balance)||s.balance<0||s.balance>4) return fresh();
-    const history=Array.isArray(s.history)?s.history.slice(-historyLimit).filter(validQuestion):[];
+      !Number.isInteger(s.balance)||s.balance<0||s.balance>balanceStages) return fresh();
+    const history=Array.isArray(s.history)?s.history.slice(-historyLimit).filter(entry=>validQuestion(entry)&&!retiredQuestion(entry)):[];
     s.history=history.map(({topic,p,revealed,points,view,series})=>({topic,p,revealed,points,view,series}));
+    s.balance%=balanceStages;
+    if(retiredQuestion(s)) delete s.p;
     return s;
   } catch {return fresh();}
 }

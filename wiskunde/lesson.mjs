@@ -78,7 +78,6 @@ export function lesson(p, lang) {
       const steps=[eq.start];
       if(p.stage===2) steps.push(t('Werk de haakjes uit.','Expand the brackets.'),eq.expanded);
       if(p.stage===3) steps.push(t(`Vermenigvuldig beide kanten met ${p.d}.`,`Multiply both sides by ${p.d}.`),eq.expanded);
-      if(p.stage===4) steps.push(t('Vermenigvuldig elk deel van de eerste haakjes met elk deel van de tweede.','Multiply each term in the first bracket by each term in the second.'),eq.extra,t('Trek x² van beide kanten af.','Subtract x² from both sides.'),eq.expanded);
       steps.push(...solve(eq.m,eq.k,eq.n,eq.r,t,p.reverse));
       return {intro:[eq.start],prompts:[t('Los op met de balansmethode.','Solve using the balance method.')],parts:[steps]};
     }

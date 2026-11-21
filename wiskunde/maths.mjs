@@ -36,6 +36,8 @@ export const expr = (m,b) => m[0] ? term(m)+tail(b) : fmt(b);
 export const formula = (l, label) => `${label ? label+': ' : ''}y = ${expr(l.m,l.b)}`;
 export const coord = (x,y) => `(${fmt(x)}; ${fmt(y)})`;
 
+export const balanceStages = 4;
+
 export function generate(family, random = Math.random, level = 0) {
   const int = (a,b) => a+Math.floor(random()*(b-a+1));
   const pick = xs => xs[int(0,xs.length-1)];
@@ -74,9 +76,9 @@ export function generate(family, random = Math.random, level = 0) {
       return {...base,lines:[line(m,int(-8,8)),line(other,int(-8,8))]};
     }
     case 'balance': {
-      const stage=level%5, x=int(-9,12), a=pick([-5,-3,-2,2,3,4,5]), b=int(-9,9);
-      const c=pick([-4,-2,-1,0,1,2,4].filter(k=>k!==a)), d=int(2,5), e=int(1,7);
-      return {...base,stage,x,a,b,c,d,e,reverse:int(0,1)===1};
+      const stage=level%balanceStages, x=int(-9,12), a=pick([-5,-3,-2,2,3,4,5]), b=int(-9,9);
+      const c=pick([-4,-2,-1,0,1,2,4].filter(k=>k!==a)), d=int(2,5);
+      return {...base,stage,x,a,b,c,d,reverse:int(0,1)===1};
     }
     case 'context': {
       const b=5*int(2,12), rate=5*int(1,6), changeRate=int(0,1)===1;
@@ -94,13 +96,12 @@ export function generate(family, random = Math.random, level = 0) {
   }
 }
 export function balance(p) {
-  const {stage,x,a,b,c,d,e,reverse}=p;
+  const {stage,x,a,b,c,d,reverse}=p;
   let m=q(a), n=q(c), k=q(b), r;
-  let expanded, start, extra;
+  let expanded, start;
   if(stage===0) n=q(0);
   if(stage===2) k=q(a*b);
   if(stage===3) {m=q(a,d);k=q(b,d);n=q(c,d);}
-  if(stage===4) {m=q(b+e);k=q(b*e);n=q(b+e+1);}
   r=add(mul(sub(m,n),q(x)),k);
   const equation=(L,R)=>reverse?`${R} = ${L}`:`${L} = ${R}`;
   expanded=equation(expr(m,k),expr(n,r));
@@ -110,13 +111,7 @@ export function balance(p) {
     expanded=equation(expr(q(a),q(b)),expr(q(c),mul(r,q(d))));
     m=q(a);n=q(c);k=q(b);r=mul(r,q(d));
   }
-  if(stage===4) {
-    const polynomial=(slope,intercept)=>'x²'+(slope[0] ?
-      (slope[0]<0?' − ':' + ')+term(q(Math.abs(slope[0]))) : '')+tail(intercept);
-    extra=equation(polynomial(m,k),polynomial(n,r));
-    start=equation(`(x${tail(q(b))})(x${tail(q(e))})`,polynomial(n,r));
-  }
-  return {m,n,k,r,start:start??expanded,expanded,extra};
+  return {m,n,k,r,start:start??expanded,expanded};
 }
 export function signature(p) {
   if(p.family==='balance') {

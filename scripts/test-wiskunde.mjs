@@ -56,13 +56,14 @@ for(const family of families){
       assert(new Set(p.lines.map(l=>num(l.b))).size<4);
     }
     if(family==='balance'){
+      assert(p.stage>=0&&p.stage<4);
+      assert(!JSON.stringify([nl,en]).includes('x²'));
       const eq=balance(p), {m,n,k,r}=eq;
       assert.notEqual(num(m),num(n));
       close((num(r)-num(k))/(num(m)-num(n)),p.x);
       const sides=x=>{
         if(p.stage===2) return [p.a*(x+p.b),p.c*x+num(r)];
         if(p.stage===3) return [(p.a*x+p.b)/p.d,(p.c*x+num(r))/p.d];
-        if(p.stage===4) return [(x+p.b)*(x+p.e),x*x+(p.b+p.e+1)*x+num(r)];
         return [num(m)*x+num(k),num(n)*x+num(r)];
       };
       for(const x of [p.x-2,p.x,p.x+2]){
@@ -126,3 +127,11 @@ assert(!previous(resumed));
 assert.equal(s.history.length,20);
 const {history,...legacy}=s;
 assert.deepEqual(restore(JSON.stringify(legacy)).history,[]);
+
+const retiredBalance={...replay,p:{...replay.p,family:'balance',stage:4}};
+const migrated=restore(JSON.stringify({...retiredBalance,balance:4,history:[retiredBalance]}));
+assert.equal(migrated.p,undefined);
+assert.equal(migrated.balance,0);
+assert.deepEqual(migrated.history,[]);
+next(migrated,rng,'balance');
+assert.equal(migrated.p.stage,0);
