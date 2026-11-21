@@ -41,7 +41,7 @@ export function draw(svg, graph, view, revealed, plotted, cursor) {
     if(x>xmax) return '';
     return line(...screen(x,value(l.m)*x+value(l.b)),...screen(xmax,value(l.m)*xmax+value(l.b)),`series s${i}`);
   }
-  const dot=(sx,sy,i,name)=>`<circle class="point s${i}" cx="${sx}" cy="${sy}" r="4"/>`+
+  const dot=(sx,sy,i,name,offLine=false)=>`<circle class="point s${i}${offLine?" off-line":""}" cx="${sx}" cy="${sy}" r="4"/>`+
     text(sx+7,sy-7,name,'point-label',sx>size-pad-45?'end':'start');
   let geometry=graph.source.map(plot).join('');
   if(revealed){
@@ -52,7 +52,7 @@ export function draw(svg, graph, view, revealed, plotted, cursor) {
         const a=graph.marks[i-1], [ax,ay]=screen(value(a.x),value(a.y));
         geometry+=line(ax,ay,sx,ay,'rise')+line(sx,ay,sx,sy,'rise');
       }
-      geometry+=dot(sx,sy,p.series??0,p.name);
+      geometry+=dot(sx,sy,p.series??0,p.name,p.offLine);
     });
   }
   plotted.forEach((ps,i)=>ps.forEach(([x,y])=>{geometry+=dot(...screen(x,y),i,String.fromCharCode(65+i));}));

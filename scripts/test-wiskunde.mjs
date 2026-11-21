@@ -38,8 +38,9 @@ for(const family of families){
           assert.notEqual(num(p.lines[0].m),num(p.lines[1].m));
           for(const l of p.lines) close(y(l,num(mark.x)),num(mark.y));
         } else {
-          const l=(family==='plot'?g.answer:g.source)[mark.series??0];
-          close(y(l,num(mark.x)),num(mark.y));
+          const l=[...g.source,...g.answer][mark.series??0];
+          if(mark.offLine) assert.notEqual(y(l,num(mark.x)),num(mark.y));
+          else close(y(l,num(mark.x)),num(mark.y));
           if(family==='read'){
             assert.equal(num(mark.x)%g.dx,0);
             assert(num(mark.y)%g.dy===0);

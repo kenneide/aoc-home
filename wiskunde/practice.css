@@ -155,3 +155,12 @@
 #given, #solution-parts .math { font-family: Georgia, serif; }
 #graph-panel, #solution { border-top: 1px solid var(--notebook-rule); padding-top: 20px; }
 #line-picker { border-inline-start: 5px solid var(--series); }
+
+.s3 { --series: #aa4725; --dash: 12 4 2 4; }
+[data-theme=dark] .s3 { --series: #ffad87; }
+.legend-item.s3::before {
+  border: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--series) 55%, transparent 55% 72%, var(--series) 72% 83%, transparent 83%);
+}
+.point.off-line { fill: var(--surface); stroke: var(--series); stroke-width: 2; }

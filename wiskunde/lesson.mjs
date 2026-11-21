@@ -35,15 +35,25 @@ export function lesson(p, lang) {
         })};
     case 'points': {
       const {l,x}=p, show=(x)=>`y = (${fmt(l.m)}) × (${x})${tail(l.b)} = ${fmt(at(l,q(x)))}`;
-      return {intro:[formula(l), p.points.map(([a,b],i)=>label(i)+coord(q(a),q(b))).join('   ')],
+      const candidates=p.points.map(([px,py],i)=>({
+        ...mark(q(px),q(py),label(i)), offLine:value(at(l,q(px)))!==py,
+      }));
+      return {graph:{...graph([],named([l],[t('Gegeven lijn','Given line')]),[
+          ...candidates, mark(q(x),at(l,q(x)),label(candidates.length)),
+        ]),revealOnly:true},
+        intro:[formula(l), p.points.map(([a,b],i)=>label(i)+coord(q(a),q(b))).join('   ')],
         prompts:[t('Welke punten liggen op de lijn?','Which points lie on the line?'),t(`Bereken y als x = ${x}.`,`Find y when x = ${x}.`)],
         parts:[part(t('Vul de x-coördinaat van elk punt in en vergelijk de y-waarden.','Substitute each x-coordinate and compare the y-values.'),
           ...p.points.flatMap(([a,b],i)=>[label(i)+coord(q(a),q(b)),show(a),value(at(l,q(a)))===b?t('De waarden zijn gelijk.','The values match.'):t('De waarden verschillen.','The values differ.')]),t('Op de lijn','On the line')+'  '+p.points.flatMap(([a,b],i)=>value(at(l,q(a)))===b?[label(i)]:[]).join(', ')),
-          part(t('Vul x in.','Substitute x.'),show(x),coord(q(x),at(l,q(x))))]};
+          part(t('Vul x in.','Substitute x.'),show(x),label(candidates.length)+coord(q(x),at(l,q(x))))]};
     }
     case 'compare': {
       const pairs=(key)=>lines.flatMap((l,i)=>lines.slice(i+1).flatMap((r,j)=>value(l[key])===value(r[key])?[`${names[i]}–${names[i+j+1]}`]:[])).join(', ');
-      return {intro:formulas,prompts:[t('Welke lijnen zijn evenwijdig?','Which lines are parallel?'),t('Welke lijnen snijden de y-as in hetzelfde punt?','Which lines share a y-intercept?'),t('Welke lijnen zijn stijgend?','Which lines are increasing?')],
+      const intercepts=lines.map((l,i)=>({...mark(q(0),l.b,names[i]),series:i}));
+      const distinctIntercepts=intercepts.filter((point,i)=>intercepts.findIndex(other=>value(other.y)===value(point.y))===i)
+        .map(point=>({...point,name:intercepts.filter(other=>value(other.y)===value(point.y)).map(other=>other.name).join(', ')}));
+      return {graph:{...graph([],named(lines,names),distinctIntercepts),revealOnly:true},
+        intro:formulas,prompts:[t('Welke lijnen zijn evenwijdig?','Which lines are parallel?'),t('Welke lijnen snijden de y-as in hetzelfde punt?','Which lines share a y-intercept?'),t('Welke lijnen zijn stijgend?','Which lines are increasing?')],
         parts:[part(t('Evenwijdige lijnen hebben dezelfde helling. Vergelijk de coëfficiënten van x.','Parallel lines have the same slope. Compare the coefficients of x.'),...lines.map((l,i)=>`a(${names[i]}) = ${fmt(l.m)}`),pairs('m')),
           part(t('Bij x = 0 blijft het startgetal over. Vergelijk die getallen.','At x = 0 only the constant remains. Compare those constants.'),...lines.map((l,i)=>`b(${names[i]}) = ${fmt(l.b)}`),pairs('b')),
           part(t('Een lijn is stijgend als de helling positief is.','A line is increasing when its slope is positive.'),lines.flatMap((l,i)=>l.m[0]>0?[names[i]]:[]).join(', '))]};
@@ -54,10 +64,14 @@ export function lesson(p, lang) {
         parts:lines.map((l,i)=>part(names[i],...slopeSteps(l,q(p.dx)),t('Lees het snijpunt met de y-as af en vul a en b in.','Read the y-intercept and substitute a and b.'),`b = ${fmt(l.b)}`,formula(l)))};
     case 'parallel': {
       const {l,x,y}=p, mx=mul(l.m,q(x)), b=sub(q(y),mx);
-      return {intro:[formula(l),`P${coord(q(x),q(y))}`],prompts:[t('Stel de formule op van de lijn door P die evenwijdig is aan de gegeven lijn.','Find the equation of the line through P that is parallel to the given line.')],
+      const parallel={m:l.m,b};
+      return {graph:{...graph(named([l],[t('Gegeven lijn','Given line')]),
+          named([parallel],[t('Lijn door P','Line through P')]),
+          [mark(q(0),l.b,''),{...mark(q(x),q(y),'P'),series:1},{...mark(q(0),b,''),series:1}]),revealOnly:true},
+        intro:[formula(l),`P${coord(q(x),q(y))}`],prompts:[t('Stel de formule op van de lijn door P die evenwijdig is aan de gegeven lijn.','Find the equation of the line through P that is parallel to the given line.')],
         parts:[part(t('Neem dezelfde helling en gebruik b voor het nieuwe startgetal.','Keep the same slope and use b for the new intercept.'),`y = ax + b`,`a = ${fmt(l.m)}`,`y = ${expr(l.m,q(0))} + b`,
           t('Vul de coördinaten in.','Substitute the coordinates.'),`${fmt(q(y))} = (${fmt(l.m)}) × (${fmt(q(x))}) + b`,`${fmt(q(y))} = ${fmt(mx)} + b`,
-          t('Trek het berekende product van beide kanten af.','Subtract the calculated product from both sides.'),`b = ${fmt(q(y))} − (${fmt(mx)}) = ${fmt(b)}`,formula({m:l.m,b}))]};
+          t('Trek het berekende product van beide kanten af.','Subtract the calculated product from both sides.'),`b = ${fmt(q(y))} − (${fmt(mx)}) = ${fmt(b)}`,formula(parallel))]};
     }
     case 'balance': {
       const eq=balance(p);
