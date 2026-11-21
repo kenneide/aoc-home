@@ -68,10 +68,19 @@ assert not list(public.rglob('notes.txt'))
 # Publish only the browser runtime for the direct-link maths practice page.
 practice = public/'wiskunde'
 assert {file.name for file in practice.iterdir()} == {
-    'index.html', 'practice.css', 'app.mjs', 'graph.mjs', 'lesson.mjs',
-    'maths.mjs', 'session.mjs', 'stories.mjs',
+    'index.html', 'practice.css', 'app.mjs', 'graph.mjs', 'language.mjs', 'lesson.mjs',
+    'maths.mjs', 'session.mjs', 'stories.mjs', 'lineaire-formules-en-vergelijkingen',
 }
 practice_html = (practice/'index.html').read_text()
 assert '<html lang="nl">' in practice_html and 'content="noindex"' in practice_html
 assert f'rel="canonical" href="{origin}/wiskunde/"' in practice_html
+tool_slug = 'lineaire-formules-en-vergelijkingen'
+tool = practice/tool_slug
+assert {file.name for file in tool.iterdir()} == {'index.html'}
+tool_html = (tool/'index.html').read_text()
+assert f'href="{tool_slug}/"' in practice_html and 'src="language.mjs"' in practice_html
+for page in (practice_html, tool_html):
+    assert 'id="languages"' in page and 'id="nl"' in page and 'id="en"' in page
+assert f'rel="canonical" href="{origin}/wiskunde/{tool_slug}/"' in tool_html
+assert 'id="practice-back" href="../"' in tool_html and 'src="../app.mjs"' in tool_html
 assert not list(public.rglob('quiz.jpeg'))

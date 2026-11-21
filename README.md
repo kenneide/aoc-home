@@ -58,4 +58,4 @@ The build generates `404.html`, `robots.txt`, `sitemap.xml` and Cloudflare `_hea
 
 ### Maths practice
 
-The Dutch/English practice tool is available by direct link at `/wiskunde/`. Run `npm run build` followed by `npm run dev` to preview it locally. Run `node scripts/test-wiskunde.mjs` for seeded generator, solution, graph and rotation checks. The bilingual story templates live in `wiskunde/stories.mjs`.
+The practice index is at `/wiskunde/`. It links to the Dutch/English tool at `/wiskunde/lineaire-formules-en-vergelijkingen/`. Run `npm run build` followed by `npm run dev` to preview it locally. Run `node scripts/test-wiskunde.mjs` for seeded generator, solution, graph and rotation checks. The bilingual story templates live in `wiskunde/stories.mjs`.

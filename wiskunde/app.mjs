@@ -2,11 +2,13 @@ import {topics,coord,q} from './maths.mjs';
 import {lesson,label} from './lesson.mjs';
 import {draw,defaultView} from './graph.mjs';
 import {key,restore,next,fresh} from './session.mjs';
+import {readLanguage,bindLanguage,renderLanguage} from './language.mjs';
 
 const $=id=>document.getElementById(id);
 const svg=$('practice-graph');
 let state;
 try { state=restore(localStorage.getItem(key)); } catch { state=fresh(); }
+state.lang=readLanguage(state.lang);
 const t=(nl,en)=>state.lang==='nl'?nl:en;
 let model, projection, cursor=null, drag=null;
 function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch{}}
@@ -41,15 +43,11 @@ function list(target,items){
 }
 function render(){
   model=lesson(state.p,state.lang);
-  document.documentElement.lang=state.lang;
-  document.title=t('Wiskunde oefenen','Maths practice')+' — Alan O Cinneide Software BV';
-  document.querySelector('.skip').textContent=t('Naar de opgave','Skip to the question');
-  document.querySelector('header nav').setAttribute('aria-label',t('Hoofdnavigatie','Main navigation'));
-  document.querySelector('.theme-toggle').textContent=t('Donkere modus','Dark mode');
-  $('practice-title').textContent=t('Wiskunde oefenen','Maths practice');
+  const title=t('Lineaire formules en vergelijkingen','Linear formulas and equations');
+  renderLanguage(state.lang,title,t('Naar de opgave','Skip to the question'));
+  $('practice-title').textContent=title;
+  $('practice-back').textContent=t('Wiskunde oefenen','Maths practice');
   $('topic-label').textContent=t('Onderwerp','Topic');
-  $('languages').setAttribute('aria-label',t('Taal','Language'));
-  for(const lang of ['nl','en']) $(lang).setAttribute('aria-pressed',String(state.lang===lang));
   $('topic').replaceChildren(...Object.entries(topics).map(([value,labels])=>new Option(t(...labels),value)));
   $('topic').value=state.topic;
   $('family').textContent=t(...topics[state.p.family]);
@@ -123,7 +121,7 @@ function place(point){
 $('new-question').onclick=newQuestion;
 $('topic').onchange=e=>{state.topic=e.target.value;newQuestion();};
 $('reveal').onclick=()=>{state.revealed=!state.revealed;render();};
-for(const lang of ['nl','en']) $(lang).onclick=()=>{state.lang=lang;render();};
+bindLanguage(lang=>{if(state.lang!==lang){state.lang=lang;render();}});
 $('line-picker').onchange=e=>{state.series=Number(e.target.value);save();};
 $('clear-points').onclick=()=>{if(state.points[state.series]) state.points[state.series]=[];renderGraph();save();};
 $('reset-view').onclick=()=>{cursor=null;changeView(()=>defaultView(model.graph));};
@@ -169,6 +167,6 @@ try {
   if(!state.p) next(state);
   render();
 } catch (error) {
-  state=fresh();next(state);render();
+  state={...fresh(),lang:state.lang};next(state);render();
 }
 $('practice-ui').hidden=false;

@@ -16,16 +16,19 @@ shared=copy['shared']; homepage=copy['home']; labels=copy['cv']
 company=json.loads((ROOT/'design/company.json').read_text())
 linkedin='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.45 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.3 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.3h.04c.4-.76 1.36-1.56 2.8-1.56 3 0 3.57 1.98 3.57 4.55v5.26Z"/></svg>'
 def social(): return f'<a class="social" aria-label="{e(shared['linkedin'])}" href="{cv["linkedin"]}">{linkedin}<span>{e(shared['linkedin'])}</span></a>'
-def shell(title,desc,body,prefix='',is_cv=False,not_found=False, practice=False):
+def shell(title,desc,body,prefix='',is_cv=False,not_found=False, practice_route=None, practice_assets=''):
     origin=copy['site']['origin']
     url=origin+('/cv/' if is_cv else '/')
     metadata='<meta name="robots" content="noindex">' if not_found else f'<link rel="canonical" href="{url}"><meta property="og:url" content="{url}">'
-    if practice:
-        url=origin+'/wiskunde/'
+    if practice_route:
+        url=origin+practice_route
         metadata=f'<meta name="robots" content="noindex"><link rel="canonical" href="{url}"><meta property="og:url" content="{url}">'
-    extra_head='<link rel="stylesheet" href="practice.css"><script type="module" src="app.mjs"></script>' if practice else ''
-    language='nl' if practice else 'en'
-    page_class=' class="practice-page"' if practice else ''
+    extra_head=f'<link rel="stylesheet" href="{practice_assets}practice.css">' if practice_route else ''
+    if practice_route:
+        module='app.mjs' if practice_assets else 'language.mjs'
+        extra_head+=f'<script type="module" src="{practice_assets}{module}"></script>'
+    language='nl' if practice_route else 'en'
+    page_class=' class="practice-page"' if practice_route else ''
     metadata+=f'''<meta property="og:type" content="website"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:image" content="{origin}/assets/social-preview.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{e(copy['site']['imageAlt'])}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{origin}/assets/social-preview.png">'''
 
     return f'''<!doctype html>
@@ -106,13 +109,32 @@ for name in ['index.html','styles.css','theme.js','assets','design','cv']:
     else:shutil.copy2(source,dest)
 practice_dir=dist/'wiskunde'
 practice_dir.mkdir()
-for name in ['app.mjs', 'graph.mjs', 'lesson.mjs', 'maths.mjs', 'session.mjs', 'stories.mjs', 'practice.css']:
+for name in ['app.mjs', 'graph.mjs', 'language.mjs', 'lesson.mjs', 'maths.mjs', 'session.mjs', 'stories.mjs', 'practice.css']:
     shutil.copy2(ROOT/'wiskunde'/name,practice_dir/name)
-practice_body=(ROOT/'wiskunde/page.html').read_text()
+practice_slug='lineaire-formules-en-vergelijkingen'
+practice_title='Lineaire formules en vergelijkingen'
+practice_route='/wiskunde/'
+practice_desc='Oefen lineaire formules en vergelijkingen in het Nederlands of Engels.'
+language_switch='''    <div id="languages" role="group" aria-label="Taal">
+      <button type="button" id="nl" lang="nl" aria-pressed="true">Nederlands</button>
+      <button type="button" id="en" lang="en" aria-pressed="false">English</button>
+    </div>
+'''
+practice_index=f'''<main id="main" class="wrap practice">
+  <div class="practice-heading"><h1 id="practice-title">Wiskunde oefenen</h1>{language_switch}</div>
+  <ul class="practice-index">
+    <li class="question"><h2><a href="{practice_slug}/" data-nl="{practice_title}" data-en="Linear formulas and equations">{practice_title}</a></h2><p data-nl="{practice_desc}" data-en="Practise linear formulas and equations in Dutch or English.">{practice_desc}</p></li>
+  </ul>
+</main>'''
 (practice_dir/'index.html').write_text(shell(
-    'Wiskunde oefenen — '+company['name'],
-    'Oefen lineaire formules en vergelijkingen in het Nederlands of Engels.',
-    practice_body,'../',practice=True), encoding='utf-8')
+    'Wiskunde oefenen — '+company['name'], practice_desc, practice_index,
+    '../', practice_route=practice_route), encoding='utf-8')
+practice_tool=practice_dir/practice_slug
+practice_tool.mkdir()
+practice_body=(ROOT/'wiskunde/page.html').read_text().replace('    <!-- language switch -->', language_switch.rstrip())
+(practice_tool/'index.html').write_text(shell(
+    practice_title+' — '+company['name'], practice_desc, practice_body,
+    '../../', practice_route=f'{practice_route}{practice_slug}/', practice_assets='../'), encoding='utf-8')
 shutil.copy2(out,dist/'assets/AlanOCinneide_CV.pdf')
 shutil.copy2(out,ROOT/'assets/AlanOCinneide_CV.pdf')
 (dist/'.nojekyll').touch()

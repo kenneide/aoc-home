@@ -126,3 +126,8 @@
 #practice-graph .point-label { stroke: var(--notebook-paper); }
 #intersection-coordinate { margin-block: 4px; text-align: center; font-weight: 600; }
 #intersection-coordinate:empty { display: none; }
+
+.practice-index { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.practice-index p { margin: 0; }
+.practice-back { margin: 0 0 16px; }
+.practice #practice-title { font-size: clamp(1.75rem, 4vw, 3rem); }
