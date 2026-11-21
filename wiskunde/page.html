@@ -1,0 +1,46 @@
+<main id="main" class="wrap practice">
+  <div class="practice-heading">
+    <h1 id="practice-title">Wiskunde oefenen</h1>
+    <div id="languages" role="group" aria-label="Taal">
+      <button type="button" id="nl" lang="nl" aria-pressed="true">Nederlands</button>
+      <button type="button" id="en" lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+  <noscript>Schakel JavaScript in om te oefenen. Enable JavaScript to practise.</noscript>
+  <div class="notebook" id="practice-ui" hidden>
+    <div class="question-flow">
+      <section class="question" aria-labelledby="family">
+        <label class="topic-control"><span id="topic-label">Onderwerp</span><select id="topic"></select></label>
+        <h2 id="family" tabindex="-1"></h2>
+        <ul id="given"></ul>
+        <ol id="prompts" type="a"></ol>
+      </section>
+      <div class="practice-actions">
+        <button type="button" id="new-question"></button>
+        <button type="button" id="reveal" aria-controls="solution"></button>
+      </div>
+    </div>
+    <section id="graph-panel" aria-labelledby="graph-title" hidden>
+      <h2 id="graph-title"></h2>
+      <div class="graph-tools">
+        <button type="button" id="zoom-out">−</button>
+        <button type="button" id="zoom-in">+</button>
+        <button type="button" id="reset-view"></button>
+      </div>
+      <div id="legend" class="graph-tools"></div>
+      <svg id="practice-graph" viewBox="0 0 360 360" tabindex="0" role="group" aria-describedby="graph-help"></svg>
+      <p id="intersection-coordinate"></p>
+      <p id="graph-help"></p>
+      <div id="plot-controls" class="graph-tools">
+        <label><span id="line-label"></span> <select id="line-picker"></select></label>
+        <button type="button" id="clear-points"></button>
+      </div>
+      <p id="point-summary" aria-live="polite"></p>
+      <span class="sr-only" id="cursor-status" aria-live="polite"></span>
+    </section>
+    <section id="solution" aria-labelledby="solution-title" hidden>
+      <h2 id="solution-title"></h2>
+      <div id="solution-parts"></div>
+    </section>
+  </div>
+</main>

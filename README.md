@@ -55,3 +55,7 @@ The public website is https://alanocinneide.com/, hosted by the GitHub-connected
 ## Website finishing assets
 
 The build generates `404.html`, `robots.txt`, `sitemap.xml` and Cloudflare `_headers` directly in `dist/`. Error copy and production metadata live in `content/site.json`. The 404 uses root-relative links for nested missing paths. Canonical URLs point to production; the error page is marked noindex. Sharing artwork and browser icons are committed under `assets/`, derived from the existing spectrum colours and local Space Grotesk font. No analytics, forms or additional external requests are introduced.
+
+### Maths practice
+
+The Dutch/English practice tool is available by direct link at `/wiskunde/`. Run `npm run build` followed by `npm run dev` to preview it locally. Run `node scripts/test-wiskunde.mjs` for seeded generator, solution, graph and rotation checks. The bilingual story templates live in `wiskunde/stories.mjs`.

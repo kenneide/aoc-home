@@ -64,3 +64,14 @@ deck = public/'projects/what-becomes-worth-building'
 assert f'rel="canonical" href="{origin}/projects/what-becomes-worth-building/"' in (deck/'index.html').read_text()
 assert {file.name for file in deck.iterdir()} == {'index.html', 'deck.js', 'deck.css', 'media'}
 assert not list(public.rglob('notes.txt'))
+
+# Publish only the browser runtime for the direct-link maths practice page.
+practice = public/'wiskunde'
+assert {file.name for file in practice.iterdir()} == {
+    'index.html', 'practice.css', 'app.mjs', 'graph.mjs', 'lesson.mjs',
+    'maths.mjs', 'session.mjs', 'stories.mjs',
+}
+practice_html = (practice/'index.html').read_text()
+assert '<html lang="nl">' in practice_html and 'content="noindex"' in practice_html
+assert f'rel="canonical" href="{origin}/wiskunde/"' in practice_html
+assert not list(public.rglob('quiz.jpeg'))
