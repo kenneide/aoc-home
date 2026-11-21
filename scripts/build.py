@@ -57,7 +57,7 @@ cvbody=f'''<main id="main" class="wrap"><section class="cv-heading" aria-labelle
 # PDF: two deliberate pages, using the same content as the website.
 pdfmetrics.registerFont(TTFont('Space',str(ROOT/'assets/fonts/SpaceGrotesk.ttf')))
 out=ROOT/'output/pdf/AlanOCinneide_CV.pdf';out.parent.mkdir(parents=True,exist_ok=True)
-c=canvas.Canvas(str(out),pagesize=A4);c.setTitle(labels['pdfTitle']);c.setAuthor(cv['name'])
+c=canvas.Canvas(str(out),pagesize=A4,invariant=True);c.setTitle(labels['pdfTitle']);c.setAuthor(cv['name'])
 W,H=A4; ink=HexColor('#20231d'); muted=HexColor('#5d6257')
 colours=['#e5312c','#038bcd','#009037','#b2c906','#96845c','#ffffff','#f7a800','#ffee16']
 style=ParagraphStyle('body',fontName='Space',fontSize=10.4,leading=15.5,textColor=ink)
@@ -139,7 +139,9 @@ practice_body=(ROOT/'wiskunde/page.html').read_text()
     practice_title, practice_desc, practice_body,
     '../../', practice_route=f'{practice_route}{practice_slug}/', practice_assets='../'), encoding='utf-8')
 shutil.copy2(out,dist/'assets/AlanOCinneide_CV.pdf')
-shutil.copy2(out,ROOT/'assets/AlanOCinneide_CV.pdf')
+tracked_pdf=ROOT/'assets/AlanOCinneide_CV.pdf'
+if not tracked_pdf.exists() or tracked_pdf.read_bytes()!=out.read_bytes():
+    shutil.copy2(out,tracked_pdf)
 (dist/'.nojekyll').touch()
 # Disable Cloudflare Pages' implicit SPA fallback for missing files.
 missing=copy['notFound']
