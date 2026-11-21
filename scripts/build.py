@@ -114,7 +114,7 @@ for name in ['app.mjs', 'graph.mjs', 'language.mjs', 'lesson.mjs', 'maths.mjs', 
 practice_slug='lineaire-formules-en-vergelijkingen'
 practice_title='Lineaire formules en vergelijkingen'
 practice_route='/wiskunde/'
-practice_desc='Oefen lineaire formules en vergelijkingen in het Nederlands of Engels.'
+practice_desc = 'Oefen lineaire formules en vergelijkingen.'
 language_switch='''    <div id="languages" role="group" aria-label="Taal">
       <button type="button" id="nl" lang="nl" aria-pressed="true">Nederlands</button>
       <button type="button" id="en" lang="en" aria-pressed="false">English</button>
@@ -123,7 +123,7 @@ language_switch='''    <div id="languages" role="group" aria-label="Taal">
 practice_index=f'''<main id="main" class="wrap practice">
   <div class="practice-heading"><h1 id="practice-title">Wiskunde oefenen</h1>{language_switch}</div>
   <ul class="practice-index">
-    <li class="question"><h2><a href="{practice_slug}/" data-nl="{practice_title}" data-en="Linear formulas and equations">{practice_title}</a></h2><p data-nl="{practice_desc}" data-en="Practise linear formulas and equations in Dutch or English.">{practice_desc}</p></li>
+    <li class="question"><h2><a href="{practice_slug}/" data-nl="{practice_title}" data-en="Linear formulas and equations">{practice_title}</a></h2><p data-nl="{practice_desc}" data-en="Practise linear formulas and equations.">{practice_desc}</p></li>
   </ul>
 </main>'''
 (practice_dir/'index.html').write_text(shell(
