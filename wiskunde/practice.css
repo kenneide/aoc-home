@@ -53,7 +53,7 @@
 #graph-help, #point-summary { font-size: .9rem; margin: 8px 0; }
 #point-summary:empty { display: none; }
 #solution-parts section + section { border-top: 1px solid var(--border); margin-top: 20px; padding-top: 16px; }
-#solution-parts p { margin: 6px 0; }
+#solution-parts p { margin: 10px 0; }
 #solution-parts .math { overflow-wrap: anywhere; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .grid-line.minor { opacity: .55; }
@@ -98,7 +98,7 @@
 }
 #solution { border-top: 4px solid var(--notebook-orange); }
 #solution-parts .math {
-  padding-block: 8px;
+  padding-inline-start: 0.75rem;
   font-size: 1.15rem;
 }
 .practice math { font-size: 1.12em; margin-inline: .08em; }

@@ -108,7 +108,7 @@ assert.deepEqual(intersection.intro,['A: y = ⟦1¦2⟧x','B: y = −x + 1']);
 assert.equal(intersection.parts[0].at(-1),'S(⟦2¦3⟧; ⟦1¦3⟧)');
 const scaledGraph={family:'read',dx:2,dy:5,lines:[{m:[5,2],b:[0,1]}]};
 assert(lesson(scaledGraph,'nl').parts[0].includes('a = ⟦Δy¦Δx⟧ = ⟦5¦2⟧ = ⟦5¦2⟧'));
-assert(lesson(scaledGraph,'en').parts[0].includes('m = ⟦Δy¦Δx⟧ = ⟦5¦2⟧ = ⟦5¦2⟧'));
+assert(lesson(scaledGraph,'en').parts[0].includes('a = ⟦Δy¦Δx⟧ = ⟦5¦2⟧ = ⟦5¦2⟧'));
 
 const replay=fresh();
 next(replay,rng,'plot');

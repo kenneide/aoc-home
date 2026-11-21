@@ -5,7 +5,6 @@ export const label = i => String.fromCharCode(65+i);
 export function lesson(p, lang) {
   const t=(nl,en)=>lang==='nl'?nl:en;
   const part=(...steps)=>steps;
-  const slope=t('a','m');
   const lines=p.lines??[];
   const names=lines.map((_,i)=>label(i));
   const formulas=lines.map((l,i)=>formula(l,names[i]));
@@ -20,7 +19,7 @@ export function lesson(p, lang) {
       t('Bereken de verandering in y en x in eenheden op de assen.','Calculate the changes in y and x in axis units.'),
       `Δy = (${fmt(b.y)}) − (${fmt(a.y)}) = ${fmt(rise)}`,
       `Δx = ${fmt(b.x)} − 0 = ${fmt(dx)}`,
-      `${slope} = ${fraction("Δy","Δx")} = ${fraction(fmt(rise),fmt(dx))} = ${fmt(l.m)}`
+      `a = ${fraction("Δy","Δx")} = ${fraction(fmt(rise),fmt(dx))} = ${fmt(l.m)}`
     ];
   };
   switch(p.family) {
@@ -31,7 +30,7 @@ export function lesson(p, lang) {
           const dx=q(l.m[1]), [a,b]=points(l,dx);
           return part(names[i],t('Begin op de y-as. Vul x = 0 in.','Start on the y-axis. Substitute x = 0.'),`y = ${fmt(l.b)}`,
             t('Gebruik de teller voor de verandering in y en de noemer voor de verandering in x.','Use the numerator for the change in y and the denominator for the change in x.'),
-            `Δx = ${fmt(dx)},   Δy = ${l.m[0]}`,`y = ${fmt(a.y)}${tail(q(l.m[0]))} = ${fmt(b.y)}`,
+            `Δx = ${fmt(dx)}`, `Δy = ${l.m[0]}`,`y = ${fmt(a.y)}${tail(q(l.m[0]))} = ${fmt(b.y)}`,
             t('Trek de lijn door deze twee punten.','Draw the line through these two points.'),`${coord(a.x,a.y)}   ${coord(b.x,b.y)}`);
         })};
     case 'points': {
@@ -45,18 +44,18 @@ export function lesson(p, lang) {
     case 'compare': {
       const pairs=(key)=>lines.flatMap((l,i)=>lines.slice(i+1).flatMap((r,j)=>value(l[key])===value(r[key])?[`${names[i]}–${names[i+j+1]}`]:[])).join(', ');
       return {intro:formulas,prompts:[t('Welke lijnen zijn evenwijdig?','Which lines are parallel?'),t('Welke lijnen snijden de y-as in hetzelfde punt?','Which lines share a y-intercept?'),t('Welke lijnen zijn stijgend?','Which lines are increasing?')],
-        parts:[part(t('Evenwijdige lijnen hebben dezelfde helling. Vergelijk de coëfficiënten van x.','Parallel lines have the same slope. Compare the coefficients of x.'),lines.map((l,i)=>`${slope}(${names[i]}) = ${fmt(l.m)}`).join('   '),pairs('m')),
-          part(t('Bij x = 0 blijft het startgetal over. Vergelijk die getallen.','At x = 0 only the constant remains. Compare those constants.'),lines.map((l,i)=>`b(${names[i]}) = ${fmt(l.b)}`).join('   '),pairs('b')),
+        parts:[part(t('Evenwijdige lijnen hebben dezelfde helling. Vergelijk de coëfficiënten van x.','Parallel lines have the same slope. Compare the coefficients of x.'),...lines.map((l,i)=>`a(${names[i]}) = ${fmt(l.m)}`),pairs('m')),
+          part(t('Bij x = 0 blijft het startgetal over. Vergelijk die getallen.','At x = 0 only the constant remains. Compare those constants.'),...lines.map((l,i)=>`b(${names[i]}) = ${fmt(l.b)}`),pairs('b')),
           part(t('Een lijn is stijgend als de helling positief is.','A line is increasing when its slope is positive.'),lines.flatMap((l,i)=>l.m[0]>0?[names[i]]:[]).join(', '))]};
     }
     case 'read':
       return {intro:[],prompts:[t('Stel de formule van elke lijn op. Kijk goed naar de stappen op de assen.','Find the equation of each line. Check the tick steps on both axes.')],
         graph:graph(named(lines,names),[],lines.flatMap((l,i)=>points(l,q(p.dx)).map((pt,j)=>({...pt,series:i,name:names[i]+(j+1),rise:j===1}))),p.dx,p.dy),
-        parts:lines.map((l,i)=>part(names[i],...slopeSteps(l,q(p.dx)),t('Lees het snijpunt met de y-as af en vul a en b in.','Read the y-intercept and substitute m and b.'),`b = ${fmt(l.b)}`,formula(l)))};
+        parts:lines.map((l,i)=>part(names[i],...slopeSteps(l,q(p.dx)),t('Lees het snijpunt met de y-as af en vul a en b in.','Read the y-intercept and substitute a and b.'),`b = ${fmt(l.b)}`,formula(l)))};
     case 'parallel': {
       const {l,x,y}=p, mx=mul(l.m,q(x)), b=sub(q(y),mx);
       return {intro:[formula(l),`P${coord(q(x),q(y))}`],prompts:[t('Stel de formule op van de lijn door P die evenwijdig is aan de gegeven lijn.','Find the equation of the line through P that is parallel to the given line.')],
-        parts:[part(t('Neem dezelfde helling en gebruik b voor het nieuwe startgetal.','Keep the same slope and use b for the new intercept.'),`y = ${slope}x + b`,`${slope} = ${fmt(l.m)}`,`y = ${expr(l.m,q(0))} + b`,
+        parts:[part(t('Neem dezelfde helling en gebruik b voor het nieuwe startgetal.','Keep the same slope and use b for the new intercept.'),`y = ax + b`,`a = ${fmt(l.m)}`,`y = ${expr(l.m,q(0))} + b`,
           t('Vul de coördinaten in.','Substitute the coordinates.'),`${fmt(q(y))} = (${fmt(l.m)}) × (${fmt(q(x))}) + b`,`${fmt(q(y))} = ${fmt(mx)} + b`,
           t('Trek het berekende product van beide kanten af.','Subtract the calculated product from both sides.'),`b = ${fmt(q(y))} − (${fmt(mx)}) = ${fmt(b)}`,formula({m:l.m,b}))]};
     }
