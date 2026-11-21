@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {families,generate,balance,signature} from '../wiskunde/maths.mjs';
 import {lesson} from '../wiskunde/lesson.mjs';
 import {defaultView} from '../wiskunde/graph.mjs';
-import {fresh,next,restore} from '../wiskunde/session.mjs';
+import {fresh,next,previous,restore} from '../wiskunde/session.mjs';
 
 let seed=19072;
 const rng=()=>((seed=(Math.imul(1664525,seed)+1013904223)>>>0)/2**32);
@@ -109,3 +109,19 @@ assert.equal(intersection.parts[0].at(-1),'S(⟦2¦3⟧; ⟦1¦3⟧)');
 const scaledGraph={family:'read',dx:2,dy:5,lines:[{m:[5,2],b:[0,1]}]};
 assert(lesson(scaledGraph,'nl').parts[0].includes('a = ⟦Δy¦Δx⟧ = ⟦5¦2⟧ = ⟦5¦2⟧'));
 assert(lesson(scaledGraph,'en').parts[0].includes('m = ⟦Δy¦Δx⟧ = ⟦5¦2⟧ = ⟦5¦2⟧'));
+
+const replay=fresh();
+next(replay,rng,'plot');
+Object.assign(replay,{revealed:true,points:[[[0,1],[2,5]]],view:{x:1,y:2,z:1.5},series:1});
+const original=structuredClone(replay);
+next(replay,rng,'balance');
+replay.lang='en';
+const resumed=restore(JSON.stringify(replay));
+assert(previous(resumed));
+for(const field of ['p','topic','revealed','points','view','series']) assert.deepEqual(resumed[field],original[field]);
+assert.equal(resumed.lang,'en');
+assert.equal(resumed.balance,replay.balance);
+assert(!previous(resumed));
+assert.equal(s.history.length,20);
+const {history,...legacy}=s;
+assert.deepEqual(restore(JSON.stringify(legacy)).history,[]);

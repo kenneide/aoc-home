@@ -1,7 +1,7 @@
 import {topics,coord,q} from './maths.mjs';
 import {lesson,label} from './lesson.mjs';
 import {draw,defaultView} from './graph.mjs';
-import {key,restore,next,fresh} from './session.mjs';
+import {key,restore,next,previous,fresh} from './session.mjs';
 import {readLanguage,bindLanguage,renderLanguage} from './language.mjs';
 
 const $=id=>document.getElementById(id);
@@ -52,6 +52,8 @@ function render(){
   $('topic').value=state.topic;
   $('family').textContent=t(...topics[state.p.family]);
   $('new-question').textContent=t('Nieuwe opgave','New question');
+  $('previous-question').textContent=t('Vorige opgave','Previous question');
+  $('previous-question').disabled=!state.history.length;
   $('reveal').textContent=state.revealed?t('Verberg uitwerking','Hide solution'):t('Toon uitwerking','Show solution');
   $('reveal').setAttribute('aria-expanded',String(state.revealed));
   $('solution').hidden=!state.revealed;
@@ -104,7 +106,16 @@ function render(){
   renderGraph();
   save();
 }
-function newQuestion(){next(state);cursor=null;render();$('family').focus();}
+function showQuestion(){
+  cursor=null;
+  $('cursor-status').textContent='';
+  render();
+  $('family').focus();
+}
+function newQuestion(topic){
+  next(state,Math.random,topic);
+  showQuestion();
+}
 function changeView(update){
   const v=state.view??defaultView(model.graph);
   state.view=update(v);
@@ -118,8 +129,9 @@ function place(point){
   state.points[i]=[...ps,point].slice(-2);
   renderGraph();save();
 }
-$('new-question').onclick=newQuestion;
-$('topic').onchange=e=>{state.topic=e.target.value;newQuestion();};
+$('new-question').onclick=()=>newQuestion(state.topic);
+$('previous-question').onclick=()=>{if(previous(state)) showQuestion();};
+$('topic').onchange=e=>newQuestion(e.target.value);
 $('reveal').onclick=()=>{state.revealed=!state.revealed;render();};
 bindLanguage(lang=>{if(state.lang!==lang){state.lang=lang;render();}});
 $('line-picker').onchange=e=>{state.series=Number(e.target.value);save();};

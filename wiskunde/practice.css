@@ -131,3 +131,5 @@
 .practice-index p { margin: 0; }
 .practice-back { margin: 0 0 16px; }
 .practice #practice-title { font-size: clamp(1.75rem, 4vw, 3rem); }
+
+#previous-question:disabled { color: var(--secondary-text); cursor: default; }
