@@ -36,11 +36,11 @@
 .grid-line, .axis, .series, .rise { vector-effect: non-scaling-stroke; }
 .grid-line { stroke: var(--border); }
 .axis { stroke: var(--secondary-text); }
-.s0 { --series: #00749e; }
-.s1 { --series: #ab3923; --dash: 9 4; }
+.s0 { --series: #00746e; }
+.s1 { --series: #7842aa; --dash: 9 4; }
 .s2 { --series: #497200; --dash: 2 4; }
-[data-theme=dark] .s0 { --series: #73d5ff; }
-[data-theme=dark] .s1 { --series: #ff9c83; }
+[data-theme=dark] .s0 { --series: #6ee1cf; }
+[data-theme=dark] .s1 { --series: #d4a7ff; }
 [data-theme=dark] .s2 { --series: #c3db52; }
 .series { stroke: var(--series); stroke-width: 2.5; stroke-dasharray: var(--dash, none); }
 .point { fill: var(--series); stroke: var(--surface); }
@@ -54,26 +54,14 @@
 #point-summary:empty { display: none; }
 #solution-parts section + section { border-top: 1px solid var(--border); margin-top: 20px; padding-top: 16px; }
 #solution-parts p { margin: 6px 0; }
-#solution-parts .math { padding: 4px 8px; background: var(--background); overflow-wrap: anywhere; }
+#solution-parts .math { overflow-wrap: anywhere; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-@media (min-width: 830px) {
-  .notebook:has(#graph-panel:not([hidden])) { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
-  #graph-panel:not([hidden]) { grid-column: 2; grid-row: 1; }
-  #solution { grid-column: 1 / -1; }
-}
 .grid-line.minor { opacity: .55; }
 @media (max-width: 420px) {
   .practice-actions button { padding-inline: 8px; font-size: .875rem; }
   #graph-panel { padding-inline: 6px; }
   #graph-panel > :not(svg) { margin-inline: 6px; }
 }
-
-/* Compact site framing, with the practice notebook as the main surface. */
-.practice-page header .spectrum { height: 12px; }
-.practice-page .header-row { padding-block: 12px; }
-.practice-page header .brand { font-size: .875rem; }
-.practice-page header nav > a { display: none; }
-.practice-page footer .spectrum { height: 16px; }
 
 .practice {
   --notebook-paper: #fffdf6;
@@ -106,19 +94,12 @@
 #given { display: grid; gap: 8px; }
 #given li {
   margin: 0;
-  width: fit-content;
-  max-width: 100%;
-  padding: 4px 12px;
-  border-radius: 5px;
-  background: var(--notebook-blue);
   font-size: clamp(1.15rem, 2.6vw, 1.5rem);
 }
 #solution { border-top: 4px solid var(--notebook-orange); }
 #solution-parts .math {
-  padding: 8px 12px;
+  padding-block: 8px;
   font-size: 1.15rem;
-  background: transparent;
-  border-bottom: 1px solid var(--notebook-rule);
 }
 .practice math { font-size: 1.12em; margin-inline: .08em; }
 .graph-paper { fill: var(--notebook-paper); }
@@ -133,3 +114,44 @@
 .practice #practice-title { font-size: clamp(1.75rem, 4vw, 3rem); }
 
 #previous-question:disabled { color: var(--secondary-text); cursor: default; }
+
+* { box-sizing: border-box; }
+.practice-page {
+  margin: 0;
+  min-height: 100vh;
+  font: 1rem/1.65 system-ui, sans-serif;
+  color: var(--text);
+  background-color: var(--background);
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.settings, .practice { width: min(calc(100% - 24px), 52rem); margin-inline: auto; }
+.settings { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px; padding-block: 14px; }
+.settings button, .practice button, .practice select {
+  border-radius: 12px; font: inherit; color: var(--text); background: var(--surface);
+  border: 1px solid var(--secondary-text); padding: 6px 12px; min-height: 44px;
+}
+.settings button[aria-pressed=true], #new-question { background: var(--text); color: var(--surface); }
+.skip { position: absolute; top: -6rem; background: var(--surface); padding: 12px; }
+.skip:focus { top: 8px; z-index: 1; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.practice {
+  background: var(--notebook-paper); border: 1px solid var(--notebook-rule);
+  border-radius: 6px 20px 20px 6px; margin-bottom: 3rem;
+  padding: clamp(16px, 5vw, 56px);
+  box-shadow: 3px 4px 0 var(--background), 4px 5px 0 var(--border);
+}
+.practice-heading { background: transparent; border: 0; padding: 0 0 20px; border-bottom: 2px dashed var(--notebook-rule); }
+.practice #practice-title { font: bold clamp(2.2rem, 6vw, 4rem)/1.08 Georgia, serif; letter-spacing: -.045em; }
+.question, #graph-panel, #solution { border: 0; padding: 0; }
+.notebook { gap: 32px; }
+.practice a { color: inherit; text-underline-offset: .2em; }
+.practice-index a, .practice-back a, .topic-control > span {
+  display: inline-block; background: #ffd2a8; color: #382717;
+  padding: .25em .75em; border-radius: 4px 12px 4px 4px;
+}
+.practice-index a { margin-block: 8px; }
+#given, #solution-parts .math { font-family: Georgia, serif; }
+#graph-panel, #solution { border-top: 1px solid var(--notebook-rule); padding-top: 20px; }
+#line-picker { border-inline-start: 5px solid var(--series); }

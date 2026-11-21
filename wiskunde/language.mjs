@@ -25,9 +25,8 @@ export function bindLanguage(change) {
 export function renderLanguage(lang,title,skip) {
   const nl=lang==='nl';
   document.documentElement.lang=lang;
-  document.title=title+' — Alan O Cinneide Software BV';
+  document.title=title;
   document.querySelector('.skip').textContent=skip;
-  document.querySelector('header nav').setAttribute('aria-label',nl?'Hoofdnavigatie':'Main navigation');
   document.querySelector('.theme-toggle').textContent=nl?'Donkere modus':'Dark mode';
   document.getElementById('languages').setAttribute('aria-label',nl?'Taal':'Language');
   for(const option of ['nl','en']){

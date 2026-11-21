@@ -93,6 +93,7 @@ function render(){
     if(plotting){
       $('line-picker').replaceChildren(...series.map((name,i)=>new Option(name,i)));
       $('line-picker').value=state.series;
+      $('line-picker').className='s'+state.series;
     }
     $('legend').replaceChildren(...series.map((name,i)=>Object.assign(document.createElement('span'),{
       className:`legend-item s${i}`,textContent:name,
@@ -134,7 +135,7 @@ $('previous-question').onclick=()=>{if(previous(state)) showQuestion();};
 $('topic').onchange=e=>newQuestion(e.target.value);
 $('reveal').onclick=()=>{state.revealed=!state.revealed;render();};
 bindLanguage(lang=>{if(state.lang!==lang){state.lang=lang;render();}});
-$('line-picker').onchange=e=>{state.series=Number(e.target.value);save();};
+$('line-picker').onchange=e=>{state.series=Number(e.target.value);e.target.className='s'+state.series;save();};
 $('clear-points').onclick=()=>{if(state.points[state.series]) state.points[state.series]=[];renderGraph();save();};
 $('reset-view').onclick=()=>{cursor=null;changeView(()=>defaultView(model.graph));};
 const zoom=factor=>changeView(v=>({...v,z:Math.min(4,Math.max(0.035,v.z*factor))}));

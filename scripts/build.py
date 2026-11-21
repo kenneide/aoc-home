@@ -27,6 +27,9 @@ def shell(title,desc,body,prefix='',is_cv=False,not_found=False, practice_route=
     if practice_route:
         module='app.mjs' if practice_assets else 'language.mjs'
         extra_head+=f'<script type="module" src="{practice_assets}{module}"></script>'
+        return f'''<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}">{metadata}<script src="{prefix}theme.js"></script><link rel="stylesheet" href="{prefix}design/tokens.css">{extra_head}</head>
+<body class="practice-page"><a class="skip" href="#main">Naar de inhoud</a><header class="settings">{language_switch}<button type="button" class="theme-toggle" hidden aria-pressed="false">Donkere modus</button></header>{body}</body></html>'''
     language='nl' if practice_route else 'en'
     page_class=' class="practice-page"' if practice_route else ''
     metadata+=f'''<meta property="og:type" content="website"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:image" content="{origin}/assets/social-preview.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{e(copy['site']['imageAlt'])}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{origin}/assets/social-preview.png">'''
@@ -121,19 +124,19 @@ language_switch='''    <div id="languages" role="group" aria-label="Taal">
     </div>
 '''
 practice_index=f'''<main id="main" class="wrap practice">
-  <div class="practice-heading"><h1 id="practice-title">Wiskunde oefenen</h1>{language_switch}</div>
+  <div class="practice-heading"><h1 id="practice-title">Wiskunde oefenen</h1></div>
   <ul class="practice-index">
     <li class="question"><h2><a href="{practice_slug}/" data-nl="{practice_title}" data-en="Linear formulas and equations">{practice_title}</a></h2><p data-nl="{practice_desc}" data-en="Practise linear formulas and equations.">{practice_desc}</p></li>
   </ul>
 </main>'''
 (practice_dir/'index.html').write_text(shell(
-    'Wiskunde oefenen — '+company['name'], practice_desc, practice_index,
+    'Wiskunde oefenen', practice_desc, practice_index,
     '../', practice_route=practice_route), encoding='utf-8')
 practice_tool=practice_dir/practice_slug
 practice_tool.mkdir()
-practice_body=(ROOT/'wiskunde/page.html').read_text().replace('    <!-- language switch -->', language_switch.rstrip())
+practice_body=(ROOT/'wiskunde/page.html').read_text()
 (practice_tool/'index.html').write_text(shell(
-    practice_title+' — '+company['name'], practice_desc, practice_body,
+    practice_title, practice_desc, practice_body,
     '../../', practice_route=f'{practice_route}{practice_slug}/', practice_assets='../'), encoding='utf-8')
 shutil.copy2(out,dist/'assets/AlanOCinneide_CV.pdf')
 shutil.copy2(out,ROOT/'assets/AlanOCinneide_CV.pdf')

@@ -20,12 +20,15 @@ class Links(HTMLParser):
 for file in public.rglob('*.html'):
     parser=Links();parser.file=file;parser.feed(file.read_text())
     text=file.read_text()
-    assert 'Alan O Cinneide' in text and 'Software BV' in text
-    assert text.count('class="spectrum"')==2
-    if file != public/'projects/what-becomes-worth-building/index.html':
-        assert cv['linkedin'] in text
     assert text.count('class="theme-toggle"') == 1
-    assert f'aria-pressed="false" hidden>{escape(copy["shared"]["themeToggle"])}</button>' in text
+    if file.is_relative_to(public/'wiskunde'):
+        assert 'Software BV' not in text and 'class="spectrum"' not in text
+    else:
+        assert 'Alan O Cinneide' in text and 'Software BV' in text
+        assert text.count('class="spectrum"')==2
+        if file != public/'projects/what-becomes-worth-building/index.html':
+            assert cv['linkedin'] in text
+        assert f'aria-pressed="false" hidden>{escape(copy["shared"]["themeToggle"])}</button>' in text
     assert text.index('theme.js') < text.index('design/tokens.css')
     for private in ['Laan van','2593','11 44 8026','11448026']:assert private not in text
 reader=PdfReader(public/'assets/AlanOCinneide_CV.pdf')
